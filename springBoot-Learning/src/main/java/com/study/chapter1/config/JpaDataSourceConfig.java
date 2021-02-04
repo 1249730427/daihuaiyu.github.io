@@ -17,17 +17,16 @@ import javax.sql.DataSource;
 public class JpaDataSourceConfig {
 
     @Bean
-    @Primary
-    @ConfigurationProperties(prefix="spring.datasource.primary")
-    public DataSource primaryDataSource(){
+    @ConfigurationProperties(prefix="spring.datasource.jpa.primary")
+    public DataSource jpaPrimaryDataSource(){
 
         return DataSourceBuilder.create().build();
     }
 
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.secondary")
-    public DataSource secondaryDataSource(){
+    @ConfigurationProperties(prefix = "spring.datasource.jpa.secondary")
+    public DataSource jpaSecondaryDataSource(){
 
         return DataSourceBuilder.create().build();
     }

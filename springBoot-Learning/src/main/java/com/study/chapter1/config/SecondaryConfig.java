@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -20,20 +19,21 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 /**
- * @author :daihuaiyu
- * @Description: 主数据源JPA配置
- * @create 2021/2/3 21:23
- */
+ * JPA接入多数据源
+ *
+ * @author daihuaiyu
+ * @create: 2021-02-04 11:43
+ **/
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef="entityManagerFactoryPrimary",
-        transactionManagerRef="transactionManagerPrimary",
-        basePackages= { "com.study.chapter1.domain","com.study.chapter1.service" })
-public class PrimaryConfig {
+@EnableJpaRepositories(entityManagerFactoryRef="entityManager",
+    transactionManagerRef = "tranctionManagerSecondary",
+    basePackages = "com.study.chapter1.entity")
+public class SecondaryConfig {
 
     @Autowired
-    @Qualifier(value = "jpaPrimaryDataSource")
-    private DataSource primaryDataSource;
+    @Qualifier("jpaSecondaryDataSource")
+    private DataSource secondaryDataSource;
 
     @Autowired
     private HibernateProperties hibernateProperties;
@@ -41,32 +41,30 @@ public class PrimaryConfig {
     @Autowired
     private JpaProperties jpaProperties;
 
-    @Bean(name = "entityManager")
-    @Primary
+    @Bean(name="entityManager")
     public EntityManager entityManager(EntityManagerFactoryBuilder builder){
-
-        return entityManagerFactoryPrimary(builder).getObject().createEntityManager();
+        return tranctionManagerSecondary(builder).getObject().createEntityManager();
     }
 
-    @Bean(name = "entityManagerFactoryPrimary")
-    @Primary
-    public LocalContainerEntityManagerFactoryBean entityManagerFactoryPrimary(EntityManagerFactoryBuilder builder){
-
-        return builder.dataSource(primaryDataSource).packages("com.study.chapter1.domain") //设置实体类所在位置
-                .persistenceUnit("primaryPersistenceUnit")
-                .properties(getVendorProperties())
+    @Bean(name="tranctionManagerSecondary")
+    public LocalContainerEntityManagerFactoryBean tranctionManagerSecondary(EntityManagerFactoryBuilder builder){
+        return builder.dataSource(secondaryDataSource)
+                .persistenceUnit("persistenceUnit")
+                .packages("com.study.chapter1.entity")
+                .properties(getVersionProperties())
                 .build();
     }
 
-    private Map<String,Object> getVendorProperties() {
+    private Map<String, ?> getVersionProperties() {
 
         return hibernateProperties.determineHibernateProperties(jpaProperties.getProperties(), new HibernateSettings());
     }
 
-    @Bean(name="transactionManagerPrimary")
-    @Primary
-    public PlatformTransactionManager transactionManagerPrimary(EntityManagerFactoryBuilder builder){
-        return new JpaTransactionManager(entityManagerFactoryPrimary(builder).getObject());
-
+    @Bean(name="sencondaryTranctionManager")
+    public PlatformTransactionManager sencondaryTranctionManager(EntityManagerFactoryBuilder builder){
+        return new JpaTransactionManager(tranctionManagerSecondary(builder).getObject());
     }
+
+
 }
+

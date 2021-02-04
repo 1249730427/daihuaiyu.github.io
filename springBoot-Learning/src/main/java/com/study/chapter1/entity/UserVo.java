@@ -1,4 +1,4 @@
-package com.study.chapter1.domain;
+package com.study.chapter1.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
