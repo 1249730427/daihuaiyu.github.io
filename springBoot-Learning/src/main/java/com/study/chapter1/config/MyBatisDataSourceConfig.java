@@ -22,13 +22,20 @@ import javax.sql.DataSource;
  * @create: 2021-02-05 14:24
  **/
 @Configuration
-@MapperScan(sqlSessionTemplateRef="sqlSessionTemplatePrimary",sqlSessionFactoryRef="sqlSessionFactoryPrimary",
-            basePackages = {"com.study.chapter1.mapper.primary"})
+@MapperScan(sqlSessionTemplateRef="sqlSessionTemplateSecondary",sqlSessionFactoryRef="sqlSessionFactorySecondary",
+            basePackages = {"com.study.chapter1.mapper.secondary"})
 public class MyBatisDataSourceConfig {
 
     @ConfigurationProperties(value="spring.datasource.mybatis.primary")
     @Bean
     public DataSource mybatisPrimarySource(){
+
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean
+    @ConfigurationProperties(value="spring.datasource.mybatis.secondary")
+    public DataSource mybatisSecondarySource(){
 
         return DataSourceBuilder.create().build();
     }
@@ -54,12 +61,33 @@ public class MyBatisDataSourceConfig {
         return  sqlSessionFactory.openSession();
     }
 
-    @Bean
+    @Bean(name = "mybatisTransactionManagerPrimary")
     public PlatformTransactionManager transactionManagerPrimary(@Qualifier("mybatisPrimarySource") DataSource mybatisPrimarySource){
 
         return new DataSourceTransactionManager(mybatisPrimarySource);
     }
 
 
+    @Bean
+    public SqlSessionFactory sqlSessionFactorySecondary(@Qualifier(value = "mybatisSecondarySource") DataSource mybatisSecondarySource) throws Exception{
+
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+
+        sqlSessionFactoryBean.setDataSource(mybatisSecondarySource);
+
+        return sqlSessionFactoryBean.getObject();
+    }
+
+    @Bean
+    public SqlSessionTemplate sqlSessionTemplateSecondary(@Qualifier(value = "sqlSessionFactorySecondary") SqlSessionFactory sqlSessionFactorySecondary ){
+
+        return new SqlSessionTemplate(sqlSessionFactorySecondary);
+    }
+
+    @Bean(name = "mybatisTransactionManagerSecondary")
+    public PlatformTransactionManager transactionManagerSecondary(@Qualifier("mybatisSecondarySource") DataSource mybatisSecondarySource){
+
+        return new DataSourceTransactionManager(mybatisSecondarySource);
+    }
 }
 
