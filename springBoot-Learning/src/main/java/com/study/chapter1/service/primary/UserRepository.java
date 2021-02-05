@@ -1,4 +1,4 @@
-package com.study.chapter1.service;
+package com.study.chapter1.service.primary;
 
 import com.study.chapter1.domain.UserVo;
 import org.springframework.data.jpa.repository.JpaRepository;

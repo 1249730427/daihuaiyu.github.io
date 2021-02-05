@@ -28,7 +28,7 @@ import java.util.Map;
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef="entityManagerFactoryPrimary",
         transactionManagerRef="transactionManagerPrimary",
-        basePackages= { "com.study.chapter1.domain","com.study.chapter1.service" })
+        basePackages= { "com.study.chapter1.domain","com.study.chapter1.service.primary" })
 public class PrimaryConfig {
 
     @Autowired

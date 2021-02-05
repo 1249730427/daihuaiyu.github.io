@@ -1,7 +1,7 @@
 package com.study.chapter1;
 
 import com.study.chapter1.domain.UserVo;
-import com.study.chapter1.service.UserRepository;
+import com.study.chapter1.service.primary.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

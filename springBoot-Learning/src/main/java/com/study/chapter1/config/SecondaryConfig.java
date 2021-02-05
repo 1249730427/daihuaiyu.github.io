@@ -26,9 +26,9 @@ import java.util.Map;
  **/
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef="entityManager",
-    transactionManagerRef = "tranctionManagerSecondary",
-    basePackages = "com.study.chapter1.entity")
+@EnableJpaRepositories(entityManagerFactoryRef="tranctionManagerSecondary",
+    transactionManagerRef = "sencondaryTranctionManager",
+    basePackages = {"com.study.chapter1.entity","com.study.chapter1.service.secondary" })
 public class SecondaryConfig {
 
     @Autowired
@@ -41,7 +41,7 @@ public class SecondaryConfig {
     @Autowired
     private JpaProperties jpaProperties;
 
-    @Bean(name="entityManager")
+    @Bean(name="secondayEntityManager")
     public EntityManager entityManager(EntityManagerFactoryBuilder builder){
         return tranctionManagerSecondary(builder).getObject().createEntityManager();
     }

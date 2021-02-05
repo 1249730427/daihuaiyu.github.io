@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @Entity
-public class UserVo {
+public class User {
 
     @Id
     @GeneratedValue
@@ -25,7 +25,7 @@ public class UserVo {
 
     private Integer age;
 
-    public UserVo(String userName, Integer age) {
+    public User(String userName, Integer age) {
         this.userName = userName;
         this.age = age;
     }
