@@ -15,6 +15,7 @@ public enum ApiCodeEnum {
     REQUEST_TIMEOUT("ERR0004","请求超时"),
     SIGN_ERROR("ERR0005","签名错误"),
     REPEAT_SUBMIT("ERR0006","请不要频繁操作"),
+    PASSWORD_ERROR("ERR0007","密码错误")
     ;
 
     /** 代码 */
