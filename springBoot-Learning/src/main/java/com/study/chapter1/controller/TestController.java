@@ -4,9 +4,12 @@ import com.study.chapter1.domain.UserVo;
 import com.study.chapter1.entity.User;
 import com.study.chapter1.mapper.primary.UserVoMapper;
 import com.study.chapter1.mapper.secondary.UserMapper;
+import com.study.chapter1.service.TestService;
 import com.study.chapter1.service.primary.UserRepository;
 import com.study.chapter1.service.secondary.UserSecondaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,15 +31,15 @@ public class TestController {
     @Autowired
     private UserSecondaryRepository userSecondaryRepository;
 
-//    @Autowired
-//    private UserVoMapper userVoMapper;
+    @Autowired
+    private UserVoMapper userVoMapper;
 
     @Autowired
     private UserMapper userMapper;
 
 
     @RequestMapping(value="/test")
-    public String test(){
+    public String test3(){
         userRepository.save(new UserVo("aaa", 10));
         userRepository.save(new UserVo("bbb", 20));
         userRepository.save(new UserVo("ccc", 30));
@@ -56,12 +59,12 @@ public class TestController {
         return "Hello Secondary World";
     }
 
-//    @RequestMapping("/test/mybatis")
-//    public String testMybatis(){
-//        List<UserVo> userVo = userVoMapper.selectByName("dy");
-//        userVo.stream().forEach(userVo1 -> System.out.println(userVo1.getAge()));
-//        return "Hello Mybatis";
-//    }
+    @RequestMapping("/test/mybatis")
+    public String testMybatis(){
+        List<UserVo> userVo = userVoMapper.selectByName("dy");
+        userVo.stream().forEach(userVo1 -> System.out.println(userVo1.getAge()));
+        return "Hello Mybatis";
+    }
 
     @RequestMapping("/test/mybatis2")
     public String testMybatis2(){
@@ -70,5 +73,25 @@ public class TestController {
         return "Hello Mybatis";
     }
 
+    @Autowired
+    @Qualifier(value = "jtaPrimaryJdbcTemplate")
+    private JdbcTemplate jtaPrimaryJdbcTemplate;
+
+    @Autowired
+    @Qualifier(value = "jtaSecondaryjdbcTemplate")
+    private JdbcTemplate jtaSecondaryJdbcTemplate;
+
+    @Autowired
+    TestService testService;
+
+    @RequestMapping("/test")
+    public void test(){
+        testService.tx();
+    }
+
+    @RequestMapping("/test2")
+    public void test2(){
+        testService.tx2();
+    }
 }
 
