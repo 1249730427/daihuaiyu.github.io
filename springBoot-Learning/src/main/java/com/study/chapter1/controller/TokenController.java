@@ -7,6 +7,7 @@ import com.study.chapter1.entity.UserInfo;
 import com.study.chapter1.util.ApiCodeEnum;
 import com.study.chapter1.util.ApiResponse;
 import com.study.chapter1.util.MD5Util;
+import com.study.chapter1.util.NotRepeatSubmit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,11 +28,15 @@ import java.util.concurrent.TimeUnit;
 /**
  * token获取controller
  * 1.获取接口令牌token：
- * a.校验用户参数 appId、timetamp、sign是否为空
+ * a.校验用户参数 appId、timestamp、sign是否为空
  * b.校验时间：防止DOS攻击
- * c.验签：校验sign(sign由appId+timetamp+securityKey 进行MD5加密得到)
+ * c.验签：校验sign(sign由appId+timestamp+securityKey 进行MD5加密得到)
+ * d.保存token到缓存中，有效期为2个小时，key为UUID
  *
  * 2.获取用户令牌token：
+ * a.校验接口参数 userName、password是否为空
+ * b.比对密码是否一致,测试为password+salt取MD5的加密值
+ * c.保存token到缓存中，有效期为2个小时，key为UUID
  * @author daihuaiyu
  * @create: 2021-02-07 13:45
  **/
@@ -64,6 +69,7 @@ public class TokenController {
         return ApiResponse.success(accessToken);
     }
 
+    @NotRepeatSubmit(value = 1000)
     @RequestMapping(path = "/user_toke")
     public ApiResponse<AccessToken> userToken(@RequestParam("userName") String userName, @RequestParam("password") String password){
         if(StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)){

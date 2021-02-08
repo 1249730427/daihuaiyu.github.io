@@ -1,8 +1,9 @@
 package com.study.chapter1.util;
 
-import org.springframework.http.HttpRequest;
+import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Map;
@@ -76,6 +77,24 @@ public class ApiUtil {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 获取注解方法
+     * @param handler
+     * @return
+     */
+    public static NotRepeatSubmit getNotRepeatSubmit(Object handler){
+
+        if(handler !=null){
+            if(handler instanceof HandlerMethod){
+                HandlerMethod handlerMethod = (HandlerMethod) handler;
+                Method method = handlerMethod.getMethod();
+                NotRepeatSubmit annotation = method.getAnnotation(NotRepeatSubmit.class);
+                return annotation;
+            }
+        }
+        return null;
     }
 }
 
