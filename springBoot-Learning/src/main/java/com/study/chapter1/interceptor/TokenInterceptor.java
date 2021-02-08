@@ -1,8 +1,11 @@
 package com.study.chapter1.interceptor;
 
+import com.study.chapter1.entity.AccessToken;
+import com.study.chapter1.entity.TokenInfo;
 import com.study.chapter1.util.ApiUtil;
 import com.study.chapter1.util.MD5Util;
 import com.study.chapter1.util.NotRepeatSubmit;
+import com.sun.deploy.ui.AppInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -57,15 +60,16 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
         //验证token存不存在
         ValueOperations valueOperations = redisTemplate.opsForValue();
-        Object o = valueOperations.get(token);
+        TokenInfo o = (TokenInfo) valueOperations.get(token);
         if(o==null){
 
             log.error("token信息已过期");
             return false;
         }
 
+
         //验证签名，签名为：MD5(nonce+token+timestamp)
-        String encode = MD5Util.encode(nonce + token + timestamp);
+        String encode = ApiUtil.concatSignString(request)+o.getAppInfo().getSecurityKey()+nonce + token + timestamp;
         if(!sign.equalsIgnoreCase(encode)){
 
            log.error("验签不通过,原签名："+sign+" 计算得出签名："+encode);
