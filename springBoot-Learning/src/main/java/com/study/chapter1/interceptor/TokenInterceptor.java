@@ -19,7 +19,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Token过滤器
+ * Token拦截器
+ * 1.获取用户请求头中的参数信息token（令牌）、sign（签名）,nonce（随机数）、timestamp（时间戳）
+ * 2.判断参数是否为空，为空则返回false
+ * 3.业务处理：判断请求是否超时，根据服务器当时时间—timestamp得出时间差，时间差>注解中时间则返回false，请求超时，请重新请求
+ *   判断token是否过期，根据token的值去缓存中取token信息，获取不到则返回false token已过期
+ *   判断是否重复提交，从缓存中获取key为sign的信息，获取不到则返回false
+ *   把sign作为key,设置到缓存中去
  *
  * @author daihuaiyu
  * @create: 2021-02-08 10:06

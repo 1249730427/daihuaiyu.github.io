@@ -35,8 +35,9 @@ import java.util.concurrent.TimeUnit;
  *
  * 2.获取用户令牌token：
  * a.校验接口参数 userName、password是否为空
- * b.比对密码是否一致,测试为password+salt取MD5的加密值
- * c.保存token到缓存中，有效期为2个小时，key为UUID
+ * b.通过拦截器拦截请求校验相关业务比如token、timestamp的校验、通过注解NotRepeatSubmit判断是否重复提交 ，判断依据为在缓存中设置key为sign的缓存
+ * c.比对密码是否一致,测试为password+salt取MD5的加密值
+ * d.保存token到缓存中，有效期为2个小时，key为UUID
  * @author daihuaiyu
  * @create: 2021-02-07 13:45
  **/
