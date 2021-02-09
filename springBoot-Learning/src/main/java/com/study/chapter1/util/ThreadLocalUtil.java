@@ -1,6 +1,5 @@
 package com.study.chapter1.util;
 
-import org.apache.log4j.helpers.ThreadLocalMap;
 
 import java.util.HashMap;
 import java.util.Map;
