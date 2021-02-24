@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
  **/
 public class StartService {
 
-    @Value("itstack.door:123456789")
+    @Value("itstack.door.userStr:123456789")
     private String userIds;
 
     public StartService(String userIds) {

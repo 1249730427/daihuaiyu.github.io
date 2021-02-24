@@ -1,11 +1,8 @@
 package com.study.chapter1.interceptor;
 
-import com.study.chapter1.entity.AccessToken;
 import com.study.chapter1.entity.TokenInfo;
 import com.study.chapter1.util.ApiUtil;
-import com.study.chapter1.util.MD5Util;
 import com.study.chapter1.util.NotRepeatSubmit;
-import com.sun.deploy.ui.AppInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

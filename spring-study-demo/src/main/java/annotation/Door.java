@@ -17,5 +17,5 @@ public @interface Door {
 
     String keyValue() default "";
 
-    String returnJson() default "";
+    String returnJson() default "白名单拦截";
 }
