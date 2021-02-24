@@ -1,9 +1,12 @@
 import com.alibaba.fastjson.JSON;
+import dao.IUserDAO;
 import domain.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import service.engine.IEngine;
 import service.engine.impl.TreeEngineHandler;
 
@@ -168,5 +171,13 @@ public class ApiTest {
         EngineResult result = treeEngineHandle.process(10001L, "Oli09pLkdjh", treeRich, decisionMatter);
         logger.info("测试结果：{}", JSON.toJSONString(result));
 
+    }
+
+    @Test
+    public void test_proxy(){
+        BeanFactory beanFactory = new ClassPathXmlApplicationContext("spring-config.xml");
+        IUserDAO userDao = beanFactory.getBean("userDao", IUserDAO.class);
+        String res = userDao.queryUserInfo("100001");
+        logger.info("测试结果：{}", res);
     }
 }
