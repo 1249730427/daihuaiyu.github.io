@@ -25,11 +25,7 @@ public class LoginSsoIntercaptorDecorator extends SsoDecorator {
 
     @Override
     public boolean preHandle(String request, String response, Object handler) throws Exception {
-        // 模拟获取cookie
-        String ticket = request.substring(1, 8);
-        // 模拟校验
-        boolean success = ticket.equals("success");
-
+         boolean success = super.preHandle(request, response, handler);
         if (!success) return false;
 
         String userId = request.substring(8);
