@@ -1,4 +1,8 @@
 import com.alibaba.fastjson.JSON;
+import controller.Context;
+import controller.LoginSsoIntercaptorDecorator;
+import controller.LoginSsoInterceptor;
+import controller.SsoInterceptor;
 import dao.IUserDAO;
 import domain.*;
 import org.junit.Before;
@@ -9,6 +13,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import service.engine.IEngine;
 import service.engine.impl.TreeEngineHandler;
+import service.impl.ZJCouponDiscount;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -180,4 +185,30 @@ public class ApiTest {
         String res = userDao.queryUserInfo("100001");
         logger.info("测试结果：{}", res);
     }
+
+    @Test
+    public void test_zj(){
+        logger.info("测试策略模式开始！");
+        Context context =new Context(new ZJCouponDiscount());
+        logger.info("直减优惠后所需钱："+context.discountAmount(15.00,20.00));
+    }
+
+    @Test
+    public void test_login(){
+        LoginSsoInterceptor loginSsoInterceptor = new LoginSsoInterceptor();
+        try {
+            boolean success = loginSsoInterceptor.preHandle("1successhuahua", "success", 1);
+            logger.info("登录校验：" + "1successhuahua" + (success ? " 放行" : " 拦截"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test_login_zsz() throws Exception {
+        LoginSsoIntercaptorDecorator loginSsoIntercaptorDecorator = new LoginSsoIntercaptorDecorator(new SsoInterceptor());
+        boolean success = loginSsoIntercaptorDecorator.preHandle("1successhuahua", "success", 1);
+        logger.info("登录校验：" + "1successhuahua" + (success ? " 放行" : " 拦截"));
+    }
+
 }
