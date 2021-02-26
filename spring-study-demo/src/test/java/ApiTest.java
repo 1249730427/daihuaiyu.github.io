@@ -1,10 +1,12 @@
 import com.alibaba.fastjson.JSON;
+import config.RebateInfo;
 import controller.Context;
 import controller.LoginSsoIntercaptorDecorator;
 import controller.LoginSsoInterceptor;
 import controller.SsoInterceptor;
 import dao.IUserDAO;
 import domain.*;
+import org.MqAdapter;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -15,10 +17,8 @@ import service.engine.IEngine;
 import service.engine.impl.TreeEngineHandler;
 import service.impl.ZJCouponDiscount;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class ApiTest {
 
@@ -209,6 +209,41 @@ public class ApiTest {
         LoginSsoIntercaptorDecorator loginSsoIntercaptorDecorator = new LoginSsoIntercaptorDecorator(new SsoInterceptor());
         boolean success = loginSsoIntercaptorDecorator.preHandle("1successhuahua", "success", 1);
         logger.info("登录校验：" + "1successhuahua" + (success ? " 放行" : " 拦截"));
+    }
+
+    @Test
+    public void test_test_mq_adapter() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        CreateAccount createAccount = new CreateAccount();
+        createAccount.setNumber("100001");
+        createAccount.setAddress("河北省.廊坊市.广阳区.大学里职业技术学院");
+        createAccount.setAccountDate(new Date());
+        createAccount.setDesc("在校开户");
+
+        HashMap<String, String> link01 = new HashMap<>();
+        link01.put("userId", "number");
+        link01.put("bizId", "number");
+        link01.put("bizTime", "accountDate");
+        link01.put("bizDesc", "desc");
+        RebateInfo rebateInfo01 = MqAdapter.filter(createAccount.toString(), link01);
+        System.out.println("mq.create_account(适配前)" + createAccount.toString());
+        System.out.println("mq.create_account(适配后)" + JSON.toJSONString(rebateInfo01));
+
+        System.out.println("");
+
+        OrderMq orderMq = new OrderMq();
+        orderMq.setUid("100001");
+        orderMq.setSku("10928092093111123");
+        orderMq.setOrderId("100000890193847111");
+        orderMq.setCreateOrderTime(new Date());
+
+        HashMap<String, String> link02 = new HashMap<>();
+        link02.put("userId", "uid");
+        link02.put("bizId", "orderId");
+        link02.put("bizTime", "createOrderTime");
+        RebateInfo rebateInfo02 = MqAdapter.filter(orderMq.toString(), link02);
+
+        System.out.println("mq.orderMq(适配前)" + orderMq.toString());
+        System.out.println("mq.orderMq(适配后)" + JSON.toJSONString(rebateInfo02));
     }
 
 }
