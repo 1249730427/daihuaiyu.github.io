@@ -13,8 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import service.OrderAdapterService;
 import service.engine.IEngine;
 import service.engine.impl.TreeEngineHandler;
+import service.impl.InsideOrderService;
+import service.impl.POPOrderAdapterServiceImpl;
 import service.impl.ZJCouponDiscount;
 
 import java.lang.reflect.InvocationTargetException;
@@ -244,6 +247,15 @@ public class ApiTest {
 
         System.out.println("mq.orderMq(适配前)" + orderMq.toString());
         System.out.println("mq.orderMq(适配后)" + JSON.toJSONString(rebateInfo02));
+    }
+
+    @Test
+    public void test_jk_adapter(){
+        OrderAdapterService popOrderAdapterService = new POPOrderAdapterServiceImpl();
+        System.out.println("判断首单，接口适配(POP)：" + popOrderAdapterService.isFrist("100001"));
+
+        OrderAdapterService insideOrderService = new InsideOrderService();
+        System.out.println("判断首单，接口适配(自营)：" + insideOrderService.isFrist("100001"));
     }
 
 }
