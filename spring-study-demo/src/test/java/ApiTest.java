@@ -1,3 +1,4 @@
+import aop.JDKProxy;
 import com.alibaba.fastjson.JSON;
 import config.RebateInfo;
 import controller.*;
@@ -10,14 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import service.ICacheAdapter;
 import service.ICommodity;
 import service.OrderAdapterService;
 import service.engine.IEngine;
 import service.engine.impl.TreeEngineHandler;
-import service.impl.InsideOrderService;
-import service.impl.POPOrderAdapterServiceImpl;
-import service.impl.StoreFactory;
-import service.impl.ZJCouponDiscount;
+import service.impl.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -316,6 +315,19 @@ public class ApiTest {
         // 3. 第三方兑换卡(爱奇艺)
         ICommodity commodityService_3 = storeFactory.store("3");
         commodityService_3.sendCommodity("10001","AQY1xjkUodl8LO975GdfrYUio",null,null);
+    }
+
+    @Test
+    public void test_CacheService() throws Exception {
+        ICacheAdapter proxy_EGM = JDKProxy.getProxy(ICacheAdapter.class, new EGMCacheAdapter());
+        proxy_EGM.set("user_name_01","小傅哥");
+        String val01 = proxy_EGM.get("user_name_01");
+        System.out.println(val01);
+
+        ICacheAdapter proxy_IIR = JDKProxy.getProxy(ICacheAdapter.class, new IIRCacheAdapter());
+        proxy_IIR.set("user_name_01","小傅哥");
+        String val02 = proxy_IIR.get("user_name_01");
+        System.out.println(val02);
     }
 
 }
