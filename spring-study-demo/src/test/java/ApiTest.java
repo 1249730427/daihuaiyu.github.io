@@ -4,7 +4,11 @@ import config.RebateInfo;
 import controller.*;
 import dao.IUserDAO;
 import domain.*;
+import mediator.SqlSession;
+import mediator.SqlSessionFactory;
+import mediator.SqlSessionFactoryBuilder;
 import org.MqAdapter;
+import org.apache.ibatis.io.Resources;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -18,6 +22,7 @@ import service.engine.IEngine;
 import service.engine.impl.TreeEngineHandler;
 import service.impl.*;
 
+import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -328,6 +333,47 @@ public class ApiTest {
         proxy_IIR.set("user_name_01","小傅哥");
         String val02 = proxy_IIR.get("user_name_01");
         System.out.println(val02);
+    }
+    @Test
+    public void test_queryUserInfoById() {
+        String resource = "mybatis-config-datasource.xml";
+        Reader reader;
+        try {
+            reader = Resources.getResourceAsReader(resource);
+            SqlSessionFactory sqlMapper = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession session = sqlMapper.openSession();
+            try {
+                User user = session.selectOne("dao.IUserDao1.queryUserInfoById", 1L);
+                logger.info("测试结果：{}", JSON.toJSONString(user));
+            } finally {
+                session.close();
+                reader.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test_queryUserList() {
+        String resource = "mybatis-config-datasource.xml";
+        Reader reader;
+        try {
+            reader = Resources.getResourceAsReader(resource);
+            SqlSessionFactory sqlMapper = new SqlSessionFactoryBuilder().build(reader);
+            SqlSession session = sqlMapper.openSession();
+            try {
+                User req = new User();
+                req.setAge(18);
+                List<User> userList = session.selectList("org.itstack.demo.design.dao.IUserDao.queryUserList", req);
+                logger.info("测试结果：{}", JSON.toJSONString(userList));
+            } finally {
+                session.close();
+                reader.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

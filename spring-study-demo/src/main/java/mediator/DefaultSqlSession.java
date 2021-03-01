@@ -74,17 +74,24 @@ public class DefaultSqlSession implements SqlSession {
 
     }
     private void buildParameter(PreparedStatement preparedStatement, Object parameter, Map<Integer, String> parameterMap) throws SQLException, IllegalAccessException {
+        int size = parameterMap.size();
         //单个参数
         if(parameter instanceof  Long){
-            preparedStatement.setLong(1,(Long)parameter);
+            for (int i = 1; i <= size; i++) {
+                preparedStatement.setLong(i, Long.parseLong(parameter.toString()));
+            }
             return;
         }
         if(parameter instanceof  String){
-            preparedStatement.setString(1,(String)parameter);
+            for (int i = 1; i <= size; i++) {
+                preparedStatement.setString(i, parameter.toString());
+            }
             return;
         }
         if(parameter instanceof Integer){
-            preparedStatement.setLong(1,(Integer)parameter);
+            for (int i = 1; i <= size; i++) {
+                preparedStatement.setLong(i, Integer.parseInt(parameter.toString()));
+            }
             return;
         }
         //参数是对象
@@ -97,7 +104,7 @@ public class DefaultSqlSession implements SqlSession {
             field.setAccessible(false);
             filedMap.put(fieldName,o);
         }
-        int size = parameterMap.size();
+
         //将对象的值利用Map转换成我们数据库的列，并设置值
         for(int i=0;i<size;i++){
             String parameterDefine=parameterMap.get(i);
@@ -138,7 +145,7 @@ public class DefaultSqlSession implements SqlSession {
             while (resultSet.next()) {
                 //获取传入Class的实例
                 T object = (T) clazz.newInstance();
-                for (int i = 0; i < columnCount; i++) {
+                for (int i = 1; i <= columnCount; i++) {
                     //遍历获取某一列的值
                     Object resultSetObject = resultSet.getObject(i);
                     //遍历获取某一列的列名
