@@ -1,7 +1,7 @@
 package com.config.service.product.service;
 
 
-import com.config.service.product.model.Produce;
+import com.config.service.product.model.Product;
 
 import java.util.List;
 
@@ -17,11 +17,11 @@ public interface ProductService {
       * @Description: 查找所有商品
       * @author xub
       */
-    List<Produce> listProduce();
+    List<Product> listProduct();
 
 
     /**
      *  根据商品ID查找商品
      */
-    Produce findById(int produceId);
+    Product findById(int productId);
 }

@@ -1,7 +1,7 @@
 package com.config.service.product.controller;
 
 
-import com.config.service.product.model.Produce;
+import com.config.service.product.model.Product;
 import com.config.service.product.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019/7/12 下午12:43
  */
 @RestController
-@RequestMapping("/api/v1/produce")
+@RequestMapping("/api/v1/product")
 public class ProductController {
 
     //集群情况下，用于订单服务查看到底调用的是哪个商品微服务节点
@@ -35,7 +35,7 @@ public class ProductController {
      */
     @RequestMapping("list")
     public Object list(){
-        return productService.listProduce();
+        return productService.listProduct();
     }
 
     /**
@@ -48,11 +48,11 @@ public class ProductController {
 //
 //    }
     @GetMapping("/find")
-    public Object findById(@RequestParam(value = "produceId") int produceId){
-        Produce product = productService.findById(produceId);
-        Produce result = new Produce();
+    public Object findById(@RequestParam(value = "productId") int produceId){
+        Product product = productService.findById(produceId);
+        Product result = new Product();
         BeanUtils.copyProperties(product,result);
-        result.setProduceName( result.getProduceName()+ " data from port="+port );
+        result.setProductName( result.getProductName()+ " data from port="+port );
         return result;
 //        return JSON.toJSONString(produceService.findById(produceId));
 

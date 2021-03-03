@@ -2,7 +2,7 @@ package com.config.service.product.service.impl;
 
 
 
-import com.config.service.product.model.Produce;
+import com.config.service.product.model.Product;
 import com.config.service.product.service.ProductService;
 import org.springframework.stereotype.Service;
 
@@ -11,32 +11,32 @@ import java.util.*;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private static final Map<Integer, Produce> daoMap = new HashMap<>();
+    private static final Map<Integer, Product> daoMap = new HashMap<>();
 
     /**
      * 模拟数据库商品数据
      */
     static {
-        Produce p1 = new Produce(1, "苹果X", 9999, 10);
-        Produce p2 = new Produce(2, "冰箱", 5342, 19);
-        Produce p3 = new Produce(3, "洗衣机", 523, 90);
-        Produce p4 = new Produce(4, "电话", 64345, 150);
-        daoMap.put(p1.getProduceId(), p1);
-        daoMap.put(p2.getProduceId(), p2);
-        daoMap.put(p3.getProduceId(), p3);
-        daoMap.put(p4.getProduceId(), p4);
+        Product p1 = new Product(1, "苹果X", 9999, 10);
+        Product p2 = new Product(2, "冰箱", 5342, 19);
+        Product p3 = new Product(3, "洗衣机", 523, 90);
+        Product p4 = new Product(4, "电话", 64345, 150);
+        daoMap.put(p1.getProductId(), p1);
+        daoMap.put(p2.getProductId(), p2);
+        daoMap.put(p3.getProductId(), p3);
+        daoMap.put(p4.getProductId(), p4);
     }
 
 
     @Override
-    public List<Produce> listProduce() {
-        Collection<Produce> collection = daoMap.values();
-        List<Produce> list = new ArrayList<>(collection);
+    public List<Product> listProduct() {
+        Collection<Product> collection = daoMap.values();
+        List<Product> list = new ArrayList<>(collection);
         return list;
     }
 
     @Override
-    public Produce findById(int id) {
+    public Product findById(int id) {
         return daoMap.get(id);
     }
 }

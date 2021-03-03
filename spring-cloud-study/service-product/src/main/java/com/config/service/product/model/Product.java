@@ -15,19 +15,19 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Produce implements Serializable {
+public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 商品ID
      */
-    private Integer produceId;
+    private Integer productId;
 
     /**
      * 商品名称
      */
-    private String produceName;
+    private String productName;
 
     /**
      * 商品价格
