@@ -10,3 +10,5 @@ eureka:
     fetchRegistry: false         #false表示自己就是注册中心，职责是维护实例，不参加检索
     serviceUrl:                  #设置eureka server的交互地址，即对外暴露的地址
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    enable-self-preservation: false
