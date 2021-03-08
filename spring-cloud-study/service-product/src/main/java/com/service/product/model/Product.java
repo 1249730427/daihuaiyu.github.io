@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
   * @ClassName: Produce
   * @Description: 商品实体信息
-  * @author xub
+  * @author daihuaiyu
   * @date 2019/7/12 下午12:33
   */
 @Data

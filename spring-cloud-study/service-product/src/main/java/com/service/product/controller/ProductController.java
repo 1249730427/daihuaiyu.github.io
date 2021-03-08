@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @Description: 商品服务对外提供接口
  *
- * @author xub
+ * @author daihuaiyu
  * @date 2019/7/12 下午12:43
  */
 @RestController

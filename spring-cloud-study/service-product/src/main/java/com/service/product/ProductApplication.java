@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 /**
   * @ClassName: ProduceApplication
   * @Description: 商品服务启动类
-  * @author xub
+  * @author daihuaiyu
   * @date 2019/7/12 下午12:29
   */
 @SpringBootApplication

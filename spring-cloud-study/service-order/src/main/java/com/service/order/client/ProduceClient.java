@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * name = "product-service"是你调用服务端名称
  * fallback = ProductClientFallback.class，后面是你自定义的降级处理类
  *
- * @author xub
+ * @author daihuaiyu
  * @date 2019/7/12 下午1:01
  */
 @FeignClient(name = "product-service",fallback = ProduceClientFallback.class )

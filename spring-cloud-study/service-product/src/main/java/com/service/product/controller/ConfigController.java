@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
   * @ClassName: ConfigController
   * @Description: 去配置中心读取配置信息
-  * @author xub
+  * @author daihuaiyu
   * @date 2019/7/12 下午12:31
   */
 @Slf4j
