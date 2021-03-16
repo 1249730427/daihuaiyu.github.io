@@ -100,5 +100,11 @@ public class Header {
     public void setCammand(int cammand) {
         this.cammand = cammand;
     }
+
+    @Override
+    public String toString() {
+        return "header [tag=" + tag + "encode=" + encode + ",encrypt=" + encrypt + ",extend1=" + extend1 + ",extend2=" + extend2 + ",sessionid=" + sessionid + ",length=" + length + ",cammand="
+                + cammand + "]";
+    }
 }
 

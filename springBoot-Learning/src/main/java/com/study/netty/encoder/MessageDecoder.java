@@ -25,7 +25,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
     /**
      * 标志头
      */
-    private final static byte PACKAGE_LENGTH = 0x01;
+    public final static byte PACKAGE_LENGTH = 0x01;
 
     //从ByteBuf中获取字节，转换成对象，写入到List中
     @Override
