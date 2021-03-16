@@ -5,7 +5,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>eureka</module>
-		<module>service-produce</module>
+		<module>service-product</module>
 		<module>service-order</module>
         <module>config-service</module>
         <module>zuul-service</module>
