@@ -2,6 +2,7 @@ package com.study.netty;
 
 import com.study.netty.domain.Header;
 import com.study.netty.domain.Message;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * @create 2021/3/16 21:42
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
     //接收请求后的处理类
