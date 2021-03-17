@@ -30,7 +30,8 @@ public class MessageDecoder extends ByteToMessageDecoder {
     //从ByteBuf中获取字节，转换成对象，写入到List中
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-        if (byteBuf.readerIndex() < HEAD_LENGTH) {
+        byteBuf.markReaderIndex();
+        if (byteBuf.readableBytes() < HEAD_LENGTH) {
             throw new CorruptedFrameException("包长度问题");
         }
         byte readByte = byteBuf.readByte();

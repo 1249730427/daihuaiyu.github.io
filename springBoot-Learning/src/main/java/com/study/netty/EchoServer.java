@@ -26,7 +26,7 @@ import java.security.cert.CertificateException;
 @Slf4j
 public class EchoServer {
 
-    private final static boolean SSL=System.getProperty("ssl")==null;
+    private final static boolean SSL=System.getProperty("ssl")!=null;
     private final static Integer PORT = Integer.parseInt(System.getProperty("port","8097"));
 
     public static void main(String[] args) throws CertificateException, SSLException, InterruptedException {
