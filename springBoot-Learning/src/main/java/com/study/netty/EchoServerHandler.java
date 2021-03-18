@@ -21,14 +21,14 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     //接收请求后的处理类
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        Message message = (Message) msg;
-        log.info("接受到的数据data:"+message.getData());
+            Message message = (Message) msg;
+            log.info("接受到的数据data:" + message.getData());
 
-        //此处编写接收到客户端请求后的业务逻辑
-        String content="hello world,this is nettyServer";
-        Header header=new Header((byte)0, (byte)1, (byte)1, (byte)1, (byte)0, "713f17ca614361fb257dc6741332caf2",content.getBytes("UTF-8").length, 1);
-        Message message1 = new Message(header, content);
-        ctx.writeAndFlush(message1);
+            //此处编写接收到客户端请求后的业务逻辑
+            String content = "hello world,this is nettyServer";
+            Header header = new Header((byte) 0, (byte) 1, (byte) 1, (byte) 1, (byte) 0, "713f17ca614361fb257dc6741332caf2", content.getBytes("UTF-8").length, 1);
+            Message message1 = new Message(header, content);
+            ctx.writeAndFlush(message1);
     }
 
     @Override

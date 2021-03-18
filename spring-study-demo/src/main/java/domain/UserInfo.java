@@ -1,6 +1,6 @@
 package domain;
 
-public class UserInfo {
+public class UserInfo extends teacher {
 
     //code、info可以统一定义一个类
     private String code;

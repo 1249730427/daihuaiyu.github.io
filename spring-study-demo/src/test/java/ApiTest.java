@@ -21,6 +21,8 @@ import service.OrderAdapterService;
 import service.engine.IEngine;
 import service.engine.impl.TreeEngineHandler;
 import service.impl.*;
+import util.RedisUtil;
+import util.ReflectUtil;
 
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
@@ -409,6 +411,34 @@ public class ApiTest {
         System.out.println(builder.levelTwo(new BigDecimal(98.25)));
         // 现代简约
         System.out.println(builder.levelThree(new BigDecimal(100)));
+    }
+
+    @Test
+    public void test_reflect(){
+        ReflectUtil.getFiledNameMap(UserInfo.class);
+//        List data =new ArrayList();
+//        UserInfo userInfo =new UserInfo();
+//        userInfo.setCode("111");
+//        userInfo.setAge(18);
+//        userInfo.setAddress("科苑路");
+//        userInfo.setName("zhangsan");
+//        userInfo.setInfo("测试测试");
+//        data.add(userInfo);
+//
+//        UserInfo userInfo1 =new UserInfo();
+//        userInfo1.setCode("111");
+//        userInfo1.setAge(18);
+//        userInfo1.setAddress("科苑路");
+//        userInfo1.setName("zhangsan");
+//        userInfo1.setInfo("测试测试");
+//        data.add(userInfo1);
+//        Map<Integer,String> map = new HashMap<>();
+//        map.put(0,"code");
+//        map.put(1,"age");
+//        map.put(2,"address");
+//        map.put(3,"name");
+//        map.put(4,"info");
+//        ReflectUtil.ObjectToArray(data,map);
     }
 
 }

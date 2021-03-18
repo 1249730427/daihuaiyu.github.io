@@ -6,6 +6,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.UUID;
+
 /**
  * EchoClient业务处理逻辑
  *
@@ -22,11 +24,10 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info("连接激活/channelActive");
         //ctx.writeAndFlush(Unpooled.copiedBuffer("hello world",CharsetUtil.UTF_8));
-
-        String content="hello world,this is netty client";
-        Header header=new Header((byte)0, (byte)1, (byte)1, (byte)1, (byte)0, "713f17ca614361fb257dc6741332caf2",content.getBytes("UTF-8").length, 1);
-        Message message=new Message(header,content);
-        ctx.writeAndFlush(message);
+            String content = "hello world,this is netty client" + UUID.randomUUID().toString().replaceAll("-", "");
+            Header header = new Header((byte) 0, (byte) 1, (byte) 1, (byte) 1, (byte) 0, "713f17ca614361fb257dc6741332caf2", content.getBytes("UTF-8").length, 1);
+            Message message = new Message(header, content);
+            ctx.writeAndFlush(message);
     }
 
     //接收到数据后调用
@@ -35,13 +36,13 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 
         Message msg1=(Message)msg;
 
-        System.out.println(msg1.getData());
+        log.info("收到服务端消息："+msg1.getData());
     }
 
     //完成时调用
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        System.out.println("channelReadComplete");
+        log.info("消息发送完成：channelReadComplete");
         ctx.flush();
     }
 
