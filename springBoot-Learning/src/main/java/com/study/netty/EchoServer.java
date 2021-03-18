@@ -41,14 +41,14 @@ public class EchoServer {
         }
         // Configure the server.
         /*步骤
-         * 创建一个ServerBootstrap b实例用来配置启动服务器
-         * b.group指定NioEventLoopGroup来接收处理新连接
-         * b.channel指定通道类型
-         * b.option设置一些参数
-         * b.handler设置日志记录
-         * b.childHandler指定连接请求，后续调用的channelHandler
-         * b.bind设置绑定的端口
-         * b.sync阻塞直至启动服务
+         * 创建一个ServerBootstrap bootstrap实例用来配置启动服务器
+         * bootstrap.group指定NioEventLoopGroup来接收处理新连接
+         * bootstrap.channel指定通道类型
+         * bootstrap.option设置一些参数
+         * bootstrap.handler设置日志记录
+         * bootstrap.childHandler指定连接请求，后续调用的channelHandler
+         * bootstrap.bind设置绑定的端口
+         * bootstrap.sync阻塞直至启动服务
          */
         EventLoopGroup bossEventLoopGroup = null;
         EventLoopGroup workEventLoopGroup = null;
@@ -56,20 +56,21 @@ public class EchoServer {
             bossEventLoopGroup = new NioEventLoopGroup();
             workEventLoopGroup = new NioEventLoopGroup();
             ServerBootstrap bootstrap = new ServerBootstrap().group(bossEventLoopGroup,workEventLoopGroup)
-                    .channel(NioServerSocketChannel.class).option(ChannelOption.SO_BACKLOG,100)
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            ChannelPipeline channelPipeline = socketChannel.pipeline();
-                            if(sslContext!=null){
-                                channelPipeline.addLast(sslContext.newHandler(socketChannel.alloc()));
-                            }
-                            channelPipeline.addLast(new MessageDecoder());
-                            channelPipeline.addLast(new MessageEncoder());
-                            channelPipeline.addLast(new LoggingHandler(LogLevel.INFO));
-                            channelPipeline.addLast(new EchoServerHandler());
-                        }
-                    });
+                    .channel(NioServerSocketChannel.class).option(ChannelOption.SO_BACKLOG,100).handler(new LoggingHandler(LogLevel.DEBUG))
+                    .childHandler(new NettyHttpInitializer(sslContext));
+//                    new ChannelInitializer<SocketChannel>() {
+//                        @Override
+//                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+//                            ChannelPipeline channelPipeline = socketChannel.pipeline();
+//                            if(sslContext!=null){
+//                                channelPipeline.addLast(sslContext.newHandler(socketChannel.alloc()));
+//                            }
+//                            channelPipeline.addLast(new MessageDecoder());
+//                            channelPipeline.addLast(new MessageEncoder());
+//                            channelPipeline.addLast(new LoggingHandler(LogLevel.INFO));
+//                            channelPipeline.addLast(new EchoServerHandler());
+//                        }
+//                    });
             //启动Server
             ChannelFuture channelFuture = bootstrap.bind(PORT).sync();
             log.info("EchoServer.main ServerBootstrap配置启动完成");
