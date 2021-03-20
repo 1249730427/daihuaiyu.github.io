@@ -25,9 +25,9 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info("连接激活/channelActive");
         //ctx.writeAndFlush(Unpooled.copiedBuffer("hello world",CharsetUtil.UTF_8));
-//            String content = "hello world,this is netty client" + UUID.randomUUID().toString().replaceAll("-", "");
-            Scanner scanner = new Scanner(System.in);
-            String content = scanner.nextLine();
+            String content = "hello world,this is netty client" + UUID.randomUUID().toString().replaceAll("-", "");
+//            Scanner scanner = new Scanner(System.in);
+//            String content = scanner.nextLine();
             Header header = new Header((byte) 0, (byte) 1, (byte) 1, (byte) 1, (byte) 0, "713f17ca614361fb257dc6741332caf2", content.getBytes("UTF-8").length, 1);
             Message message = new Message(header, content);
             ctx.writeAndFlush(message);

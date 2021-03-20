@@ -15,10 +15,12 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.net.ssl.SSLException;
 import java.security.cert.CertificateException;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -67,9 +69,11 @@ public class EchoClient {
                                 channelPipeline.addLast(sslContext.newHandler(socketChannel.alloc(),IPADDRESS,PORT));
                             }
                             channelPipeline.addLast(new LoggingHandler(LogLevel.INFO));
+                            channelPipeline.addLast(new IdleStateHandler(0, 14, 0, TimeUnit.SECONDS));
                             channelPipeline.addLast(new MessageEncoder());
                             channelPipeline.addLast(new MessageDecoder());
                             channelPipeline.addLast(new EchoClientHandler());
+                            channelPipeline.addLast(new KpClientHandler());  //添加客户端心跳检测逻辑
                         }
                     });
 
