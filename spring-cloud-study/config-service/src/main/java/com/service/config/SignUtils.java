@@ -17,28 +17,28 @@ public class SignUtils {
     private static final String secretKeyOfWxh = "e10adc3949ba59abbe56e057f20f883f";
     private static final String appidOfWxh = "xxx";
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         //参数签名算法测试例子
         HashMap<String, String> signMap = new HashMap<String, String>();
-        signMap.put("devid","BC5549D899ED");
-        signMap.put("userId","1");
-        signMap.put("type","worker");
-        signMap.put("name","中文测试");
-        System.out.println("得到签名sign1:"+getSign(signMap,secretKeyOfWxh));
+        signMap.put("devid", "BC5549D899ED");
+        signMap.put("userId", "1");
+        signMap.put("type", "worker");
+        signMap.put("name", "中文测试");
+        System.out.println("得到签名sign1:" + getSign(signMap, secretKeyOfWxh));
     }
 
 
     /**
      * 唯修汇外部接口签名验证
+     *
      * @param request
      * @return
      */
     public static Boolean checkSign(HttpServletRequest request) throws Exception {
-        Boolean flag= false;
+        Boolean flag = false;
         String appid = request.getParameter("appid");//appid
-        if(!appid.equals(appidOfWxh)){
-            throw  RestCommService.buildBadRequest("appid错误");
+        if (!appid.equals(appidOfWxh)) {
+            throw RestCommService.buildBadRequest("appid错误");
         }
         String sign = request.getParameter("sign");//签名
         String timestamp = request.getParameter("timestamp");//时间戳
@@ -48,18 +48,18 @@ public class SignUtils {
         int verifyTimestampNum = Integer.parseInt(timestamp); // 时间戳的数值
         // 在一小时范围之外，访问已过期
         if (Math.abs(verifyTimestampNum - currTimestampNum) > 600) {
-            throw  RestCommService.buildBadRequest("sign已经过期");
+            throw RestCommService.buildBadRequest("sign已经过期");
         }
         //检查sigin是否过期
-        Enumeration<?> pNames =  request.getParameterNames();
+        Enumeration<?> pNames = request.getParameterNames();
         Map<String, String> params = new HashMap<String, String>();
         while (pNames.hasMoreElements()) {
             String pName = (String) pNames.nextElement();
-            if("sign".equals(pName)) continue;
-            String pValue = (String)request.getParameter(pName);
+            if ("sign".equals(pName)) continue;
+            String pValue = (String) request.getParameter(pName);
             params.put(pName, pValue);
         }
-        if(sign.equals(getSign(params, secretKeyOfWxh))){
+        if (sign.equals(getSign(params, secretKeyOfWxh))) {
             flag = true;
         }
         return flag;
@@ -73,7 +73,6 @@ public class SignUtils {
             throw new IllegalArgumentException(e);
         }
     }
-
 
 
     private static byte[] getMD5Digest(String data) throws IOException {
@@ -104,24 +103,23 @@ public class SignUtils {
 
     /**
      * 得到签名
+     *
      * @param params 参数集合不含secretkey
      * @param secret 验证接口的secretkey
      * @return
      */
-    public static String getSign(Map<String, String> params, String secret)
-    {
-        String sign="";
+    public static String getSign(Map<String, String> params, String secret) {
+        String sign = "";
         StringBuilder sb = new StringBuilder();
         //step1：先对请求参数排序
-        Set<String> keyset=params.keySet();
-        TreeSet<String> sortSet=new TreeSet<String>();
+        Set<String> keyset = params.keySet();
+        TreeSet<String> sortSet = new TreeSet<String>();
         sortSet.addAll(keyset);
-        Iterator<String> it=sortSet.iterator();
+        Iterator<String> it = sortSet.iterator();
         //step2：把参数的key value链接起来 secretkey放在最后面，得到要加密的字符串
-        while(it.hasNext())
-        {
-            String key=it.next();
-            String value=params.get(key);
+        while (it.hasNext()) {
+            String key = it.next();
+            String value = params.get(key);
             sb.append(key).append(value);
         }
         sb.append(secret);
@@ -131,7 +129,7 @@ public class SignUtils {
             md5Digest = getMD5Digest(sb.toString());
             sign = byte2hex(md5Digest);
         } catch (IOException e) {
-            LOGGER.error("生成签名错误",e);
+            LOGGER.error("生成签名错误", e);
         }
         return sign;
     }

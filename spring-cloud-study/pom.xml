@@ -9,6 +9,7 @@
 		<module>service-order</module>
         <module>config-service</module>
         <module>zuul-service</module>
+        <module>service-kafka</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

@@ -31,10 +31,11 @@ public class AesUtil {
 
     /**
      * 解密视频路径
+     *
      * @param data 加密路径
      * @return 解密路径
      */
-    public static String decrypt(String data){
+    public static String decrypt(String data) {
         if (StringUtils.isEmpty(data)) {
             return "";
         }
@@ -66,7 +67,7 @@ public class AesUtil {
         return content;
     }
 
-    public static String encrypt(String data){
+    public static String encrypt(String data) {
         if (StringUtils.isEmpty(data)) {
             return "";
         }

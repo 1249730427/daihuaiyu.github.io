@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
-  * @ClassName: Produce
-  * @Description: 商品实体信息
-  * @author daihuaiyu
-  * @date 2019/7/12 下午12:33
-  */
+ * @author daihuaiyu
+ * @ClassName: Produce
+ * @Description: 商品实体信息
+ * @date 2019/7/12 下午12:33
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

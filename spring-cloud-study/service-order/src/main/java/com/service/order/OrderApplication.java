@@ -20,14 +20,14 @@ import org.springframework.web.client.RestTemplate;
 @EnableCircuitBreaker
 public class OrderApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(OrderApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(OrderApplication.class, args);
+    }
 
-	@LoadBalanced
-	@Bean
-	public RestTemplate restTemplate(){
-		return new RestTemplate();
-	}
+    @LoadBalanced
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
 }

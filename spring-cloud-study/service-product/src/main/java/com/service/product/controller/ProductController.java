@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * @Description: 商品服务对外提供接口
- *
  * @author daihuaiyu
+ * @Description: 商品服务对外提供接口
  * @date 2019/7/12 下午12:43
  */
 @RestController
@@ -31,15 +30,17 @@ public class ProductController {
 
     /**
      * 获取所有商品列表
+     *
      * @return
      */
     @RequestMapping("list")
-    public Object list(){
+    public Object list() {
         return productService.listProduct();
     }
 
     /**
      * t
+     *
      * @return
      */
 //    @GetMapping("/find")
@@ -48,11 +49,11 @@ public class ProductController {
 //
 //    }
     @GetMapping("/find")
-    public Object findById(@RequestParam(value = "productId") int produceId){
+    public Object findById(@RequestParam(value = "productId") int produceId) {
         Product product = productService.findById(produceId);
         Product result = new Product();
-        BeanUtils.copyProperties(product,result);
-        result.setProductName( result.getProductName()+ " data from port="+port );
+        BeanUtils.copyProperties(product, result);
+        result.setProductName(result.getProductName() + " data from port=" + port);
         return result;
 //        return JSON.toJSONString(produceService.findById(produceId));
 

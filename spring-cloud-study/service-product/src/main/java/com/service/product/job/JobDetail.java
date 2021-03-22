@@ -13,12 +13,12 @@ class SampleScheduler {
 
     @Bean
     public JobDetail sampleJobDetail() {
-        return JobBuilder.newJob(DemoJob.class).withIdentity("job","test").
-                usingJobData("name","World !").storeDurably().build();
+        return JobBuilder.newJob(DemoJob.class).withIdentity("job", "test").
+                usingJobData("name", "World !").storeDurably().build();
     }
 
     @Bean
-    public Trigger sampleTrigger(){
+    public Trigger sampleTrigger() {
         SimpleScheduleBuilder builder = SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(10000).repeatForever();
         return TriggerBuilder.newTrigger().forJob(sampleJobDetail()).withIdentity("sampleTrigger").withSchedule(builder).build();
     }

@@ -16,8 +16,8 @@ public class ScheduleTask1 {
      */
     @Scheduled(fixedRate = 6000000)
     @Async
-    void process(){
-        System.out.println("this is scheduler task running " + Thread.currentThread().getId()+""+(count++));
+    void process() {
+        System.out.println("this is scheduler task running " + Thread.currentThread().getId() + "" + (count++));
     }
 
 

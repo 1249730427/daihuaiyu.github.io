@@ -43,7 +43,7 @@ public class ProduceOrderServiceImpl implements ProduceOrderService {
         produceOrder.setProduceName(jsonNode.get("produceName").toString());
         produceOrder.setPrice(Integer.parseInt(jsonNode.get("price").toString()));
 
-        log.info("最终生成的订单信息为 = {}",produceOrder);
+        log.info("最终生成的订单信息为 = {}", produceOrder);
         return produceOrder;
     }
 }

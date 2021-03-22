@@ -15,7 +15,7 @@ public class DemoJob2 extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        JobDataMap map=jobExecutionContext.getJobDetail().getJobDataMap();
+        JobDataMap map = jobExecutionContext.getJobDetail().getJobDataMap();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH24:mm:ss");
     }
 }

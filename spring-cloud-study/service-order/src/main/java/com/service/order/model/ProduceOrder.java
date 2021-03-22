@@ -20,7 +20,7 @@ public class ProduceOrder implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     *  订单ID
+     * 订单ID
      */
     private Integer orderId;
 

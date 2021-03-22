@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
-  * @ClassName: ConfigController
-  * @Description: 去配置中心读取配置信息
-  * @author daihuaiyu
-  * @date 2019/7/12 下午12:31
-  */
+ * @author daihuaiyu
+ * @ClassName: ConfigController
+ * @Description: 去配置中心读取配置信息
+ * @date 2019/7/12 下午12:31
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/product")
@@ -26,7 +26,7 @@ public class ConfigController {
 
 
     @RequestMapping("url")
-    public void list(){
+    public void list() {
         log.info("去配置中心读取的url为={}", url);
     }
 }

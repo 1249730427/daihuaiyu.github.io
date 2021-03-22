@@ -5,16 +5,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.config.server.EnableConfigServer;
 
 /**
-  * @ClassName: ConfigserviceApplication
-  * @Description: 配置中心 添加注解@EnableConfigServer
-  * @author daihuaiyu
-  * @date 2019/7/12 下午3:39
-  */
+ * @author daihuaiyu
+ * @ClassName: ConfigserviceApplication
+ * @Description: 配置中心 添加注解@EnableConfigServer
+ * @date 2019/7/12 下午3:39
+ */
 @SpringBootApplication
 @EnableConfigServer
 public class ConfigserviceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ConfigserviceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigserviceApplication.class, args);
+    }
 }

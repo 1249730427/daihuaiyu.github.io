@@ -19,7 +19,7 @@ public class KeyUtils {
 
     private static final String PRIVATE_KEY_PATH = "E:\\2.txt";
 
-    public static void geration(){
+    public static void geration() {
         KeyPairGenerator keyPairGenerator;
         try {
             keyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -39,8 +39,10 @@ public class KeyUtils {
             e.printStackTrace();
         }
     }
+
     /**
      * 获取公钥
+     *
      * @param filename
      * @return
      * @throws Exception
@@ -49,30 +51,33 @@ public class KeyUtils {
         File f = new File(filename);
         FileInputStream fis = new FileInputStream(f);
         DataInputStream dis = new DataInputStream(fis);
-        byte[] keyBytes = new byte[(int)f.length()];
+        byte[] keyBytes = new byte[(int) f.length()];
         dis.readFully(keyBytes);
         dis.close();
         X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return kf.generatePublic(spec);
     }
+
     /**
      * 获取私钥
+     *
      * @param filename
      * @return
      * @throws Exception
      */
-    public static PrivateKey getPrivateKey(String filename)throws Exception {
+    public static PrivateKey getPrivateKey(String filename) throws Exception {
         File f = new File(filename);
         FileInputStream fis = new FileInputStream(f);
         DataInputStream dis = new DataInputStream(fis);
-        byte[] keyBytes = new byte[(int)f.length()];
+        byte[] keyBytes = new byte[(int) f.length()];
         dis.readFully(keyBytes);
         dis.close();
-        PKCS8EncodedKeySpec spec =new PKCS8EncodedKeySpec(keyBytes);
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return kf.generatePrivate(spec);
     }
+
     public static void main(String[] args) {
 
         geration();

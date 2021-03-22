@@ -13,7 +13,7 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
 
 /**
  * 订单限流
- *其它和上面都一样，只是run()中逻辑不一样
+ * 其它和上面都一样，只是run()中逻辑不一样
  */
 @Component
 public class OrderRateLimiterFilter extends ZuulFilter {

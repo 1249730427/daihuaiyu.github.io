@@ -18,6 +18,6 @@ public class DemoJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.out.println("Demo:"+"Hello "+name);
+        System.out.println("Demo:" + "Hello " + name);
     }
 }

@@ -13,7 +13,7 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
 
 /**
  * 登录过滤器
- *记得类上加Component注解
+ * 记得类上加Component注解
  */
 @Component
 public class LoginFilter extends ZuulFilter {

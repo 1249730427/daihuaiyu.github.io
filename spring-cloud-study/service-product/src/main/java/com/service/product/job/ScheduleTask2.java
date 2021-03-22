@@ -18,8 +18,8 @@ public class ScheduleTask2 {
 
     @Scheduled(cron = "*/6 5 10 * * ?")
     @Async
-    void process(){
-        System.out.println("this is scheduler task running "+Thread.currentThread().getId()+""+format.format(new Date()));
+    void process() {
+        System.out.println("this is scheduler task running " + Thread.currentThread().getId() + "" + format.format(new Date()));
 
     }
 }
