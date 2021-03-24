@@ -1,10 +1,7 @@
 server:
-  port: 8080
-
-spring:
-  profiles:
-    active: dev
+  port: 8081
 
 kafka:
   bootstrap-servers: 127.0.0.1:9092
-  topics: testTopic
+  topic:
+    helloworld: testTopic

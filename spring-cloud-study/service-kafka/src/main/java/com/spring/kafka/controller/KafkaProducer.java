@@ -25,7 +25,7 @@ public class KafkaProducer {
     @Autowired
     private Sender sender;
 
-    @RequestMapping(value = "/sender.action",method= RequestMethod.POST )
+    @RequestMapping(path = "/sender",method= RequestMethod.POST )
     public void exec(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,String data) throws IOException {
         log.info("开始发送消息：");
         sender.sendMessage("testTopic",data);

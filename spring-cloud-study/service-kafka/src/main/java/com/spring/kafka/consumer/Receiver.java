@@ -15,16 +15,12 @@ public class Receiver {
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    public Receiver(final CountDownLatch countDownLatch) {
-        this.countDownLatch = countDownLatch;
-    }
-
     public Receiver() {
     }
 
     @KafkaListener(topics = "${kafka.topic.helloworld}")
-    public void receive(String payLoad){
-        log.info("接收到消息payLoad:{}",payLoad);
+    public void receive(String payload){
+        log.info("接收到消息payLoad:{}",payload);
         countDownLatch.countDown();
     }
 
