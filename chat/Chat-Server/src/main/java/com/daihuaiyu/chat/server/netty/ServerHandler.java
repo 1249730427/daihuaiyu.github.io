@@ -1,5 +1,6 @@
 package com.daihuaiyu.chat.server.netty;
 
+import com.daihuaiyu.chat.server.config.SpringUtil;
 import com.daihuaiyu.chat.server.controller.NettyController;
 import com.daihuaiyu.chat.server.util.CacheUtil;
 import io.netty.channel.Channel;
@@ -19,6 +20,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServerHandler extends SimpleChannelInboundHandler<String> {
 
+    private static NettyController nettyController;
+
+    static {
+        nettyController = SpringUtil.getBean(NettyController.class);
+    }
+
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, String s) throws Exception {
@@ -30,7 +37,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.info("接收到channel地址："+ctx.channel().remoteAddress()+"的消息"+msg);
         Channel channel = ctx.channel();
-        String message = NettyController.process((String)msg,channel);
+        String message = nettyController.process((String)msg,channel);
         if(message !=null && message.length()>0){
             ctx.writeAndFlush(message); //写会客户端
         }
@@ -48,5 +55,11 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
         Channel channel = ctx.channel();
         CacheUtil.del(channel); //删除用户缓存
         log.info(channel.remoteAddress()+"下线了");
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.info(ctx.channel().remoteAddress()+"出错了，原因："+cause);
+        ctx.close();
     }
 }

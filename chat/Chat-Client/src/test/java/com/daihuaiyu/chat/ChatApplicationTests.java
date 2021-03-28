@@ -1,13 +1,16 @@
 package com.daihuaiyu.chat;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ChatApplicationTests {
+public class ChatApplicationTests {
+
+    public ChatApplicationTests() {
+    }
 
     @Test
-    void contextLoads() {
+    public void contextLoads() {
     }
 
 }

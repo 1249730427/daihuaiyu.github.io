@@ -1,8 +1,10 @@
 package com.daihuaiyu.chat.server.service;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.netty.channel.Channel;
 
-import java.nio.channels.Channel;
+import java.beans.PropertyVetoException;
+import java.sql.SQLException;
 
 /**
  * 业务处理类接口
@@ -13,5 +15,7 @@ import java.nio.channels.Channel;
  */
 public interface ChatHandleService {
 
-     String handleService(ObjectNode jsonNodes, Channel channel);
+     String handleService(ObjectNode jsonNodes, Channel channel) throws PropertyVetoException, SQLException;
+
+     String getMSG_TYPE();
 }
