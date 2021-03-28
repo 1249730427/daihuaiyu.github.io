@@ -40,7 +40,7 @@ public class SingleChatHandleServiceImpl implements ChatHandleService {
             //用户在线
             objectNode.put("code",300);
             //消息转发
-            channel.writeAndFlush(message.toString());
+            channel1.writeAndFlush(message.toString());
         }
         return objectNode.toString();
     }
