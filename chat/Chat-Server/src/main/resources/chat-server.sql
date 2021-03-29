@@ -1,12 +1,12 @@
---创建数据库
+#创建数据库
 create database chat;
 
---表如果存在则删除表
+#表如果存在则删除表
 drop table if exists friend;
 drop table if exists information;
 drop table if exists user;
 
---创建朋友表
+#创建朋友表
 CREATE TABLE friend (
   id bigint(20) NOT NULL AUTO_INCREMENT comment '主键',
   user varchar(256)  DEFAULT NULL comment '用户名称',
@@ -16,7 +16,7 @@ CREATE TABLE friend (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 comment '朋友表';
 
---创建信息表
+#创建信息表
 CREATE TABLE information (
   id bigint(20) NOT NULL AUTO_INCREMENT comment '主键',
   iid int(20) DEFAULT NULL comment '信息ID',
@@ -27,7 +27,7 @@ CREATE TABLE information (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 comment '信息表';
 
---创建用户表
+#创建用户表
 CREATE TABLE user (
   id bigint(20) NOT NULL AUTO_INCREMENT AUTO_INCREMENT comment '主键',
   user_id int(20) NOT NULL comment '用户ID',
@@ -38,7 +38,7 @@ CREATE TABLE user (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 comment '用户表';
 
---初始化语句，数据可自定义
+#初始化语句，数据可自定义
 INSERT INTO user (user_id,name,passwd,email) values(1249730427,'戴怀玉','daihuaiyu','1249730427@qq.com');
 INSERT INTO user (user_id,name,passwd,email) values(891975477,'张三','zhangsan','891975477@qq.com');
 INSERT INTO user (user_id,name,passwd,email) values(892174673,'李四','lisi','892174673@qq.com');
