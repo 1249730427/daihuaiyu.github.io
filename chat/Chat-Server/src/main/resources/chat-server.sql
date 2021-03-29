@@ -27,7 +27,7 @@ CREATE TABLE information (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 comment '信息表';
 
---创建用户表
+--创建用户表，数据可自定义
 CREATE TABLE user (
   id bigint(20) NOT NULL AUTO_INCREMENT AUTO_INCREMENT comment '主键',
   user_id int(20) NOT NULL comment '用户ID',
@@ -42,7 +42,8 @@ CREATE TABLE user (
 INSERT INTO user (user_id,name,passwd,email) values(1249730427,'戴怀玉','daihuaiyu','1249730427@qq.com');
 INSERT INTO user (user_id,name,passwd,email) values(891975477,'张三','zhangsan','891975477@qq.com');
 INSERT INTO user (user_id,name,passwd,email) values(892174673,'李四','lisi','892174673@qq.com');
-INSERT INTO information(iid,nickName,signature,uId) values (1,'Sunny-带鱼','你若离去',1249730427);
-INSERT INTO information(iid,nickName,signature,uId) values (2,'张三','后会无期',1249730427);
-INSERT INTO  friend(user,linker,uid) values ('张三','张三',1249730427);
+INSERT INTO information(iid,nickName,signature,uId) values (1,'带鱼','你若离去',1249730427);
+INSERT INTO information(iid,nickName,signature,uId) values (2,'张三','后会无期',891975477);
+INSERT INTO  friend(user,linker,uid) values ('带鱼','张三',1249730427);
+INSERT INTO  friend(user,linker,uid) values ('张三','带鱼',891975477);
 
