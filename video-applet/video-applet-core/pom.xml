@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.daihuaiyu</groupId>
         <artifactId>video-applet</artifactId>
@@ -10,15 +11,10 @@
     </parent>
 
     <groupId>com.daihuaiyu</groupId>
-    <artifactId>video-applet-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.daihuaiyu</groupId>
-            <artifactId>video-applet-core</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-    </dependencies>
+    <artifactId>video-applet-core</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>video-applet-core</name>
+    <description>短视频类的微信小程序项目基础包</description>
 
 </project>

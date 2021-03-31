@@ -37,9 +37,7 @@ public class ApiResponse {
     }
 
     /**失败时响应，状态码为500，响应数据为null*/
-    public static ApiResponse error(String msg){
-        return new ApiResponse(500,msg,null);
-    }
+    public static ApiResponse errorMsg(String msg) { return new ApiResponse(500, msg, null); }
 
     /**失败响应，状态码为501，响应数据为null*/
     public static ApiResponse errorMap(Object data) {

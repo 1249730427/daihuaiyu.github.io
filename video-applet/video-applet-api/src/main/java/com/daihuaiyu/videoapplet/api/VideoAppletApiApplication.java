@@ -1,9 +1,12 @@
 package com.daihuaiyu.videoapplet.api;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan(basePackages = {"com.daihuaiyu.videoapplet.api.*","com.daihuaiyu.videoapplet.core.*"})
 public class VideoAppletApiApplication {
 
     public static void main(String[] args) {

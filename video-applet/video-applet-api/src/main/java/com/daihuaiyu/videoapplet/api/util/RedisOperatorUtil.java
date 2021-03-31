@@ -179,5 +179,9 @@ public class RedisOperatorUtil {
     public long rpush(String key, String value) {
         return redisTemplate.opsForList().rightPush(key, value);
     }
+
+    public boolean hasKey(String key){
+        return redisTemplate.hasKey(key);
+    }
 }
 

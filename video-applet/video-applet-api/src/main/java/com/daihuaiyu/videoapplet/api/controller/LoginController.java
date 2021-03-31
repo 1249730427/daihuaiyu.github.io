@@ -14,16 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
-
 /**
- * 用户注册Controller
+ * 用户登录Controller
  *
  * @author daihuaiyu
- * @create: 2021-03-30 16:01
+ * @create: 2021-03-31 10:15
  **/
 @RestController
-public class RegisterController {
+public class LoginController {
 
     private final static String USERSESSIONID="user-session-id";
 
@@ -31,19 +29,19 @@ public class RegisterController {
     private UserService userService;
 
     @Autowired
-    private RedisOperatorUtil redisOperator;
+    private RedisOperatorUtil RedisOperator;
     /**
-     * 用户注册业务逻辑：
-     * 1.前端传入用户的用户名和密码，需对用户名称和密码进行校验，不成功则返回相应的错误信息
+     * 用户登录业务逻辑：
+     * 1.前端传入用户名和密码：需对用户名称和密码进行校验，不成功则返回相应的错误信息
      * 2.判断用户是否注册，根据用户名称去用户表查找数据是否存在
-     * 3.若不存在，则开始注册,保存注册信息进数据库
-     * 4.利用UUID生成token，保存到缓存中，key为：USER：+用户的id，并设置过期日期为30分钟
+     * 3.校验密码，和数据库中的MD5的值进行比较
+     * 4.从缓存中获取token信息，如果存在则更新token过期时间，不存在则设置token,利用UUID生成token，保存到缓存中，key为：USER：+用户的id，并设置过期日期为30分钟
      * @param users
      * @return
      */
-    @ApiOperation(value = "用户注册", notes = "用户注册的接口")
-    @RequestMapping(path="/regist")
-    public ApiResponse userRegister(@RequestBody Users users) throws Exception {
+    @ApiOperation(value = "用户登录", notes = "用户登录的接口")
+    @RequestMapping(path="/login")
+    public ApiResponse login(@RequestBody Users users) throws Exception {
         if(StringUtils.isBlank(users.getUsername())){
             return ApiResponse.errorMsg("用户名称不能为空!");
         }
@@ -51,24 +49,21 @@ public class RegisterController {
             return ApiResponse.errorMsg("用户密码不能为空!");
         }
         boolean exists = userService.userExists(users.getUsername());
-        if(exists){
-            return ApiResponse.errorMsg("该用户名已注册!");
+        if(!exists){
+            return ApiResponse.errorMsg("请先注册，再登录!");
         }
-        Users user = new Users();
-        user.setUsername(users.getUsername());
-        user.setPassword(MD5Util.encode(users.getPassword()));
-        user.setNickname(users.getUsername());
-        user.setFaceImage("");
-        user.setFansCounts(0);
-        user.setFollowCounts(0);
-        user.setReceiveLikeCounts(0);
-        final Users users1 = userService.save(user);
-        String token = UUID.randomUUID().toString();
-        user.setPassword("");
+        final Users user = userService.findByUserName(users.getUsername());
+        if(user.getPassword().equalsIgnoreCase(MD5Util.encode(users.getPassword()))){
+            return ApiResponse.errorMsg("密码输入错误!");
+        }
+        final boolean hasKey = RedisOperator.hasKey(USERSESSIONID + user.getId());
+        if(hasKey){
+            RedisOperator.expire(USERSESSIONID + user.getId(),30*60);
+        }
+        final String token = RedisOperator.get(USERSESSIONID + user.getId());
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user,userVo);
         userVo.setToken(token);
-        redisOperator.set(USERSESSIONID+users1.getId(),token,30*60);
         return ApiResponse.ok(userVo);
     }
 }
