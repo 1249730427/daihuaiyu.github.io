@@ -64,5 +64,19 @@ public class UserServiceImpl implements UserService {
         }
         return users;
     }
+
+    /**
+     * 根据用户ID查找用户信息
+     *
+     * @param id
+     */
+    @Override
+    public Users fingById(String id) {
+        Optional<Users> users = userDao.findById(id);
+        if(users.isPresent()){
+            return users.get();
+        }
+        return null;
+    }
 }
 

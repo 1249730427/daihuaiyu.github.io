@@ -18,4 +18,7 @@ public interface UserService {
 
     /**根据用户名称查找用户信息，用户名是唯一索引*/
     Users findByUserName(String userName);
+
+    /**根据用户ID查找用户信息*/
+    Users fingById(String id);
 }
