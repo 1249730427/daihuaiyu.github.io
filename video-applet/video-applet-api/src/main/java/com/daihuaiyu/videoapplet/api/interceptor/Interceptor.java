@@ -3,8 +3,6 @@ package com.daihuaiyu.videoapplet.api.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.daihuaiyu.videoapplet.api.util.ApiResponse;
 import com.daihuaiyu.videoapplet.api.util.RedisOperatorUtil;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufOutputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
