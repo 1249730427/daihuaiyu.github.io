@@ -1,5 +1,6 @@
 package com.daihuaiyu.videoapplet.api.service;
 
+import com.daihuaiyu.videoapplet.api.util.PageResult;
 import com.daihuaiyu.videoapplet.core.domain.Video;
 
 /**
@@ -12,4 +13,7 @@ public interface VideoService {
 
     /**保存视频信息*/
     void save(Video video);
+
+    /**分页查询视频信息*/
+    PageResult findAllVideo(Integer pageNum,Integer pageSize,String searchValue);
 }

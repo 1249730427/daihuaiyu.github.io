@@ -111,4 +111,17 @@ public class VideoController {
         return ApiResponse.ok(bgmService.findAllBgm());
     }
 
+
+    /**
+     * 查询视频列表业务逻辑：
+     * 1.根据查询条件,
+     * @param searchValue
+     * @return
+     */
+    @ApiOperation(value = "查询视频列表", notes = "查询视频列表")
+    @PostMapping(value = "/findVideoList")
+    public ApiResponse findVideoList(@RequestParam(value = "searchValue",defaultValue = "",required = false)String searchValue,@RequestParam("pageNum") Integer pageNum,
+                                     @RequestParam("size") Integer size){
+        return ApiResponse.ok(videoService.findAllVideo(pageNum,size,searchValue));
+    }
 }
