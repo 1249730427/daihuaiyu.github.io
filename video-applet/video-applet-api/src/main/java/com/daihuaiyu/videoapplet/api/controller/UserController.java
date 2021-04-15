@@ -1,7 +1,11 @@
 package com.daihuaiyu.videoapplet.api.controller;
 
+import com.daihuaiyu.videoapplet.api.service.CommentService;
+import com.daihuaiyu.videoapplet.api.service.UserLikeVideoService;
 import com.daihuaiyu.videoapplet.api.service.UserService;
 import com.daihuaiyu.videoapplet.api.util.ApiResponse;
+import com.daihuaiyu.videoapplet.api.util.PageResult;
+import com.daihuaiyu.videoapplet.core.domain.Comments;
 import com.daihuaiyu.videoapplet.core.domain.UserVo;
 import com.daihuaiyu.videoapplet.core.domain.Users;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +14,7 @@ import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +30,17 @@ import java.io.*;
 @RestController
 public class UserController {
 
+    //默认每页显示数据数
+    private final Integer SIZE=4;
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserLikeVideoService userLikeVideoService;
+
+    @Autowired
+    private CommentService commentService;
 
     /**
      * 获取用户信息业务逻辑
@@ -94,6 +108,35 @@ public class UserController {
         }
 
         return null;
+    }
+
+    @ApiOperation(value = "用户点赞功能", notes = "用户点赞功能")
+    @PostMapping("/like")
+    public ApiResponse like(String id,String videoId,String videoCreatedId){
+        userLikeVideoService.like(id,videoId,videoCreatedId);
+        return ApiResponse.ok(null);
+    }
+
+    @ApiOperation(value = "用户取消点赞功能", notes = "用户取消点赞功能")
+    @PostMapping("/unlike")
+    public ApiResponse unlike(String id,String videoId,String videoCreatedId){
+
+        userLikeVideoService.unlike(id,videoId,videoCreatedId);
+        return ApiResponse.ok(null);
+    }
+
+    @ApiOperation(value = "用户评论的接口/回复用户的留言", notes = "用户评论的接口/回复用户的留言")
+    @PostMapping(value = "/saveComments")
+    public ApiResponse saveComments(@RequestBody Comments comments){
+        commentService.saveComment(comments);
+        return ApiResponse.ok(null);
+    }
+
+    @ApiOperation(value = "查询用户留言", notes = "查询用户留言")
+    @PostMapping(value = "/findComments")
+    public ApiResponse findComments(String videoId,Integer page){
+        PageResult pageResult = commentService.findComments(videoId, page, SIZE);
+        return ApiResponse.ok(pageResult);
     }
 }
 

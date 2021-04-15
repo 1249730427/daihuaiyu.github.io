@@ -10,9 +10,8 @@ import io.netty.util.CharsetUtil;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.study.netty.HttpHeaderUtil.is100ContinueExcepted;
 import static io.netty.handler.codec.http.HttpHeaderNames.*;
-import static io.netty.handler.codec.http.HttpHeaders.isKeepAlive;
+import static io.netty.handler.codec.http.HttpHeaders.*;
 import static io.netty.util.CharsetUtil.*;
 
 /**
@@ -34,7 +33,7 @@ public class NettyHttpServerHandler extends ChannelInboundHandlerAdapter {
             //100 Continue含义
             //HTTP客户端程序有一个实体的主体部分要发送给服务器，但希望在发送之前查看下服务器是否会接受这个实体，所以在发送实体之前先发送了一个携带100 Continue的Expect请求首部的请求。
             //服务器在收到这样的请求后，应该用 100 Continue或一条错误码来进行响应。
-            if(is100ContinueExcepted(httpRequest)){
+            if(is100ContinueExpected(httpRequest)){
                 ctx.write( new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE));
             }
             /**HTTP请求响应
@@ -62,7 +61,7 @@ public class NettyHttpServerHandler extends ChannelInboundHandlerAdapter {
                     HttpResponseStatus.OK,
                     Unpooled.copiedBuffer(msg1, UTF_8));
             // 设置头信息
-            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8");
+            response.headers().set(CONTENT_TYPE, "text/html; charset=UTF-8");
             //response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=UTF-8");
             // 将html write到客户端
             ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
