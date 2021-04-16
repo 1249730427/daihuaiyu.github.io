@@ -1,23 +1,25 @@
 package com.daihuaiyu.videoapplet.api.controller;
 
 import com.daihuaiyu.videoapplet.api.service.BgmService;
+import com.daihuaiyu.videoapplet.api.service.CommentService;
 import com.daihuaiyu.videoapplet.api.service.VideoService;
 import com.daihuaiyu.videoapplet.api.util.ApiResponse;
 import com.daihuaiyu.videoapplet.api.util.FfmPeg;
+import com.daihuaiyu.videoapplet.api.util.PageResult;
 import com.daihuaiyu.videoapplet.core.domain.Bgm;
+import com.daihuaiyu.videoapplet.core.domain.Comments;
 import com.daihuaiyu.videoapplet.core.domain.Video;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,6 +29,7 @@ import java.util.UUID;
  * @create 2021/4/1 22:36
  */
 @RestController
+@RequestMapping("/video")
 public class VideoController {
 
     @Autowired
@@ -34,6 +37,10 @@ public class VideoController {
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private CommentService commentService;
+
 
     private static final String FiLESPACE ="D:/Study/ffmpeg";
 
@@ -124,4 +131,32 @@ public class VideoController {
                                      @RequestParam("size") Integer size){
         return ApiResponse.ok(videoService.findAllVideo(pageNum,size,searchValue));
     }
+
+    @ApiOperation(value = "用户评论的接口/回复用户的留言", notes = "用户评论的接口/回复用户的留言")
+    @PostMapping(value = "/saveComments")
+    public ApiResponse saveComments(@RequestBody Comments comments){
+        commentService.saveComment(comments);
+        return ApiResponse.ok(null);
+    }
+
+    @ApiOperation(value = "查询用户留言", notes = "查询用户留言")
+    @PostMapping(value = "/findComments")
+    public ApiResponse findComments(String videoId,Integer page){
+        PageResult pageResult = commentService.findComments(videoId, page, SIZE);
+        return ApiResponse.ok(pageResult);
+    }
+
+    @ApiOperation(value = "查询热搜词", notes = "查询热搜词")
+    @PostMapping(value = "/hot")
+    public ApiResponse findHot(){
+        List<String> list = videoService.findHot();
+        return ApiResponse.ok(list);
+    }
+
+//    @ApiOperation(value = "查询视频详情", notes = "查询视频详情")
+//    @PostMapping(value = "/findVideo")
+//    public ApiResponse findVideo( @RequestParam String id){
+//        Video video = videoService.findVideo(id);
+//        return ApiResponse.ok(video);
+//    }
 }

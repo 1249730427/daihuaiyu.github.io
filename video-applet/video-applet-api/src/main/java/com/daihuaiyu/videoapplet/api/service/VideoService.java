@@ -1,7 +1,10 @@
 package com.daihuaiyu.videoapplet.api.service;
 
 import com.daihuaiyu.videoapplet.api.util.PageResult;
+import com.daihuaiyu.videoapplet.core.domain.Hot;
 import com.daihuaiyu.videoapplet.core.domain.Video;
+
+import java.util.List;
 
 /**
  * 视频信息相关接口
@@ -16,4 +19,7 @@ public interface VideoService {
 
     /**分页查询视频信息*/
     PageResult findAllVideo(Integer pageNum,Integer pageSize,String searchValue);
+
+    /**查询热搜词功能*/
+    List<String> findHot();
 }
