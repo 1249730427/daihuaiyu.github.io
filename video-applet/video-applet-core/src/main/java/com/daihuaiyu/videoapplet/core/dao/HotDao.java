@@ -3,6 +3,7 @@ package com.daihuaiyu.videoapplet.core.dao;
 import com.daihuaiyu.videoapplet.core.domain.Hot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
 /**
  * 热搜词接口
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @author daihuaiyu
  * @create: 2021-04-16 09:43
  **/
+@Repository
 public interface HotDao extends JpaRepository<Hot,String>, JpaSpecificationExecutor<Hot> {
 
     /**通过Content查询 jpa自定义查询的固定格式findBy+对应条件的字段*/

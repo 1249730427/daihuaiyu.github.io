@@ -63,4 +63,7 @@ public class UserVo {
     @ApiModelProperty(hidden = true)
     private Integer receiveLikeCounts;
 
+    /**是否有关注者*/
+    private Boolean followed;
+
 }

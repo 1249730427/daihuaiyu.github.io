@@ -1,11 +1,13 @@
 package com.daihuaiyu.videoapplet.api.controller;
 
 import com.daihuaiyu.videoapplet.api.service.CommentService;
+import com.daihuaiyu.videoapplet.api.service.UserFansService;
 import com.daihuaiyu.videoapplet.api.service.UserLikeVideoService;
 import com.daihuaiyu.videoapplet.api.service.UserService;
 import com.daihuaiyu.videoapplet.api.util.ApiResponse;
 import com.daihuaiyu.videoapplet.api.util.PageResult;
 import com.daihuaiyu.videoapplet.core.domain.Comments;
+import com.daihuaiyu.videoapplet.core.domain.PublishVo;
 import com.daihuaiyu.videoapplet.core.domain.UserVo;
 import com.daihuaiyu.videoapplet.core.domain.Users;
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +42,9 @@ public class UserController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private UserFansService userFansService;
+
     /**
      * 获取用户信息业务逻辑
      * 1.客户端传入用户的ID，服务端根据用户ID查找用户信息
@@ -49,13 +54,18 @@ public class UserController {
      */
     @ApiOperation(value = "用户信息查询", notes = "用户信息查询的接口")
     @PostMapping("/findUserInfo")
-    public ApiResponse findUserInfo(@RequestParam("id")String id){
+    public ApiResponse findUserInfo(@RequestParam("id")String id,@RequestParam("fansId") String fansId){
+        Boolean followed = false;
         if(StringUtils.isBlank(id)){
             return ApiResponse.errorMsg("用户的ID为空!");
+        }
+        if (!StringUtils.isBlank(fansId)){
+            followed = userFansService.findIsFollowed(id, fansId);
         }
         UserVo userVo = new UserVo();
          Users users = userService.fingById(id);
         BeanUtils.copyProperties(users,userVo);
+        userVo.setFollowed(followed);
         return ApiResponse.ok(userVo);
     }
 
@@ -135,6 +145,20 @@ public class UserController {
     public ApiResponse findComments(String videoId,Integer page){
         PageResult pageResult = commentService.findComments(videoId, page, SIZE);
         return ApiResponse.ok(pageResult);
+    }
+
+    @ApiOperation(value = "查询视频发布者信息", notes = "查询视频发布者信息")
+    @PostMapping("/findPublish")
+    public ApiResponse findPublish(String id,String videoId,String publishId){
+        //查询视频发布者的信息
+        Users userInfo = userService.fingById(publishId);
+        userInfo.setPassword("");
+        //查询该用户是否给该视频点赞
+        Boolean b = userLikeVideoService.UserIsLike(id, videoId);
+        PublishVo publishVo =new PublishVo();
+        publishVo.setUsers(userInfo);
+        publishVo.setIsLike(b);
+        return ApiResponse.ok(publishVo);
     }
 }
 
