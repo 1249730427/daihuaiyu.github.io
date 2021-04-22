@@ -64,7 +64,9 @@ public class Interceptor implements HandlerInterceptor {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            printWriter.close();
+            if(printWriter!=null){
+                printWriter.close();
+            }
         }
         return false;
     }

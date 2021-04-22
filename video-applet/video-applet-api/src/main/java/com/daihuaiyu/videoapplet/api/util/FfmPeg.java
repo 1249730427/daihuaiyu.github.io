@@ -29,6 +29,8 @@ public class FfmPeg {
      * @throws IOException
      */
     public static void convert(String in,String mp3,Integer seconds,String out) throws IOException {
+        InputStreamReader inputStreamReader = null;
+        BufferedReader br =null;
         //ffmpeg.exe -i test.mp4  -i bgm.mp3 -t 3 -y new.mp4
         //把一段命令通过空格的方式分割，并存入list
         List<String> cmd=new ArrayList();
@@ -46,10 +48,15 @@ public class FfmPeg {
         Process process = processBuilder.start();
         //下面的操作是对FFMPeg中错误流的处理，如果不做该处理，最后合成的视频会不完整且无法播放
         InputStream errorStream = process.getErrorStream();
-        InputStreamReader inputStreamReader = new InputStreamReader(errorStream);
-        BufferedReader br = new BufferedReader(inputStreamReader);
-        while ( br.readLine() != null ) {
+        if(errorStream !=null){
+            inputStreamReader = new InputStreamReader(errorStream,"UTF-8");
         }
+        if(inputStreamReader!=null){
+           br = new BufferedReader(inputStreamReader);
+        }
+
+//        while ( br.readLine() != null ) {
+//        }
 
         if (br != null) {
             br.close();
@@ -62,6 +69,8 @@ public class FfmPeg {
         }
     }
     public static void convert(String in, String out) throws IOException {
+        InputStreamReader inputStreamReader = null;
+        BufferedReader br =null;
         //ffmpeg.exe -ss 00:00:01 -y -i lex.mp4 -vframes 1 lex.jpg
         List<String> cmd=new ArrayList<String>();
         cmd.add(FFMPEGEXE);
@@ -76,11 +85,16 @@ public class FfmPeg {
         ProcessBuilder processBuilder =new ProcessBuilder(cmd);
         Process process = processBuilder.start();
         InputStream errorStream = process.getErrorStream();
-        InputStreamReader inputStreamReader = new InputStreamReader(errorStream);
-        BufferedReader br = new BufferedReader(inputStreamReader);
-        String line = "";
-        while ( (line = br.readLine()) != null ) {
+        if(errorStream!=null){
+            inputStreamReader = new InputStreamReader(errorStream,"utf-8");
         }
+        if(inputStreamReader!=null){
+            br = new BufferedReader(inputStreamReader);
+        }
+
+//        String line = "";
+//        while ( (line = br.readLine()) != null ) {
+//        }
         if (br != null) {
             br.close();
         }

@@ -180,10 +180,17 @@ public class Video {
     }
 
     public Date getCreateTime() {
-        return this.createTime;
+        if(createTime ==null){
+            return null;
+        }
+        return (Date) createTime.clone();
     }
 
     public void setCreateTime(final Date createTime) {
-        this.createTime = createTime;
+        if(createTime ==null){
+            this.createTime =null;
+        }else{
+            this.createTime = (Date) createTime.clone();
+        }
     }
 }

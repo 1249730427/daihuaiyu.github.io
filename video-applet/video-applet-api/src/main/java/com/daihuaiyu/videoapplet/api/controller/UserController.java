@@ -86,7 +86,7 @@ public class UserController {
         if(StringUtils.isBlank(id)){
             return ApiResponse.errorMsg("用户ID为空!");
         }
-        InputStream InputStream = null;
+        InputStream inputStream = null;
         FileOutputStream fileOutputStream =null;
         try {
             String fileRootPath = "F:/file";
@@ -99,20 +99,31 @@ public class UserController {
             //获得该文件存入数据库的相对路径
             String upLoadPathDb=filePath+"/"+ originalFilename;
             if(file1.getParentFile()!=null && !file1.getParentFile().isDirectory()){
-                file1.getParentFile().mkdirs();
+                boolean mkdirs = file1.getParentFile().mkdirs();
             }
-            fileOutputStream= new FileOutputStream(file1);
-            InputStream = file[0].getInputStream();
-            IOUtils.copy(InputStream,fileOutputStream);
+            if(file1 !=null){
+                fileOutputStream = new FileOutputStream(file1);
+            }
+            if(file !=null && file.length>0){
+                inputStream = file[0].getInputStream();
+            }
+            IOUtils.copy(inputStream,fileOutputStream);
             Users users = userService.fingById(id);
             users.setFaceImage(upLoadPathDb);
             userService.save(users);
             return ApiResponse.ok(upLoadPathDb);
         } catch (Exception e) {
             e.printStackTrace();
+            if(fileOutputStream !=null){
+                fileOutputStream.close();
+            }
         } finally {
-            InputStream.close();
-            fileOutputStream.close();
+            if(inputStream !=null ){
+                inputStream.close();
+            }
+            if(fileOutputStream !=null){
+                fileOutputStream.close();
+            }
         }
 
         return null;
@@ -154,7 +165,7 @@ public class UserController {
         Users userInfo = userService.fingById(publishId);
         userInfo.setPassword("");
         //查询该用户是否给该视频点赞
-        Boolean b = userLikeVideoService.UserIsLike(id, videoId);
+        Boolean b = userLikeVideoService.userIsLike(id, videoId);
         PublishVo publishVo =new PublishVo();
         publishVo.setUsers(userInfo);
         publishVo.setIsLike(b);

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
+ * 背景音乐Service处理类
+ *
  * @author :daihuaiyu
  * @Description:
  * @create 2021/4/1 21:21

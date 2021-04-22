@@ -72,7 +72,7 @@ public class VideoController {
                 File file1 = new File(filePath);
                 String coverPath = FiLESPACE+"/"+id+"/video"+"/"+coverName;
                 if(file1.getParentFile()!=null && !file1.getParentFile().isDirectory()){
-                    file1.getParentFile().mkdirs();
+                    boolean mkdirs = file1.getParentFile().mkdirs();
                 }
                 fileOutputStream = new FileOutputStream(file1);
                 inputStream = file.getInputStream();
@@ -106,16 +106,14 @@ public class VideoController {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            inputStream.close();
-            fileOutputStream.close();
+            if(inputStream!=null){
+                inputStream.close();
+            }
+            if(fileOutputStream!=null){
+                fileOutputStream.close();
+            }
         }
         return ApiResponse.ok(upLoadPathDb);
-    }
-
-    @ApiOperation(value = "查询BGM列表", notes = "查询bgm列表的接口")
-    @PostMapping("/bgmList")
-    public ApiResponse getBgmList(){
-        return ApiResponse.ok(bgmService.findAllBgm());
     }
 
 
@@ -127,9 +125,8 @@ public class VideoController {
      */
     @ApiOperation(value = "查询视频列表", notes = "查询视频列表")
     @PostMapping(value = "/findVideoList")
-    public ApiResponse findVideoList(@RequestParam(value = "searchValue",defaultValue = "",required = false)String searchValue,@RequestParam("pageNum") Integer pageNum,
-                                     @RequestParam("size") Integer size){
-        return ApiResponse.ok(videoService.findAllVideo(pageNum,size,searchValue));
+    public ApiResponse findVideoList(@RequestParam(value = "searchValue",defaultValue = "",required = false)String searchValue,@RequestParam(value="pageNum",defaultValue = "1",required = false) Integer pageNum){
+        return ApiResponse.ok(videoService.findAllVideo(pageNum,SIZE,searchValue));
     }
 
     @ApiOperation(value = "用户评论的接口/回复用户的留言", notes = "用户评论的接口/回复用户的留言")

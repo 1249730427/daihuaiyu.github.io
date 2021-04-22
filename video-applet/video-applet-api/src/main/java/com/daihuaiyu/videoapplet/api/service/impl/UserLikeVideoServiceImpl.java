@@ -124,7 +124,7 @@ public class UserLikeVideoServiceImpl implements UserLikeVideoService {
      * @param videoId
      */
     @Override
-    public boolean UserIsLike(String id, String videoId) {
+    public boolean userIsLike(String id, String videoId) {
         UsersLikeVideos likeVideos = this.findByUserIdAndVideoId(id, videoId);
         if (likeVideos != null) {
             return true;

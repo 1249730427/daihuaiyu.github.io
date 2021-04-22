@@ -20,5 +20,5 @@ public interface UserLikeVideoService {
     UsersLikeVideos findByUserIdAndVideoId(String id, String videoId);
 
     /**查询用户是否点赞了视频信息*/
-    boolean UserIsLike(String id, String videoId);
+    boolean userIsLike(String id, String videoId);
 }

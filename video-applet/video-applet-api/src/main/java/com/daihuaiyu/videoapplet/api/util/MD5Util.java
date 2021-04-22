@@ -2,6 +2,7 @@ package com.daihuaiyu.videoapplet.api.util;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -20,7 +21,12 @@ public class MD5Util {
      */
     public static String encode(String message) throws NoSuchAlgorithmException {
          MessageDigest md5 = MessageDigest.getInstance("MD5");
-        final String base64String = Base64.encodeBase64String(md5.digest(message.getBytes()));//对MD5加密值进行BASE64加密
+        String base64String ="";//对MD5加密值进行BASE64加密
+        try {
+            base64String = Base64.encodeBase64String(md5.digest(message.getBytes("UTF-8")));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         return base64String;
     }
 

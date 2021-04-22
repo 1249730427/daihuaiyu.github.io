@@ -6,17 +6,19 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Entity;
 
 /**
+ * 背景音乐实体类
+ *
  * @author :daihuaiyu
  * @Description: 背景音乐实体类
  * @create 2021/4/1 21:10
  */
 @Entity
-@ApiModel(value = "北京音乐")
+@ApiModel(value = "背景音乐")
 public class Bgm {
 
     @javax.persistence.Id
     @ApiModelProperty(hidden = true)
-    private String Id;
+    private String id;
 
     /**
      * 视屏作者
@@ -37,11 +39,11 @@ public class Bgm {
     private String path;
 
     public String getId() {
-        return this.Id;
+        return this.id;
     }
 
     public void setId(final String id) {
-        this.Id = id;
+        this.id = id;
     }
 
     public String getAuthor() {

@@ -13,7 +13,6 @@
     <groupId>com.daihuaiyu</groupId>
     <artifactId>video-applet-core</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
     <name>video-applet-core</name>
     <description>短视频类的微信小程序项目基础包</description>
 

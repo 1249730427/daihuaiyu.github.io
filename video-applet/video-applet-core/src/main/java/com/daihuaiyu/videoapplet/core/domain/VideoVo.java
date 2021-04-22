@@ -99,4 +99,18 @@ public class VideoVo {
     @ApiModelProperty(value = "创建时间", name = "createTime")
     private Date createTime;
 
+    public Date getCreateTime() {
+        if(createTime ==null){
+            return null;
+        }
+        return (Date) createTime.clone();
+    }
+
+    public void setCreateTime(Date createTime) {
+        if(createTime ==null){
+            this.createTime =null;
+        }else{
+            this.createTime = (Date) createTime.clone();
+        }
+    }
 }

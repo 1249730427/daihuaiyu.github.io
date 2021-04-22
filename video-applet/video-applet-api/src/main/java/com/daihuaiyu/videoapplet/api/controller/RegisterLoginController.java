@@ -120,7 +120,7 @@ public class RegisterLoginController {
      */
     @ApiOperation(value = "用户注销", notes = "用户注销的接口")
     @ApiImplicitParam(name = "id",value = "用户id",required = true,dataType = "String" ,paramType = "query")
-    @RequestMapping(path="/login")
+    @RequestMapping(path="/logout")
     public ApiResponse logout(@RequestParam("id")String id){
         if(redisOperator.hasKey(USERSESSIONID+id)){
             redisOperator.del(USERSESSIONID+id);
