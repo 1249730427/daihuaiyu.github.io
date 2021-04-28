@@ -43,6 +43,7 @@ public class VideoServiceImpl implements VideoService  {
      */
     @Override
     public void save(Video video) {
+        video.setId(IdUtil.getId());
         videoDao.save(video);
     }
 

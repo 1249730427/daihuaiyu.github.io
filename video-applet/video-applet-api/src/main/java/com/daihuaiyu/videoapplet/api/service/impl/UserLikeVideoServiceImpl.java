@@ -104,10 +104,10 @@ public class UserLikeVideoServiceImpl implements UserLikeVideoService {
      * @param videoId
      */
     @Override
-    public UsersLikeVideos findByUserIdAndVideoId(String id, String videoId) {
+    public UsersLikeVideos findByUserIdAndVideoId(String userId, String videoId) {
         return userLikeVideosDao.findAll((Specification<UsersLikeVideos>) (root, cq, cb) -> {
             //将usersLikeVideos实体类中的userid获取，类型为String，并将id的值赋值给他，作为第一个查询条件
-            Predicate p1 = cb.equal(root.get("userId").as(String.class), id);
+            Predicate p1 = cb.equal(root.get("userId").as(String.class), userId);
             //将usersLikeVideos实体类中的videoId获取，类型为String，并将videoId的值赋值给他，作为第二个查询条件
             Predicate p2 = cb.equal(root.get("videoId").as(String.class), videoId);
             //将这两个条件放到一个数组中

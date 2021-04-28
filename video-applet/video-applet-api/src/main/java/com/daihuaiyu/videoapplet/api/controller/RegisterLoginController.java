@@ -2,6 +2,7 @@ package com.daihuaiyu.videoapplet.api.controller;
 
 import com.daihuaiyu.videoapplet.api.service.UserService;
 import com.daihuaiyu.videoapplet.api.util.ApiResponse;
+import com.daihuaiyu.videoapplet.api.util.IdUtil;
 import com.daihuaiyu.videoapplet.api.util.MD5Util;
 import com.daihuaiyu.videoapplet.api.util.RedisOperatorUtil;
 import com.daihuaiyu.videoapplet.core.domain.UserVo;
@@ -59,6 +60,7 @@ public class RegisterLoginController {
             return ApiResponse.errorMsg("该用户名已注册!");
         }
         Users user = new Users();
+        user.setId(IdUtil.getId());
         user.setUsername(users.getUsername());
         user.setPassword(MD5Util.encode(users.getPassword()));
         user.setNickname(users.getUsername());
@@ -66,7 +68,7 @@ public class RegisterLoginController {
         user.setFansCounts(0);
         user.setFollowCounts(0);
         user.setReceiveLikeCounts(0);
-        final Users users1 = userService.save(user);
+        Users users1 = userService.save(user);
         String token = UUID.randomUUID().toString();
         user.setPassword("");
         UserVo userVo = new UserVo();
@@ -98,7 +100,7 @@ public class RegisterLoginController {
             return ApiResponse.errorMsg("请先注册，再登录!");
         }
         final Users user = userService.findByUserName(users.getUsername());
-        if(user.getPassword().equalsIgnoreCase(MD5Util.encode(users.getPassword()))){
+        if(!user.getPassword().equalsIgnoreCase(MD5Util.encode(users.getPassword()))){
             return ApiResponse.errorMsg("密码输入错误!");
         }
         final boolean hasKey = redisOperator.hasKey(USERSESSIONID + user.getId());

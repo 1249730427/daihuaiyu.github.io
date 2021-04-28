@@ -125,8 +125,8 @@ public class VideoController {
      */
     @ApiOperation(value = "查询视频列表", notes = "查询视频列表")
     @PostMapping(value = "/findVideoList")
-    public ApiResponse findVideoList(@RequestParam(value = "searchValue",defaultValue = "",required = false)String searchValue,@RequestParam(value="pageNum",defaultValue = "1",required = false) Integer pageNum){
-        return ApiResponse.ok(videoService.findAllVideo(pageNum,SIZE,searchValue));
+    public ApiResponse findVideoList(@RequestParam(value = "searchValue",defaultValue = "",required = false)String searchValue,@RequestParam(value="page",defaultValue = "1",required = false) Integer page){
+        return ApiResponse.ok(videoService.findAllVideo(page,SIZE,searchValue));
     }
 
     @ApiOperation(value = "用户评论的接口/回复用户的留言", notes = "用户评论的接口/回复用户的留言")
