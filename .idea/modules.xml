@@ -2,8 +2,22 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/chat/Chat-Client/Chat-Client.iml" filepath="$PROJECT_DIR$/chat/Chat-Client/Chat-Client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chat/Chat-Server/Chat-Server.iml" filepath="$PROJECT_DIR$/chat/Chat-Server/Chat-Server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chat/chat.iml" filepath="$PROJECT_DIR$/chat/chat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/config-service/config-service.iml" filepath="$PROJECT_DIR$/spring-cloud-study/config-service/config-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/eureka/eureka.iml" filepath="$PROJECT_DIR$/spring-cloud-study/eureka/eureka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/seconds-kill/seconds-kill.iml" filepath="$PROJECT_DIR$/seconds-kill/seconds-kill.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/service-product/servce-produce.iml" filepath="$PROJECT_DIR$/spring-cloud-study/service-product/servce-produce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/service-kafka/service-kafka.iml" filepath="$PROJECT_DIR$/spring-cloud-study/service-kafka/service-kafka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/service-order/service-order.iml" filepath="$PROJECT_DIR$/spring-cloud-study/service-order/service-order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/spring-cloud-study.iml" filepath="$PROJECT_DIR$/spring-cloud-study/spring-cloud-study.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-study-demo/spring-study-demo.iml" filepath="$PROJECT_DIR$/spring-study-demo/spring-study-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/springBoot-Learning/springboot-learning.iml" filepath="$PROJECT_DIR$/springBoot-Learning/springboot-learning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/video-applet/video-applet.iml" filepath="$PROJECT_DIR$/video-applet/video-applet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/video-applet/video-applet-api/video-applet-api.iml" filepath="$PROJECT_DIR$/video-applet/video-applet-api/video-applet-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/video-applet/video-applet-core/video-applet-core.iml" filepath="$PROJECT_DIR$/video-applet/video-applet-core/video-applet-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/zuul-service/zuul-service.iml" filepath="$PROJECT_DIR$/spring-cloud-study/zuul-service/zuul-service.iml" />
     </modules>
   </component>
 </project>

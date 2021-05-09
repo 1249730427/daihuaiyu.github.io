@@ -5,6 +5,10 @@
       <list>
         <option value="$PROJECT_DIR$/spring-study-demo/pom.xml" />
         <option value="$PROJECT_DIR$/springBoot-Learning/pom.xml" />
+        <option value="$PROJECT_DIR$/chat/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-cloud-study/pom.xml" />
+        <option value="$PROJECT_DIR$/video-applet/pom.xml" />
+        <option value="$PROJECT_DIR$/seconds-kill/pom.xml" />
       </list>
     </option>
   </component>

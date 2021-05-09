@@ -7,18 +7,54 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Chat-Server" />
+        <module name="config-service" />
+        <module name="Chat-Client" />
+        <module name="service-order" />
         <module name="springboot-learning" />
+        <module name="servce-produce" />
+        <module name="eureka" />
+        <module name="service-kafka" />
         <module name="spring-study-demo" />
+        <module name="seconds-kill" />
+        <module name="zuul-service" />
+        <module name="video-applet-core" />
+        <module name="video-applet-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="chat" target="1.8" />
+      <module name="Chat-Client" target="1.8" />
+      <module name="Chat-Server" target="1.8" />
+      <module name="config-service" target="1.8" />
+      <module name="eureka" target="1.8" />
+      <module name="seconds-kill" target="1.8" />
+      <module name="servce-produce" target="1.8" />
+      <module name="service-kafka" target="1.8" />
+      <module name="service-order" target="1.8" />
+      <module name="spring-cloud-study" target="1.8" />
       <module name="spring-study-demo" target="8" />
       <module name="springboot-learning" target="1.8" />
+      <module name="video-applet" target="1.8" />
+      <module name="video-applet-api" target="1.8" />
+      <module name="video-applet-core" target="1.8" />
+      <module name="zuul-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Chat-Client" options="-parameters" />
+      <module name="Chat-Server" options="-parameters" />
+      <module name="config-service" options="-parameters" />
+      <module name="eureka" options="-parameters" />
+      <module name="seconds-kill" options="-parameters" />
+      <module name="servce-produce" options="-parameters" />
+      <module name="service-kafka" options="-parameters" />
+      <module name="service-order" options="-parameters" />
       <module name="springboot-learning" options="-parameters" />
+      <module name="video-applet-api" options="-parameters" />
+      <module name="video-applet-core" options="-parameters" />
+      <module name="zuul-service" options="-parameters" />
     </option>
   </component>
 </project>
