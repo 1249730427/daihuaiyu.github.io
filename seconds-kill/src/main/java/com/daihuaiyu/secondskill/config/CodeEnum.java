@@ -11,7 +11,7 @@ import lombok.Data;
 public enum CodeEnum {
     SUCCESS(0, "success"),
     SERVER_ERROR(500100, "服务端异常"),
-    BIND_ERROR(500101, "参数校验异常：%s"),
+    BIND_ERROR(500101, "参数校验异常"),
     //登录模块 5002XX
     SESSION_ERROR (500210, "Session不存在或者已经失效"),
     PASSWORD_EMPTY (500211, "登录密码不能为空"),

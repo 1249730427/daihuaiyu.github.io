@@ -9,6 +9,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
  * @author daihuaiyu
  * @create: 2021-05-10 17:40
  **/
-@Component
+@ResponseBody
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -32,7 +33,7 @@ public class GlobalExceptionHandler {
         if(e instanceof GlobalException){
             GlobalException globalException = (GlobalException) e;
             return Result.error(globalException.getCm());
-        }else if(e instanceof BindException){ //网络异常
+        }else if(e instanceof BindException){ //Bind异常
             BindException bindException = (BindException) e;
             List<ObjectError> allErrors = bindException.getAllErrors();
             ObjectError objectError = allErrors.get(0);

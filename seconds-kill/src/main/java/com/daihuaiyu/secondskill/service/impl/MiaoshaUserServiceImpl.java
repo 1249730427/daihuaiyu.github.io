@@ -34,7 +34,7 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
      */
     @Override
     public boolean login (HttpServletResponse response, LoginVo loginVo) {
-        MiaoshaUser user = miaoshaUserMapper.getUserById("" + loginVo.getMobile());
+        MiaoshaUser user = miaoshaUserMapper.getUserById( loginVo.getMobile());
         if(user==null){
             throw new GlobalException(CodeEnum.MOBILE_NOT_EXIST);
         }

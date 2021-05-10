@@ -17,18 +17,18 @@ public class LoginVo {
 
     @NotNull(message = "手机号不能为空")
     @IsMobile
-    private Integer mobile;
+    private String mobile;
 
     @NotNull(message="登录密码不能为空")
     @NotEmpty(message="登录密码不能为空")
     @Length(min=32)
     private String password;
 
-    public Integer getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(Integer mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
