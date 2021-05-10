@@ -1,14 +1,17 @@
 package com.daihuaiyu.secondskill.exception;
 
+import com.daihuaiyu.secondskill.config.CodeEnum;
 import com.daihuaiyu.secondskill.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.BindException;
+import java.util.List;
 
 /**
  * 全局异常捕获处理器
@@ -31,9 +34,14 @@ public class GlobalExceptionHandler {
             return Result.error(globalException.getCm());
         }else if(e instanceof BindException){ //网络异常
             BindException bindException = (BindException) e;
-            //TODO
+            List<ObjectError> allErrors = bindException.getAllErrors();
+            ObjectError objectError = allErrors.get(0);
+            String message = objectError.getDefaultMessage();
+            logger.info("错误信息："+message);
+            return Result.error(CodeEnum.BIND_ERROR);
+        }else{
+            return Result.error(CodeEnum.SERVER_ERROR);
         }
-        return null;
     }
 }
 

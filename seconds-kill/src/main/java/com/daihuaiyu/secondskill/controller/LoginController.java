@@ -1,12 +1,17 @@
 package com.daihuaiyu.secondskill.controller;
 
 import com.daihuaiyu.secondskill.config.CodeEnum;
+import com.daihuaiyu.secondskill.exception.GlobalException;
 import com.daihuaiyu.secondskill.util.Result;
 import com.daihuaiyu.secondskill.vo.LoginVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * 登录Controller
@@ -17,13 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/login")
 public class LoginController {
-
+    private Logger logger = LoggerFactory.getLogger(LoginController.class);
     @RequestMapping("/do_login")
-    public Result toLogin( @Validated  @RequestBody LoginVo loginVo){
-
+    @ResponseBody
+    public Result toLogin(HttpServletRequest request, @Valid LoginVo loginVo){
+        logger.info("登录信息:"+loginVo.toString());
         if(loginVo ==null){
-            return Result.error(CodeEnum.SERVER_ERROR);
+            throw  new GlobalException(CodeEnum.SERVER_ERROR);
         }
+        //判断用户是否存在
 
         return null;
     }
