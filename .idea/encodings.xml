@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/chat" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/chat/Chat-Client" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/chat/Chat-Client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/chat/Chat-Server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/chat/Chat-Server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/seconds-kill" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/seconds-kill/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-study" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-study/config-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/config-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/config-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-study/eureka" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/eureka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/eureka/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-study/service-kafka" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/service-kafka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/service-kafka/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-study/service-order" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/service-order/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/service-order/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-study/service-product" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/service-product/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/service-product/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-cloud-study/zuul-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/zuul-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-cloud-study/zuul-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springBoot-Learning" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springBoot-Learning/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/video-applet" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/video-applet/video-applet-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/video-applet/video-applet-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/video-applet/video-applet-core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/video-applet/video-applet-core/src/main/java" charset="UTF-8" />
   </component>
 </project>
