@@ -8,11 +8,14 @@ import com.daihuaiyu.secondskill.vo.LoginVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.UUID;
 
 /**
  * 登录Controller
@@ -28,6 +31,9 @@ public class LoginController {
     @Autowired
     private MiaoshaUserService miaoshaUserService;
 
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
+
     @RequestMapping("/to_login")
     public String toLogin() {
         return "login";
@@ -37,11 +43,10 @@ public class LoginController {
     @ResponseBody
     public Result<Boolean> doLogin( HttpServletResponse response, @Valid LoginVo loginVo){
         logger.info("登录信息:"+loginVo.toString());
-        if(loginVo ==null){
-            throw  new GlobalException(CodeEnum.SERVER_ERROR);
-        }
-        //判断用户是否存在
         miaoshaUserService.login(response, loginVo);
+        String token = UUID.randomUUID().toString();
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+//        opsForValue.set(token,);
         return Result.success(Boolean.TRUE);
     }
 }

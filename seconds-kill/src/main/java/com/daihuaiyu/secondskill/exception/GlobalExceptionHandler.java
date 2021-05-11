@@ -4,7 +4,6 @@ import com.daihuaiyu.secondskill.config.CodeEnum;
 import com.daihuaiyu.secondskill.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;

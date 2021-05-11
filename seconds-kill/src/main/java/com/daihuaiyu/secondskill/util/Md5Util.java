@@ -17,14 +17,14 @@ public class Md5Util {
         return DigestUtils.md5Hex(str);
     }
 
-    public static String inputPassToFormPass(String inputPassForm){
-        String md5InputPass = salt.charAt(0) + salt.charAt(2) + inputPassForm + salt.charAt(5) + salt.charAt(6);
-        return md5(md5InputPass);
+    public static String inputPassToFormPass(String inputPass){
+        String str = ""+salt.charAt(0)+salt.charAt(2) + inputPass +salt.charAt(5) + salt.charAt(4);
+        return md5(str);
     }
 
     /**对输入的字符串进行二次MD5加密*/
     public static String formPassToDBPass(String formPass) {
-        String str = salt.charAt(0)+salt.charAt(2) + formPass +salt.charAt(5) + salt.charAt(6);
+        String str = ""+salt.charAt(0)+salt.charAt(2) + formPass +salt.charAt(5) + salt.charAt(4);
         return md5(str);
     }
 
