@@ -1,6 +1,7 @@
 package com.daihuaiyu.secondskill.config;
 
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
+import com.daihuaiyu.secondskill.redis.MiaoshaUserKey;
 import com.daihuaiyu.secondskill.service.MiaoshaUserService;
 import com.daihuaiyu.secondskill.service.impl.MiaoshaUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,8 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         String cookieToken = getCookieValue(request,MiaoshaUserServiceImpl.COOKI_NAME_TOKEN);//2.获取cookie中的token信息
         String token =paramToken==null ?cookieToken:paramToken;
         //返回缓存中的对象信息
-        return miaoshaUserService.getByToken(response,token);
+        MiaoshaUser miaoshaUser = miaoshaUserService.getByToken(response, token);
+        return miaoshaUser;
     }
 
     private String getCookieValue(HttpServletRequest request, String cookiNameToken) {

@@ -21,15 +21,18 @@ CREATE TABLE goods(
     primary key(id)
 )ENGINE =InnoDB DEFAULT CHARSET=utf8mb4;
 
-create table miaosha_goods(
-    id bigint(20) not null COMMENT '秒杀商品ID',
-    goods_id bigint(20) not null comment '商品ID',
-    stock_count int(11) comment '库存',
-    start_date datetime comment '秒杀开始时间',
-    end_date datetime comment '秒杀结束时间',
-    primary key(id),
-    unique key (id,goods_id)
-)ENGINE =InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `miaosha_goods`
+(
+    id            bigint(20) NOT NULL COMMENT '秒杀商品ID',
+    goods_id      bigint(20) NOT NULL COMMENT '商品ID',
+    miaosha_price float(10, 2) DEFAULT NULL COMMENT '秒杀价格',
+    stock_count   int(11)      DEFAULT NULL COMMENT '库存',
+    start_date    datetime     DEFAULT NULL COMMENT '秒杀开始时间',
+    end_date      datetime     DEFAULT NULL COMMENT '秒杀结束时间',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `id` (`id`, `goods_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 create table order_info(
     id bigint(20) not null comment '订单ID',

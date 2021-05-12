@@ -23,9 +23,9 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
-    @RequestMapping("to_list")
+    @RequestMapping("/to_list")
     public String to_list(Model model, MiaoshaUser miaoshaUser){
-        //TODO 从数据库中查询出数据用于列表展示，由于是demo，不做分页查询，实际生产过程中做分页查询
+        //DO 从数据库中查询出数据用于列表展示，由于是demo，不做分页查询，实际生产过程中做分页查询
         List<GoodsVo> goodsList = goodsService.getGoodsVo();
         model.addAttribute("user",miaoshaUser);
         model.addAttribute("goodsList",goodsList);

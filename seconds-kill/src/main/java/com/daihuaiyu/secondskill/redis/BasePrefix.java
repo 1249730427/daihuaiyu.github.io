@@ -33,6 +33,7 @@ public abstract class BasePrefix implements KeyPrefix {
      */
     @Override
     public String getPrefix() {
+        prefix="";
         String simpleName = getClass().getSimpleName();
         prefix =simpleName+":"+prefix;
         return prefix;

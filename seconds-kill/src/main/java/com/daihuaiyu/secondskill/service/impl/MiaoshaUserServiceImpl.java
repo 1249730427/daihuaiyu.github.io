@@ -2,6 +2,7 @@ package com.daihuaiyu.secondskill.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.daihuaiyu.secondskill.config.CodeEnum;
+import com.daihuaiyu.secondskill.controller.LoginController;
 import com.daihuaiyu.secondskill.dao.MiaoshaUserMapper;
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
 import com.daihuaiyu.secondskill.exception.GlobalException;
@@ -9,8 +10,9 @@ import com.daihuaiyu.secondskill.redis.MiaoshaUserKey;
 import com.daihuaiyu.secondskill.service.MiaoshaUserService;
 import com.daihuaiyu.secondskill.util.Md5Util;
 import com.daihuaiyu.secondskill.vo.LoginVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,6 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +37,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class MiaoshaUserServiceImpl implements MiaoshaUserService {
 
+    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+
     public static final String COOKI_NAME_TOKEN = "token";
 
     @Autowired
@@ -49,7 +52,8 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
         if(StringUtils.isEmpty(token)){
             return null;
         }
-        MiaoshaUser miaoshaUser = JSON.parseObject((InputStream) redisTemplate.opsForHash().get(MiaoshaUserKey.token.getPrefix() + token, token),MiaoshaUser.class);
+        logger.info("秒杀key为："+MiaoshaUserKey.token.getPrefix());
+        MiaoshaUser miaoshaUser = JSON.parseObject((String) redisTemplate.opsForHash().get(MiaoshaUserKey.token.getPrefix()+token, token),MiaoshaUser.class);
         return miaoshaUser;
     }
 
@@ -75,13 +79,15 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
 
     private void addCookie(HttpServletResponse response,  String token,MiaoshaUser user) {
         HashOperations<String, Object, Object> opsForHash = redisTemplate.opsForHash();
-        //过期时间小于等于0则不设置过期时间
-        if(MiaoshaUserKey.token.expireSeconds()<=0){
-            opsForHash.put(MiaoshaUserKey.token.getPrefix()+token,token, JSON.toJSONString(user));
-        }else{ //获取时间大于0设置key的过期时间
-            opsForHash.put(MiaoshaUserKey.token.getPrefix()+token,token, JSON.toJSONString(user));
-            redisTemplate.expire(MiaoshaUserKey.token.getPrefix()+token,MiaoshaUserKey.token.expireSeconds(), TimeUnit.SECONDS);
-        }
+        String prefix = MiaoshaUserKey.token.getPrefix() + token;
+            //过期时间小于等于0则不设置过期时间
+            if (MiaoshaUserKey.token.expireSeconds() <= 0) {
+                opsForHash.put(prefix, token, JSON.toJSONString(user));
+            } else { //获取时间大于0设置key的过期时间
+
+                opsForHash.put(prefix, token, JSON.toJSONString(user));
+                redisTemplate.expire(prefix, MiaoshaUserKey.token.expireSeconds(), TimeUnit.SECONDS);
+            }
         Cookie cookie = new Cookie(MiaoshaUserServiceImpl.COOKI_NAME_TOKEN,token);
         cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
         cookie.setPath("/");
