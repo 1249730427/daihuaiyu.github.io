@@ -24,6 +24,10 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 登录服务
+ * 问题：token放在cookie中和放在请求头中的区别
+ * cookie中: 防止xss攻击,但是导致所有请求都会携带token
+ * 请求头中: 会有xss风险,而且前端需要保存token并在每次请求的时候携带…好处是可以控制哪些请求携带,哪些不需要携带
  * @ClassName: MiaoshaUserServiceImpl
  * @Author: hydai
  * @Date: 2021/5/10 22:50
@@ -40,6 +44,7 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
+    @Override
     public MiaoshaUser getByToken(HttpServletResponse response,String token) throws IOException {
         if(StringUtils.isEmpty(token)){
             return null;
