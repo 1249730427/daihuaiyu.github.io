@@ -14,4 +14,7 @@ public interface GoodsService {
 
     /**获取商品列表*/
     List<GoodsVo> getGoodsVo();
+
+    /**获取商品详情*/
+    GoodsVo getGoodsVoByGoodsId(long goodsId);
 }

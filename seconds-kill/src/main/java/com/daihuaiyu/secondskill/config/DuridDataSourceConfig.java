@@ -23,7 +23,7 @@ import javax.sql.DataSource;
  * @Description:
  */
 @Configuration
-@MapperScan(basePackages = {"com.daihuaiyu.secondskill.dao"},sqlSessionFactoryRef="sqlSessionFactory",sqlSessionTemplateRef="sqlSessionTemplate")
+@MapperScan(basePackages = {"com.daihuaiyu.secondskill.dao"},sqlSessionTemplateRef="sqlSessionTemplate")
 public class DuridDataSourceConfig {
 
     //构建数据源
@@ -38,7 +38,7 @@ public class DuridDataSourceConfig {
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
-        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*Mapper.xml"));
+//        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*Mapper.xml"));
         return sqlSessionFactoryBean.getObject();
     }
 

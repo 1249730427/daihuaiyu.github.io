@@ -7,19 +7,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="video-applet-api" />
         <module name="Chat-Server" />
-        <module name="config-service" />
+        <module name="eureka" />
         <module name="Chat-Client" />
         <module name="service-order" />
         <module name="springboot-learning" />
         <module name="servce-produce" />
-        <module name="eureka" />
-        <module name="service-kafka" />
-        <module name="spring-study-demo" />
-        <module name="seconds-kill" />
-        <module name="zuul-service" />
+        <module name="config-service" />
         <module name="video-applet-core" />
-        <module name="video-applet-api" />
+        <module name="zuul-service" />
+        <module name="seconds-kill" />
+        <module name="spring-study-demo" />
+        <module name="service-kafka" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -47,7 +47,7 @@
       <module name="Chat-Server" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="eureka" options="-parameters" />
-      <module name="seconds-kill" options="-parameters" />
+      <module name="seconds-kill" options="" />
       <module name="servce-produce" options="-parameters" />
       <module name="service-kafka" options="-parameters" />
       <module name="service-order" options="-parameters" />

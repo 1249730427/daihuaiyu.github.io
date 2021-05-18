@@ -4,7 +4,6 @@ package com.daihuaiyu.secondskill.vo;
 import com.daihuaiyu.secondskill.validator.IsMobile;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -20,7 +19,6 @@ public class LoginVo {
     private String mobile;
 
     @NotNull(message="登录密码不能为空")
-    @NotEmpty(message="登录密码不能为空")
     @Length(min=32)
     private String password;
 
