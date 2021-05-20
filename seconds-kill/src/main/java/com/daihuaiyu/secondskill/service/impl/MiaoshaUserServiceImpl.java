@@ -7,6 +7,7 @@ import com.daihuaiyu.secondskill.dao.MiaoshaUserMapper;
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
 import com.daihuaiyu.secondskill.exception.GlobalException;
 import com.daihuaiyu.secondskill.redis.MiaoshaUserKey;
+import com.daihuaiyu.secondskill.redis.UserKey;
 import com.daihuaiyu.secondskill.service.MiaoshaUserService;
 import com.daihuaiyu.secondskill.util.Md5Util;
 import com.daihuaiyu.secondskill.vo.LoginVo;
@@ -18,6 +19,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -41,7 +43,7 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
 
     public static final String COOKI_NAME_TOKEN = "token";
 
-    @Autowired
+    @Resource
     private MiaoshaUserMapper miaoshaUserMapper;
 
     @Autowired
@@ -52,8 +54,19 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
         if(StringUtils.isEmpty(token)){
             return null;
         }
-        logger.info("秒杀key为："+MiaoshaUserKey.token.getPrefix());
         MiaoshaUser miaoshaUser = JSON.parseObject((String) redisTemplate.opsForHash().get(MiaoshaUserKey.token.getPrefix()+token, token),MiaoshaUser.class);
+        return miaoshaUser;
+    }
+
+    private MiaoshaUser getMiaoshaUserById(String mobile){
+        //先从缓存中查找，查不到的话从数据库中查询返回
+        HashOperations<String, Object, Object> operations = redisTemplate.opsForHash();
+        MiaoshaUser miaoshaUser = JSON.parseObject((String) operations.get(UserKey.getById.getPrefix()+"id",mobile),MiaoshaUser.class);
+        if(miaoshaUser !=null){
+            return miaoshaUser;
+        }
+        miaoshaUser = miaoshaUserMapper.getUserById(mobile);
+        operations.put(UserKey.getById.getPrefix()+"id",mobile,JSON.toJSONString(miaoshaUser));
         return miaoshaUser;
     }
 
@@ -62,7 +75,7 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
         if(loginVo ==null){
             throw  new GlobalException(CodeEnum.SERVER_ERROR);
         }
-        MiaoshaUser user = miaoshaUserMapper.getUserById( loginVo.getMobile());
+        MiaoshaUser user = getMiaoshaUserById( loginVo.getMobile());
         if(user==null){
             throw new GlobalException(CodeEnum.MOBILE_NOT_EXIST);
         }
