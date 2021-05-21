@@ -1,5 +1,6 @@
 package com.daihuaiyu.secondskill.service;
 
+import com.daihuaiyu.secondskill.domain.Goods;
 import com.daihuaiyu.secondskill.vo.GoodsVo;
 
 import java.util.List;
@@ -17,4 +18,7 @@ public interface GoodsService {
 
     /**获取商品详情*/
     GoodsVo getGoodsVoByGoodsId(long goodsId);
+
+    /**减库存*/
+    void reduceStock(Goods goods);
 }

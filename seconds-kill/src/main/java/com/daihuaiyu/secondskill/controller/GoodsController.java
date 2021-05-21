@@ -1,17 +1,31 @@
 package com.daihuaiyu.secondskill.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.daihuaiyu.secondskill.domain.Goods;
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
+import com.daihuaiyu.secondskill.redis.GoodsKey;
 import com.daihuaiyu.secondskill.service.GoodsService;
 import com.daihuaiyu.secondskill.vo.GoodsVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.spring4.context.SpringWebContext;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 商品Controller
@@ -23,20 +37,53 @@ import java.util.List;
 @RequestMapping("/goods")
 public class GoodsController {
 
+    private Logger log = LoggerFactory.getLogger(GoodsController.class);
+
     @Autowired
     private GoodsService goodsService;
 
-    @RequestMapping("/to_list")
-    public String to_list(Model model, MiaoshaUser miaoshaUser){
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
+
+    @Autowired
+    private ThymeleafViewResolver thymeleafViewResolver;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @RequestMapping(value = "/to_list",produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String to_list(HttpServletRequest request, HttpServletResponse response,Model model, MiaoshaUser miaoshaUser){
+        //从缓存中获取页面文件，有的话直接返回
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String html = opsForValue.get(GoodsKey.getGoodsList.getPrefix()+getClass().getSimpleName() + "gl");
+        if(html !=null){
+            log.info("从页面缓存中获取页面列表信息：{}",html);
+            return html;
+        }
         //DO 从数据库中查询出数据用于列表展示，由于是demo，不做分页查询，实际生产过程中做分页查询
         List<GoodsVo> goodsList = goodsService.getGoodsVo();
         model.addAttribute("user",miaoshaUser);
         model.addAttribute("goodsList",goodsList);
-        return "goods_list";
+        //构建静态化模板
+        SpringWebContext ctx =new SpringWebContext(request,response,request.getServletContext(),request.getLocale(),model.asMap(),applicationContext);
+        html =thymeleafViewResolver.getTemplateEngine().process("goods_list",ctx);
+        if(html !=null){
+            //放入缓存
+            opsForValue.set(GoodsKey.getGoodsList.getPrefix()+getClass().getSimpleName() + "gl",html,5*60, TimeUnit.SECONDS);
+        }
+        return html;
     }
 
-    @RequestMapping("/to_detail/{goodsId}")
-    public String to_detail(@PathVariable Long goodsId, Model model, MiaoshaUser miaoshaUser){
+    @RequestMapping(value = "/to_detail/{goodsId}",produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String to_detail(HttpServletRequest request, HttpServletResponse response,@PathVariable Long goodsId, Model model, MiaoshaUser miaoshaUser){
+        ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
+        String html = opsForValue.get(GoodsKey.getGoodsDetail.getPrefix()+getClass().getSimpleName()  + "gd"+goodsId);
+        if(html !=null){
+            log.info("从页面缓存中获取商品详情信息：{}",html);
+            return html;
+        }
         GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
         Date startDate = goodsVo.getStartDate();
         Date endDate = goodsVo.getEndDate();
@@ -56,7 +103,14 @@ public class GoodsController {
         model.addAttribute("miaoshaStatus",miaoshaStatus);
         model.addAttribute("user",miaoshaUser);
         model.addAttribute("goods",goodsVo);
-        return "goods_detail";
+        //构建静态化模板
+        SpringWebContext ctx =new SpringWebContext(request,response,request.getServletContext(),request.getLocale(),model.asMap(),applicationContext);
+        html =thymeleafViewResolver.getTemplateEngine().process("goods_detail",ctx);
+        if(html !=null){
+            //放入缓存
+            opsForValue.set(GoodsKey.getGoodsDetail.getPrefix() + getClass().getSimpleName() +"gd"+goodsId, html,2*60,TimeUnit.SECONDS);
+        }
+        return html;
     }
 }
 
