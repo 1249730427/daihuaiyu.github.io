@@ -31,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-
+    @Override
     public OrderInfo getOrderById(long orderId) {
         return orderDao.getOrderById(orderId);
     }
@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
             miaoshaOrder.setUserId(user.getId());
             orderDao.insertMiaoshaOrder(miaoshaOrder);
 
-        redisTemplate.opsForHash().put(OrderKey.getMiaoshaOrderByUidGid.getPrefix().getClass().getSimpleName()+"moug", ""+user.getId()+"_"+goods.getId(),JSON.toJSONString(miaoshaOrder));
+        redisTemplate.opsForHash().put(OrderKey.getMiaoshaOrderByUidGid.getPrefix()+"moug", ""+user.getId()+"_"+goods.getId(),JSON.toJSONString(miaoshaOrder));
 
             return orderInfo;
         }

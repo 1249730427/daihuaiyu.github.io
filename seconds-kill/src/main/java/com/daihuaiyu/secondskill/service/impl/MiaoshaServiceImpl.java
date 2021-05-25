@@ -46,7 +46,7 @@ public class MiaoshaServiceImpl implements MiaoshaService {
     public MiaoshaOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
         //return orderDao.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
         HashOperations opsForHash = redisTemplate.opsForHash();
-        MiaoshaOrder miaoshaOrder = JSON.parseObject((String) opsForHash.get(OrderKey.getMiaoshaOrderByUidGid.getPrefix().getClass().getSimpleName()+"moug", "" + userId + "_" + goodsId), MiaoshaOrder.class);
+        MiaoshaOrder miaoshaOrder = JSON.parseObject((String) opsForHash.get(OrderKey.getMiaoshaOrderByUidGid.getPrefix()+"moug", "" + userId + "_" + goodsId), MiaoshaOrder.class);
         if(miaoshaOrder !=null ){
             return miaoshaOrder;
         }

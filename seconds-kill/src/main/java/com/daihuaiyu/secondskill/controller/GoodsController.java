@@ -5,6 +5,8 @@ import com.daihuaiyu.secondskill.domain.Goods;
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
 import com.daihuaiyu.secondskill.redis.GoodsKey;
 import com.daihuaiyu.secondskill.service.GoodsService;
+import com.daihuaiyu.secondskill.util.Result;
+import com.daihuaiyu.secondskill.vo.GoodsDetailVo;
 import com.daihuaiyu.secondskill.vo.GoodsVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.spring4.context.SpringWebContext;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -58,7 +61,7 @@ public class GoodsController {
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         String html = opsForValue.get(GoodsKey.getGoodsList.getPrefix()+getClass().getSimpleName() + "gl");
         if(html !=null){
-            log.info("从页面缓存中获取页面列表信息：{}",html);
+//            log.info("从页面缓存中获取页面列表信息：{}",html);
             return html;
         }
         //DO 从数据库中查询出数据用于列表展示，由于是demo，不做分页查询，实际生产过程中做分页查询
@@ -111,6 +114,32 @@ public class GoodsController {
             opsForValue.set(GoodsKey.getGoodsDetail.getPrefix() + getClass().getSimpleName() +"gd"+goodsId, html,2*60,TimeUnit.SECONDS);
         }
         return html;
+    }
+
+    @RequestMapping(value = "/detail/{goodsId}",method = RequestMethod.GET)
+    @ResponseBody
+    public Result<GoodsDetailVo> detail(@PathVariable Long goodsId,MiaoshaUser miaoshaUser){
+        GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
+        Date startDate = goodsVo.getStartDate();
+        Date endDate = goodsVo.getEndDate();
+        Date now = new Date();
+        int miaoshaStatus ;
+        long remainSeconds = 0;
+        if(startDate.getTime()<now.getTime() && endDate.getTime()>now.getTime()){
+            miaoshaStatus =1; //秒杀进行中
+        }else if(startDate.getTime()>now.getTime()){
+            miaoshaStatus =0; //秒杀未开始，倒计时
+            remainSeconds = (startDate.getTime()-now.getTime())/1000;//倒计时秒
+        }else{
+            miaoshaStatus =2; //秒杀结束
+            remainSeconds = -1;
+        }
+        GoodsDetailVo goodsDetailVo = new GoodsDetailVo();
+        goodsDetailVo.setGoodsVo(goodsVo);
+        goodsDetailVo.setUser(miaoshaUser);
+        goodsDetailVo.setRemainSeconds(remainSeconds);
+        goodsDetailVo.setMiaoshaStatus(miaoshaStatus);
+        return Result.success(goodsDetailVo);
     }
 }
 

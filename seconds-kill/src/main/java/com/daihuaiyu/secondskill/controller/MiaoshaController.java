@@ -34,32 +34,23 @@ public class MiaoshaController {
     private MiaoshaService miaoshaService;
 
     @PostMapping(value = "/do_miaosha")
-//    @ResponseBody
-    public String doMiaosha(MiaoshaUser miaoshaUser, Model model, @RequestParam(value = "goodsId") long goodsId) {
+    @ResponseBody
+    public Result doMiaosha(MiaoshaUser miaoshaUser, Model model, @RequestParam(value = "goodsId") long goodsId) {
         if(miaoshaUser ==null){
-//            return Result.error(CodeEnum.SESSION_ERROR);
-            return "login";
+            return Result.error(CodeEnum.SESSION_ERROR);
         }
         GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
         Integer stockCount = goodsVo.getStockCount();
         if(stockCount<=0){
-            model.addAttribute("errmsg", CodeEnum.MIAO_SHA_OVER.getMessage());
-            return "miaosha_fail";
-//            return Result.error(CodeEnum.MIAO_SHA_OVER);
+            return Result.error(CodeEnum.MIAO_SHA_OVER);
         }
         MiaoshaOrder miaoshaOrder = miaoshaService.getMiaoshaOrderByUserIdGoodsId(miaoshaUser.getId(), goodsId);
         if(miaoshaOrder!=null){
-//            return Result.error(CodeEnum.REPEATE_MIAOSHA);
-            model.addAttribute("errmsg", CodeEnum.REPEATE_MIAOSHA.getMessage());
-            return "miaosha_fail";
+            return Result.error(CodeEnum.REPEATE_MIAOSHA);
         }
         //下订单，下秒杀订单，减库存，减秒杀库存
         OrderInfo orderInfo = miaoshaService.miaosha(miaoshaUser, goodsVo);
-//        return Result.success(orderInfo);
-        model.addAttribute("orderInfo", orderInfo);
-        model.addAttribute("goods", goodsVo);
-        model.addAttribute("user", miaoshaUser);
-        return "order_detail";
+        return Result.success(orderInfo);
     }
 }
 

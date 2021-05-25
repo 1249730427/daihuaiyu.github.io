@@ -67,7 +67,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
         goodsVo = goodsDao.getGoodsVoByGoodsId(goodsId);
         if (goodsVo != null) {
-            opsForHash.put(GoodsKey.getGoodsDetail.getPrefix() + getClass().getSimpleName() + "gd", "" + goodsId, JSON.toJSONString(goodsVo));
+            opsForHash.put(GoodsKey.getGoodsDetail.getPrefix() +  "gd", "" + goodsId, JSON.toJSONString(goodsVo));
             redisTemplate.expire(GoodsKey.getGoodsDetail.getPrefix() + getClass().getSimpleName() + "gd", 60 * 10, TimeUnit.SECONDS);
         }
         return goodsDao.getGoodsVoByGoodsId(goodsId);
@@ -85,6 +85,7 @@ public class GoodsServiceImpl implements GoodsService {
         g.setGoodsId(goods.getId());
         goodsDao.reduceStock(g);
         goodsDao.reduceMiaoshaStock(g);
+        redisTemplate.opsForHash().delete(GoodsKey.getGoodsDetail.getPrefix() +getClass().getSimpleName() + "gd", "" + goods.getId());
     }
 }
 

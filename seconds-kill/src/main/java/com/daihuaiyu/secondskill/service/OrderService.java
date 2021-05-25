@@ -15,4 +15,6 @@ public interface OrderService {
     /**下单接口*/
     OrderInfo createOrder(MiaoshaUser user, GoodsVo goods);
 
+    /**根据订单ID获取订单信息*/
+    OrderInfo getOrderById(long orderId);
 }
