@@ -28,7 +28,7 @@ public class OrderController {
     @Autowired
     private GoodsService goodsService;
 
-    @RequestMapping(value ="/detail/" ,method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value ="/detail" ,method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public Result<OrderDetailVo> orderDetail(MiaoshaUser miaoshaUser, @RequestParam("orderId") long orderId){
         if(miaoshaUser == null) {
