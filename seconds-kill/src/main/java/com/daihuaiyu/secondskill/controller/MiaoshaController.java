@@ -6,6 +6,8 @@ import com.daihuaiyu.secondskill.config.CodeEnum;
 import com.daihuaiyu.secondskill.domain.MiaoshaOrder;
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
 import com.daihuaiyu.secondskill.domain.OrderInfo;
+import com.daihuaiyu.secondskill.rabbitmq.MessageSender;
+import com.daihuaiyu.secondskill.rabbitmq.MiaoshaMessage;
 import com.daihuaiyu.secondskill.redis.GoodsKey;
 import com.daihuaiyu.secondskill.service.GoodsService;
 import com.daihuaiyu.secondskill.service.MiaoshaService;
@@ -48,6 +50,9 @@ public class MiaoshaController implements InitializingBean {
 
     private Map<String,Object> concurrentHashMap =  new ConcurrentHashMap<>();
 
+    @Autowired
+    private MessageSender sender;
+
     @PostMapping(value = "/do_miaosha")
     @ResponseBody
     public Result doMiaosha(MiaoshaUser miaoshaUser, @RequestParam(value = "goodsId") long goodsId) {
@@ -69,24 +74,39 @@ public class MiaoshaController implements InitializingBean {
         HashOperations opsForHash = redisTemplate.opsForHash();
         Integer stock = JSON.parseObject((String) opsForHash.get(GoodsKey.getMiaoshaGoodsStock.getPrefix() + "gs", "" + goodsId),Integer.class);
         if(stock<=0){
+            concurrentHashMap.put(""+goodsId,false);
             return Result.error(CodeEnum.MIAO_SHA_OVER);
         }
          opsForHash.increment(GoodsKey.getMiaoshaGoodsStock.getPrefix() + "gs", "" + goodsId,-1);
-//        GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
-//        Integer stockCount = goodsVo.getStockCount();
-//        if(stockCount<=0){
-//            return Result.error(CodeEnum.MIAO_SHA_OVER);
-//        }
         MiaoshaOrder miaoshaOrder = miaoshaService.getMiaoshaOrderByUserIdGoodsId(miaoshaUser.getId(), goodsId);
         if(miaoshaOrder!=null){
             return Result.error(CodeEnum.REPEATE_MIAOSHA);
         }
-        //下订单，下秒杀订单，减库存，减秒杀库存
-
-        OrderInfo orderInfo = miaoshaService.miaosha(miaoshaUser, goodsVo);
-        return Result.success(orderInfo);
+        //发秒杀MQ消息
+        MiaoshaMessage miaoshaMessage = new MiaoshaMessage();
+        miaoshaMessage.setMiaoshaUser(miaoshaUser);
+        miaoshaMessage.setGoodsId(goodsId);
+        sender.sendMiaoshaMessage(miaoshaMessage);
+        return Result.success("0");
     }
 
+    /**
+     *orderId：成功
+     *-1：秒杀失败
+     *0： 排队中
+     * @param miaoshaUser
+     * @param model
+     * @param goodsId
+     * @return
+     */
+    public Result<Long> result(MiaoshaUser miaoshaUser,Model model,@RequestParam(value = "goodsId") long goodsId){
+        model.addAttribute("user", miaoshaUser);
+        if(miaoshaUser == null) {
+            return Result.error(CodeEnum.SESSION_ERROR);
+        }
+        Long result = miaoshaService.getMiaoshaResult(miaoshaUser.getId(),goodsId);
+        return Result.success(result);
+    }
     @Override
     public void afterPropertiesSet() {
         HashOperations opsForHash = redisTemplate.opsForHash();

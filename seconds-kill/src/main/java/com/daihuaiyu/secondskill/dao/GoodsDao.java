@@ -37,7 +37,4 @@ public interface GoodsDao {
 
     @Update("update miaosha_goods set stock_count = stock_count - 1 where goods_id = #{goodsId} and stock_count>0")
     int reduceMiaoshaStock(MiaoshaGoods g);
-
-    @Update("update goods set goods_stock = goods_stock - 1 where id = #{goodsId}")
-    int reduceStock(MiaoshaGoods g);
 }

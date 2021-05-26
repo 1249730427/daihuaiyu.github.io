@@ -18,4 +18,7 @@ public interface MiaoshaService {
 
     /**下订单，减库存*/
     OrderInfo miaosha(MiaoshaUser user, GoodsVo goods);
+
+    /**根据用户ID和商品ID查询订单信息*/
+    Long getMiaoshaResult(Long id, long goodsId);
 }

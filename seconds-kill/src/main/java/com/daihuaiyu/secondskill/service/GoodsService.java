@@ -20,5 +20,5 @@ public interface GoodsService {
     GoodsVo getGoodsVoByGoodsId(long goodsId);
 
     /**减库存*/
-    void reduceStock(Goods goods);
+    boolean reduceStock(Goods goods);
 }

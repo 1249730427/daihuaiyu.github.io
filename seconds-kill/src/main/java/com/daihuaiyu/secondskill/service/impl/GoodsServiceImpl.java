@@ -80,12 +80,12 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     @Transactional
-    public void reduceStock(Goods goods) {
+    public boolean reduceStock(Goods goods) {
         MiaoshaGoods g = new MiaoshaGoods();
         g.setGoodsId(goods.getId());
-        goodsDao.reduceStock(g);
-        goodsDao.reduceMiaoshaStock(g);
+        int ret = goodsDao.reduceMiaoshaStock(g);
         redisTemplate.opsForHash().delete(GoodsKey.getGoodsDetail.getPrefix() +getClass().getSimpleName() + "gd", "" + goods.getId());
+        return ret>0;
     }
 }
 
