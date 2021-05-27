@@ -50,7 +50,7 @@ public class MessageSender {
 
 	public void sendHeader(Object message) {
 		String msg = JSON.toJSONString(message);
-		log.info("send fanout message:"+msg);
+		log.info("send header message:"+msg);
 		MessageProperties properties = new MessageProperties();
 		properties.setHeader("header1", "value1");
 		properties.setHeader("header2", "value2");

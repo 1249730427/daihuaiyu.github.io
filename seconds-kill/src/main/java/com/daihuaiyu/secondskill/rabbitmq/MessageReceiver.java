@@ -9,8 +9,10 @@ import com.daihuaiyu.secondskill.vo.GoodsVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,22 +29,15 @@ public class MessageReceiver {
     private Logger logger = LoggerFactory.getLogger(MessageReceiver.class);
 
     @Autowired
-    private AmqpTemplate rabbitTemplate;
-
-    @Autowired
     private GoodsService goodsService;
 
     @Autowired
     private MiaoshaService miaoshaService;
 
-    @RabbitListener(queues = {"QUEUE"})
-    public void receiverMessage(Object msg) {
-        Object receive = rabbitTemplate.convertSendAndReceive(msg);
-        logger.info("接收消息:"+ JSON.parseObject((String) receive,String.class));
-    }
-
     @RabbitListener(queues = MQConfig.MIAOSHA_QUEUQE)
+    @RabbitHandler
     public void receive(String message) {
+        logger.info("receive message:"+message);
         MiaoshaMessage miaoshaMessage = JSON.parseObject(message,MiaoshaMessage.class);
         Long goodsId = miaoshaMessage.getGoodsId();
         MiaoshaUser user = miaoshaMessage.getMiaoshaUser();
@@ -53,6 +48,7 @@ public class MessageReceiver {
         }
         //减库存，写订单信息,写秒杀订单信息
         miaoshaService.miaosha(user, goodsVo);
+
     }
 
     @RabbitListener(queues = MQConfig.QUEUE)

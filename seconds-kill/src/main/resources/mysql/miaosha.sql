@@ -57,6 +57,12 @@ create table miaosha_order(
     primary key(id),
     unique key(id,user_id,order_id,goods_id)
 )ENGINE =InnoDB DEFAULT CHARSET=utf8mb4;
-
+#初始化用户信息
 INSERT INTO `miaosha`.`miaosha_user`(`id`, `nickname`, `password`, `salt`, `head`, `register_date`, `last_login_data`, `login_count`)
 VALUES (13635607637, '带鱼', 'b7797cce01b4b131b433b6acf4add449', '1a2b3c4d', NULL, '2021-05-11 10:50:34', '2021-05-11 10:50:37', 0);
+#初始化产品信息
+INSERT INTO `miaosha`.`goods`(`id`, `goods_name`, `goods_title`, `goods_img`, `goods_detail`, `goods_price`, `goods_stock`) VALUES (1, 'iphone-xr', '苹果手机', '/img/iphonex.png', 'Apple苹果iphone XR双卡双待手机 黑色 128GB', 4499.00, 488);
+INSERT INTO `miaosha`.`goods`(`id`, `goods_name`, `goods_title`, `goods_img`, `goods_detail`, `goods_price`, `goods_stock`) VALUES (2, 'huawei-mate10', '华为手机', '/img/meta10.png', '【二手95新】华为Mate10二手手机 【现货速发】徕卡双摄 全面屏游戏手机 2K屏 摩卡金 6+128G全网通', 3566.00, 497);
+#初始化秒杀产品信息
+INSERT INTO `miaosha`.`miaosha_goods`(`id`, `goods_id`, `miaosha_price`, `stock_count`, `start_date`, `end_date`) VALUES (1, 1, 5.00, 5, '2021-05-18 18:22:43', '2021-05-30 15:22:48');
+INSERT INTO `miaosha`.`miaosha_goods`(`id`, `goods_id`, `miaosha_price`, `stock_count`, `start_date`, `end_date`) VALUES (2, 2, 4.00, 5, '2021-05-05 15:23:05', '2021-05-26 15:23:09');

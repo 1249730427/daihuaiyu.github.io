@@ -20,10 +20,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -99,6 +96,8 @@ public class MiaoshaController implements InitializingBean {
      * @param goodsId
      * @return
      */
+    @RequestMapping(value = "/result",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
     public Result<Long> result(MiaoshaUser miaoshaUser,Model model,@RequestParam(value = "goodsId") long goodsId){
         model.addAttribute("user", miaoshaUser);
         if(miaoshaUser == null) {
@@ -111,7 +110,7 @@ public class MiaoshaController implements InitializingBean {
     public void afterPropertiesSet() {
         HashOperations opsForHash = redisTemplate.opsForHash();
         List<GoodsVo> goodsVo = goodsService.getGoodsVo();
-        if(goodsVo ==null || goodsVo.size()>0){
+        if(goodsVo ==null || goodsVo.size()<=0){
             return;
         }
         goodsVo.stream().forEach(goods ->{

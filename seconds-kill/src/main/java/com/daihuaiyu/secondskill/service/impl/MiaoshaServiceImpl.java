@@ -5,6 +5,7 @@ import com.daihuaiyu.secondskill.dao.OrderDao;
 import com.daihuaiyu.secondskill.domain.MiaoshaOrder;
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
 import com.daihuaiyu.secondskill.domain.OrderInfo;
+import com.daihuaiyu.secondskill.redis.GoodsKey;
 import com.daihuaiyu.secondskill.redis.MiaoshaKey;
 import com.daihuaiyu.secondskill.redis.OrderKey;
 import com.daihuaiyu.secondskill.service.GoodsService;
@@ -63,14 +64,18 @@ public class MiaoshaServiceImpl implements MiaoshaService {
      * @param goods
      */
     @Override
-    @Transactional
     public OrderInfo miaosha(MiaoshaUser user, GoodsVo goods) {
         //减库存 下订单 写入秒杀订单
         boolean isOver = goodsService.reduceStock(goods);
+        Boolean hasKey = redisTemplate.hasKey(GoodsKey.getGoodsList.getPrefix() + "gl");
+        if(hasKey){
+            redisTemplate.delete(GoodsKey.getGoodsList.getPrefix() + "gl");
+        }
         if(isOver){
             return orderService.createOrder(user, goods);
         }
         redisTemplate.opsForHash().put(MiaoshaKey.isGoodsOver.getPrefix()+"go",""+goods.getId(),true);
+
         return null;
     }
 

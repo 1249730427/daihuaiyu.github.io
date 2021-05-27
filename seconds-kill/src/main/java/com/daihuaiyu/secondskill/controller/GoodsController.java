@@ -59,7 +59,7 @@ public class GoodsController {
     public String to_list(HttpServletRequest request, HttpServletResponse response,Model model, MiaoshaUser miaoshaUser){
         //从缓存中获取页面文件，有的话直接返回
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
-        String html = opsForValue.get(GoodsKey.getGoodsList.getPrefix()+getClass().getSimpleName() + "gl");
+        String html = opsForValue.get(GoodsKey.getGoodsList.getPrefix()+"gl");
         if(html !=null){
 //            log.info("从页面缓存中获取页面列表信息：{}",html);
             return html;
@@ -73,7 +73,7 @@ public class GoodsController {
         html =thymeleafViewResolver.getTemplateEngine().process("goods_list",ctx);
         if(html !=null){
             //放入缓存
-            opsForValue.set(GoodsKey.getGoodsList.getPrefix()+getClass().getSimpleName() + "gl",html,5*60, TimeUnit.SECONDS);
+            opsForValue.set(GoodsKey.getGoodsList.getPrefix()+ "gl",html,5*60, TimeUnit.SECONDS);
         }
         return html;
     }
@@ -82,7 +82,7 @@ public class GoodsController {
     @ResponseBody
     public String to_detail(HttpServletRequest request, HttpServletResponse response,@PathVariable Long goodsId, Model model, MiaoshaUser miaoshaUser){
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
-        String html = opsForValue.get(GoodsKey.getGoodsDetail.getPrefix()+getClass().getSimpleName()  + "gd"+goodsId);
+        String html = opsForValue.get(GoodsKey.getGoodsDetail.getPrefix()+"gd"+goodsId);
         if(html !=null){
             log.info("从页面缓存中获取商品详情信息：{}",html);
             return html;
@@ -111,7 +111,7 @@ public class GoodsController {
         html =thymeleafViewResolver.getTemplateEngine().process("goods_detail",ctx);
         if(html !=null){
             //放入缓存
-            opsForValue.set(GoodsKey.getGoodsDetail.getPrefix() + getClass().getSimpleName() +"gd"+goodsId, html,2*60,TimeUnit.SECONDS);
+            opsForValue.set(GoodsKey.getGoodsDetail.getPrefix()  +"gd"+goodsId, html,2*60,TimeUnit.SECONDS);
         }
         return html;
     }

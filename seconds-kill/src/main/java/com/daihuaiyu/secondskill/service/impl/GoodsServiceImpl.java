@@ -41,14 +41,14 @@ public class GoodsServiceImpl implements GoodsService {
     public List<GoodsVo> getGoodsVo() {
         //增加对象级缓存
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
-        List<GoodsVo> goodsVoList = JSON.parseObject(opsForValue.get(GoodsKey.getGoodsList.getPrefix() + getClass().getSimpleName() + "gl"), new TypeReference<ArrayList<GoodsVo>>() {
+        List<GoodsVo> goodsVoList = JSON.parseObject(opsForValue.get(GoodsKey.getGoodsList.getPrefix() +"goods_list"), new TypeReference<ArrayList<GoodsVo>>() {
         });
         if (goodsVoList != null) {
             return goodsVoList;
         }
         goodsVoList = goodsDao.getGoodsVoList();
         if (goodsVoList != null && goodsVoList.size() > 0) {
-            opsForValue.set(GoodsKey.getGoodsList.getPrefix() + getClass().getSimpleName() + "gl", JSON.toJSONString(goodsVoList), 60 * 10, TimeUnit.SECONDS);
+            opsForValue.set(GoodsKey.getGoodsList.getPrefix() +  "goods_list", JSON.toJSONString(goodsVoList), 60 * 10, TimeUnit.SECONDS);
         }
         return goodsVoList;
     }
@@ -61,14 +61,14 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public GoodsVo getGoodsVoByGoodsId(long goodsId) {
         HashOperations<String, Object, Object> opsForHash = redisTemplate.opsForHash();
-        GoodsVo goodsVo = JSON.parseObject((String) opsForHash.get(GoodsKey.getGoodsDetail.getPrefix() + getClass().getSimpleName() + "gd", "" + goodsId), GoodsVo.class);
+        GoodsVo goodsVo = JSON.parseObject((String) opsForHash.get(GoodsKey.getGoodsDetail.getPrefix()  + "good_detail", "" + goodsId), GoodsVo.class);
         if (goodsVo != null) {
             return goodsVo;
         }
         goodsVo = goodsDao.getGoodsVoByGoodsId(goodsId);
         if (goodsVo != null) {
-            opsForHash.put(GoodsKey.getGoodsDetail.getPrefix() +  "gd", "" + goodsId, JSON.toJSONString(goodsVo));
-            redisTemplate.expire(GoodsKey.getGoodsDetail.getPrefix() + getClass().getSimpleName() + "gd", 60 * 10, TimeUnit.SECONDS);
+            opsForHash.put(GoodsKey.getGoodsDetail.getPrefix() +  "good_detail", "" + goodsId, JSON.toJSONString(goodsVo));
+            redisTemplate.expire(GoodsKey.getGoodsDetail.getPrefix() +  "good_detail", 60 * 10, TimeUnit.SECONDS);
         }
         return goodsDao.getGoodsVoByGoodsId(goodsId);
     }
@@ -79,7 +79,6 @@ public class GoodsServiceImpl implements GoodsService {
      * @param goods
      */
     @Override
-    @Transactional
     public boolean reduceStock(Goods goods) {
         MiaoshaGoods g = new MiaoshaGoods();
         g.setGoodsId(goods.getId());

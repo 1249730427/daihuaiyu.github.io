@@ -20,7 +20,7 @@ import java.util.Map;
 public class MQConfig {
 
     //定义队列名称以及交换机名称
-    public static final String MIAOSHA_QUEUQE = "miaosha_queue";
+    public static final String MIAOSHA_QUEUQE = "miaosha.queue";
     public static final String QUEUE = "queue";
     public static final String TOPIC_QUEUE1 = "topic.queue1";
     public static final String TOPIC_QUEUE2 = "topic.queue2";
@@ -38,6 +38,9 @@ public class MQConfig {
         return new Queue(QUEUE,true);
     }
 
+    @Bean
+    public Queue miaoshaQueue (){
+        return new Queue(MIAOSHA_QUEUQE,true);}
     /**
      * Topic模式 交换机Exchange
      * @return
@@ -59,7 +62,7 @@ public class MQConfig {
 
     @Bean
     public Binding topicBind2(){
-        return BindingBuilder.bind(topicQueue1()).to(topicExchange()).with("topic.#");
+        return BindingBuilder.bind(topicQueue2()).to(topicExchange()).with("topic.#");
     }
 
     @Bean
