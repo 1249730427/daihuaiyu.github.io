@@ -6,8 +6,10 @@ import com.daihuaiyu.secondskill.dao.GoodsDao;
 import com.daihuaiyu.secondskill.domain.Goods;
 import com.daihuaiyu.secondskill.domain.MiaoshaGoods;
 import com.daihuaiyu.secondskill.redis.GoodsKey;
+import com.daihuaiyu.secondskill.redis.OrderKey;
 import com.daihuaiyu.secondskill.service.GoodsService;
 import com.daihuaiyu.secondskill.vo.GoodsVo;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -83,7 +85,21 @@ public class GoodsServiceImpl implements GoodsService {
         MiaoshaGoods g = new MiaoshaGoods();
         g.setGoodsId(goods.getId());
         int ret = goodsDao.reduceMiaoshaStock(g);
-        redisTemplate.opsForHash().delete(GoodsKey.getGoodsDetail.getPrefix() +getClass().getSimpleName() + "gd", "" + goods.getId());
+        //1.删除商品列表页面缓存
+        Boolean hasGlKey = redisTemplate.hasKey(GoodsKey.getGoodsList.getPrefix() + "gl");
+        if(hasGlKey){
+            redisTemplate.delete(GoodsKey.getGoodsList.getPrefix() + "gl");
+        }
+        //2.删除商品信息缓存
+        Boolean hasGoodList = redisTemplate.hasKey(GoodsKey.getGoodsList.getPrefix() +  "goods_list");
+        if(hasGoodList){
+            redisTemplate.delete(GoodsKey.getGoodsList.getPrefix() +  "goods_list");
+        }
+        //3.删除商品详情缓存
+        Boolean hasGoodsDetail = redisTemplate.hasKey(GoodsKey.getGoodsDetail.getPrefix() +  "good_detail");
+        if(hasGoodsDetail){
+            redisTemplate.opsForHash().delete(GoodsKey.getGoodsDetail.getPrefix() + "good_detail", "" + goods.getId());
+        }
         return ret>0;
     }
 }

@@ -8,6 +8,8 @@ import com.daihuaiyu.secondskill.domain.OrderInfo;
 import com.daihuaiyu.secondskill.redis.OrderKey;
 import com.daihuaiyu.secondskill.service.OrderService;
 import com.daihuaiyu.secondskill.vo.GoodsVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,7 +26,7 @@ import java.util.Date;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-
+    private Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
     @Resource
     OrderDao orderDao;
 
@@ -43,7 +45,6 @@ public class OrderServiceImpl implements OrderService {
      * @param goods
      */
     @Override
-    @Transactional
     public OrderInfo createOrder(MiaoshaUser user, GoodsVo goods) {
 
             OrderInfo orderInfo = new OrderInfo();
@@ -56,12 +57,13 @@ public class OrderServiceImpl implements OrderService {
             orderInfo.setOrderChannel(1);
             orderInfo.setStatus(0);
             orderInfo.setUserId(user.getId());
-            long orderId = orderDao.insert(orderInfo);
+             orderDao.insert(orderInfo);
             MiaoshaOrder miaoshaOrder = new MiaoshaOrder();
             miaoshaOrder.setGoodsId(goods.getId());
-            miaoshaOrder.setOrderId(orderId);
+            miaoshaOrder.setOrderId(orderInfo.getId());
             miaoshaOrder.setUserId(user.getId());
             orderDao.insertMiaoshaOrder(miaoshaOrder);
+            logger.info("订单写入完成！！");
 
         redisTemplate.opsForHash().put(OrderKey.getMiaoshaOrderByUidGid.getPrefix()+"moug", ""+user.getId()+"_"+goods.getId(),JSON.toJSONString(miaoshaOrder));
 

@@ -2,6 +2,7 @@ package com.daihuaiyu.secondskill.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.daihuaiyu.secondskill.config.AccessLimit;
 import com.daihuaiyu.secondskill.config.CodeEnum;
 import com.daihuaiyu.secondskill.domain.MiaoshaOrder;
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
@@ -22,6 +23,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,11 +58,15 @@ public class MiaoshaController implements InitializingBean {
     @Autowired
     private MessageSender sender;
 
-    @PostMapping(value = "/do_miaosha")
+    @PostMapping(value = "/{path}/do_miaosha")
     @ResponseBody
-    public Result doMiaosha(MiaoshaUser miaoshaUser, @RequestParam(value = "goodsId") long goodsId) {
+    public Result doMiaosha(MiaoshaUser miaoshaUser, @RequestParam(value = "goodsId") long goodsId,@PathVariable String path) {
         if(miaoshaUser ==null){
             return Result.error(CodeEnum.SESSION_ERROR);
+        }
+        boolean checkMiaoshaPathPass = miaoshaService.checkMiaoshaPath(miaoshaUser.getId(),goodsId,path);
+        if(!checkMiaoshaPathPass){
+            return Result.error(CodeEnum.MIAOSHA_PATH_INVALID);
         }
         /**
          * 异步下单：
@@ -64,6 +76,10 @@ public class MiaoshaController implements InitializingBean {
          * 4.异步处理减库存，写订单
          * 5.客户端轮询访问是否秒杀到商品信息
          * */
+        MiaoshaOrder miaoshaOrder = miaoshaService.getMiaoshaOrderByUserIdGoodsId(miaoshaUser.getId(), goodsId);
+        if(miaoshaOrder!=null){
+            return Result.error(CodeEnum.REPEATE_MIAOSHA);
+        }
         Boolean check = (Boolean) concurrentHashMap.get(""+goodsId);
         if(!check.booleanValue()){
            return Result.error(CodeEnum.MIAO_SHA_OVER);
@@ -75,10 +91,6 @@ public class MiaoshaController implements InitializingBean {
             return Result.error(CodeEnum.MIAO_SHA_OVER);
         }
          opsForHash.increment(GoodsKey.getMiaoshaGoodsStock.getPrefix() + "gs", "" + goodsId,-1);
-        MiaoshaOrder miaoshaOrder = miaoshaService.getMiaoshaOrderByUserIdGoodsId(miaoshaUser.getId(), goodsId);
-        if(miaoshaOrder!=null){
-            return Result.error(CodeEnum.REPEATE_MIAOSHA);
-        }
         //发秒杀MQ消息
         MiaoshaMessage miaoshaMessage = new MiaoshaMessage();
         miaoshaMessage.setMiaoshaUser(miaoshaUser);
@@ -106,6 +118,55 @@ public class MiaoshaController implements InitializingBean {
         Long result = miaoshaService.getMiaoshaResult(miaoshaUser.getId(),goodsId);
         return Result.success(result);
     }
+
+    @AccessLimit(timeRange = 5,maxCount = 6,needLogin = true)
+    @RequestMapping(value="/path", method=RequestMethod.GET)
+    @ResponseBody
+    public Result<String> getMiaoshaPath( MiaoshaUser miaoshaUser,
+                                         @RequestParam("goodsId")long goodsId,
+                                         @RequestParam(value="verifyCode", defaultValue="0")int verifyCode
+    ) {
+        if(miaoshaUser ==null){
+            return Result.error(CodeEnum.SESSION_ERROR);
+        }
+        boolean checkVerifyCodePass = miaoshaService.checkVerifyCode(goodsId,verifyCode);
+        if(!checkVerifyCodePass){
+            return Result.error(CodeEnum.VERIFYCODE_INVALID);
+        }
+        String path = miaoshaService.generateMiaoshaPath(miaoshaUser.getId(),goodsId);
+        return Result.success(path);
+    }
+    /**
+     * 生成验证码code
+     * @param miaoshaUser
+     * @param response
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping(value = "/verifyCode/{goodsId}",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public Result<String> generateVerifyCode(MiaoshaUser miaoshaUser, HttpServletResponse response, @PathVariable(value = "goodsId") long goodsId) throws IOException {
+        if(miaoshaUser ==null){
+            return Result.error(CodeEnum.SESSION_ERROR);
+        }
+        OutputStream outputStream = null;
+        try {
+            BufferedImage verifyCode = miaoshaService.createVerifyCode(miaoshaUser.getId(),goodsId);
+            outputStream = response.getOutputStream();
+            ImageIO.write(verifyCode,"JPEG",outputStream);
+            outputStream.flush();
+            outputStream.close();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Result.error(CodeEnum.MIAOSHA_FAIL);
+        }finally {
+            if(outputStream !=null){
+                outputStream.close();
+            }
+        }
+    }
+
     @Override
     public void afterPropertiesSet() {
         HashOperations opsForHash = redisTemplate.opsForHash();

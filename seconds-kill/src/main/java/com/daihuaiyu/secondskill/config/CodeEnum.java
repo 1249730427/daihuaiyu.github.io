@@ -1,6 +1,5 @@
 package com.daihuaiyu.secondskill.config;
 
-import lombok.Data;
 
 /**
  * @Enum: CodeEnum
@@ -12,6 +11,10 @@ public enum CodeEnum {
     SUCCESS(0, "success"),
     SERVER_ERROR(500100, "服务端异常"),
     BIND_ERROR(500101, "参数校验异常"),
+    MIAOSHA_FAIL(500102,"秒杀失败"),
+    VERIFYCODE_INVALID(500103,"验证码输入错误"),
+    MIAOSHA_PATH_INVALID(500104,"秒杀路径有误"),
+    ACCESS_LIMIT_REACHED(500105,"访问太频繁"),
     //登录模块 5002XX
     SESSION_ERROR (500210, "Session不存在或者已经失效"),
     PASSWORD_EMPTY (500211, "登录密码不能为空"),
