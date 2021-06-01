@@ -8,9 +8,10 @@ import com.daihuaiyu.secondskill.service.MiaoshaService;
 import com.daihuaiyu.secondskill.service.MiaoshaUserService;
 import com.daihuaiyu.secondskill.service.impl.MiaoshaUserServiceImpl;
 import com.daihuaiyu.secondskill.util.Result;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,8 @@ public class AccessLimitAspect  {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Around("@annotation(com.daihuaiyu.secondskill.config.AccessLimit)")
-    public Object accessLimit(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    @Before("@annotation(com.daihuaiyu.secondskill.config.AccessLimit)")
+    public Object accessLimit(JoinPoint proceedingJoinPoint) throws Throwable {
        MethodSignature methodSignature= (MethodSignature) proceedingJoinPoint.getSignature();
         Method method = methodSignature.getMethod();
         //获取注解
@@ -66,14 +67,20 @@ public class AccessLimitAspect  {
             }
         }
         HashOperations opsForHash = redisTemplate.opsForHash();
-        Integer count = (Integer) opsForHash.get(AccessLimitAspect.class.getSimpleName() + "access", "" + miaoshaUser.getId());
+        Integer count = JSON.parseObject((String) opsForHash.get(AccessLimitAspect.class.getSimpleName() + "access", "" + miaoshaUser.getId()),Integer.class);
         if(count ==null){
-            opsForHash.put(AccessLimitAspect.class.getSimpleName() + "access","" + miaoshaUser.getId(),1);
+            opsForHash.put(AccessLimitAspect.class.getSimpleName() + "access","" + miaoshaUser.getId(),JSON.toJSONString(1));
             redisTemplate.expire(AccessLimitAspect.class.getSimpleName() + "access",timeRange,TimeUnit.SECONDS);
-            return proceedingJoinPoint.proceed();
-        }else if(count<=maxCount){
-            opsForHash.increment(AccessLimitAspect.class.getSimpleName() + "access", "" + miaoshaUser.getId(),1);
-            return proceedingJoinPoint.proceed();
+            return true;
+        }else if(count<maxCount){
+            Boolean hasKey = redisTemplate.hasKey(AccessLimitAspect.class.getSimpleName() + "access");
+            if(hasKey){
+                opsForHash.increment(AccessLimitAspect.class.getSimpleName() + "access", "" + miaoshaUser.getId(),1);
+            }else{
+                opsForHash.put(AccessLimitAspect.class.getSimpleName() + "access","" + miaoshaUser.getId(),JSON.toJSONString(1));
+                redisTemplate.expire(AccessLimitAspect.class.getSimpleName() + "access",timeRange,TimeUnit.SECONDS);
+            }
+            return true;
         }else{
             render(response, CodeEnum.ACCESS_LIMIT_REACHED);
             return false;

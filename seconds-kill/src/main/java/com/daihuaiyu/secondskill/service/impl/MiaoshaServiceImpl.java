@@ -160,7 +160,10 @@ public class MiaoshaServiceImpl implements MiaoshaService {
     @Override
     public boolean checkVerifyCode(long goodsId, int verifyCode) {
         HashOperations opsForHash = redisTemplate.opsForHash();
-        Integer eval = (Integer) opsForHash.get(MiaoshaKey.getMiaoshaVerifyCode.getPrefix()+"vc",""+goodsId);
+        Integer eval = JSON.parseObject((String) opsForHash.get(MiaoshaKey.getMiaoshaVerifyCode.getPrefix()+"vc",""+goodsId),Integer.class);
+        if(eval ==null){
+          return false;
+        }
         return verifyCode==eval;
     }
 
@@ -203,7 +206,7 @@ public class MiaoshaServiceImpl implements MiaoshaService {
             Integer eval = (Integer) javaScript.eval(verifyCode);
             HashOperations opsForHash = redisTemplate.opsForHash();
             //放入缓存中
-            opsForHash.put(MiaoshaKey.getMiaoshaVerifyCode.getPrefix()+"vc",""+goodsId,eval);
+            opsForHash.put(MiaoshaKey.getMiaoshaVerifyCode.getPrefix()+"vc",""+goodsId,JSON.toJSONString(eval));
             redisTemplate.expire(MiaoshaKey.getMiaoshaVerifyCode.getPrefix()+"vc",60,TimeUnit.SECONDS);
         } catch (ScriptException e) {
             e.printStackTrace();

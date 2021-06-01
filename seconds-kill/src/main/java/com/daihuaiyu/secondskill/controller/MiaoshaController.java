@@ -119,7 +119,7 @@ public class MiaoshaController implements InitializingBean {
         return Result.success(result);
     }
 
-    @AccessLimit(timeRange = 5,maxCount = 6,needLogin = true)
+    @AccessLimit(timeRange = 60,maxCount = 6,needLogin = true)
     @RequestMapping(value="/path", method=RequestMethod.GET)
     @ResponseBody
     public Result<String> getMiaoshaPath( MiaoshaUser miaoshaUser,
@@ -143,9 +143,9 @@ public class MiaoshaController implements InitializingBean {
      * @param goodsId
      * @return
      */
-    @RequestMapping(value = "/verifyCode/{goodsId}",method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/verifyCode",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public Result<String> generateVerifyCode(MiaoshaUser miaoshaUser, HttpServletResponse response, @PathVariable(value = "goodsId") long goodsId) throws IOException {
+    public Result<String> generateVerifyCode(MiaoshaUser miaoshaUser, HttpServletResponse response, @RequestParam(value = "goodsId") long goodsId) throws IOException {
         if(miaoshaUser ==null){
             return Result.error(CodeEnum.SESSION_ERROR);
         }

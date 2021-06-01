@@ -10,6 +10,7 @@ import com.daihuaiyu.secondskill.redis.MiaoshaUserKey;
 import com.daihuaiyu.secondskill.redis.UserKey;
 import com.daihuaiyu.secondskill.service.MiaoshaUserService;
 import com.daihuaiyu.secondskill.util.Md5Util;
+import com.daihuaiyu.secondskill.util.ThreadLocalUtil;
 import com.daihuaiyu.secondskill.vo.LoginVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

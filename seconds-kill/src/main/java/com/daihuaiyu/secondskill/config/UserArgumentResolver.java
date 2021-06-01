@@ -4,6 +4,7 @@ import com.daihuaiyu.secondskill.domain.MiaoshaUser;
 import com.daihuaiyu.secondskill.redis.MiaoshaUserKey;
 import com.daihuaiyu.secondskill.service.MiaoshaUserService;
 import com.daihuaiyu.secondskill.service.impl.MiaoshaUserServiceImpl;
+import com.daihuaiyu.secondskill.util.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer,
                                   NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+
         //1.获取HttpServletRequest和HttpServletResponse
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
