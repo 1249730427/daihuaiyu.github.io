@@ -1,9 +1,12 @@
 package com.daihuaiyu.secondskill.config;
 
+import com.daihuaiyu.secondskill.interceptor.MiaoshaUserInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.util.List;
@@ -16,6 +19,9 @@ import java.util.List;
  **/
 @Configuration
 public class WebConfig  extends WebMvcConfigurationSupport {
+
+    @Autowired
+    MiaoshaUserInterceptor miaoshaUserInterceptor;
 
     @Autowired
     UserArgumentResolver userArgumentResolver;
@@ -34,6 +40,14 @@ public class WebConfig  extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/**")
                 .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS);
 
+    }
+
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(miaoshaUserInterceptor)
+        .addPathPatterns("/goods/*").addPathPatterns("/miaosha/*")
+         .addPathPatterns("/order/*")
+        .excludePathPatterns("/login/*");
     }
 }
 

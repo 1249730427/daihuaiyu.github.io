@@ -9,6 +9,7 @@ package com.daihuaiyu.secondskill.config;
  */
 public enum CodeEnum {
     SUCCESS(0, "success"),
+    LOGIN_FRIST(500105,"用户信息为空，请登陆"),
     SERVER_ERROR(500100, "服务端异常"),
     BIND_ERROR(500101, "参数校验异常"),
     MIAOSHA_FAIL(500102,"秒杀失败"),
