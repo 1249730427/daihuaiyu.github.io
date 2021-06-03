@@ -1,6 +1,7 @@
 package com.study.chapter1.util;
 
 import java.security.MessageDigest;
+import java.util.*;
 
 /**
  * MD5工具类
@@ -47,6 +48,28 @@ public class MD5Util {
         } catch (Exception exception) {
         }
         return resultString;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getMaxTimesString("12358bbbb戴8aaabbbbba"));
+    }
+    public static String getMaxTimesString(String sourceString){
+        Map<String,Integer> countMap = new HashMap<>();
+        char[] charArray = sourceString.toCharArray();
+        for(int i=0;i<charArray.length;i++){
+            if(sourceString.indexOf(charArray[i])!=-1){
+                Integer times = countMap.get(String.valueOf(charArray[i]));
+                if(times !=null){
+                    times = times+1;
+                    countMap.put(String.valueOf(charArray[i]),times);
+                }else{
+                    countMap.put(String.valueOf(charArray[i]),1);
+                }
+            }
+        }
+        List<Map.Entry<String,Integer>> list = new ArrayList<>(countMap.entrySet());
+        Collections.sort(list, (o1, o2) -> o2.getValue()-o1.getValue());
+        return "出现次数最多的字符为："+list.get(0).getKey()+",出现次数为："+list.get(0).getValue();
     }
 }
 

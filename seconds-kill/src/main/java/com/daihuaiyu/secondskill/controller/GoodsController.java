@@ -1,7 +1,5 @@
 package com.daihuaiyu.secondskill.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.daihuaiyu.secondskill.domain.Goods;
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
 import com.daihuaiyu.secondskill.redis.GoodsKey;
 import com.daihuaiyu.secondskill.service.GoodsService;
@@ -12,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
@@ -24,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.spring4.context.SpringWebContext;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -48,7 +46,7 @@ public class GoodsController {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
-    @Autowired
+    @Resource
     private ThymeleafViewResolver thymeleafViewResolver;
 
     @Autowired
