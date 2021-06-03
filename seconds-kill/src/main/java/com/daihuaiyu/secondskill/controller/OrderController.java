@@ -8,6 +8,8 @@ import com.daihuaiyu.secondskill.service.OrderService;
 import com.daihuaiyu.secondskill.util.Result;
 import com.daihuaiyu.secondskill.vo.GoodsVo;
 import com.daihuaiyu.secondskill.vo.OrderDetailVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @Controller
 @RequestMapping("/order")
+@Api("订单相关API")
 public class OrderController {
 
     @Autowired
@@ -30,6 +33,7 @@ public class OrderController {
 
     @RequestMapping(value ="/detail" ,method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @ApiOperation(value = "订单详情")
     public Result<OrderDetailVo> orderDetail(MiaoshaUser miaoshaUser, @RequestParam("orderId") long orderId){
         if(miaoshaUser == null) {
             return Result.error(CodeEnum.SESSION_ERROR);

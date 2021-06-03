@@ -15,6 +15,8 @@ import com.daihuaiyu.secondskill.service.MiaoshaService;
 import com.daihuaiyu.secondskill.service.OrderService;
 import com.daihuaiyu.secondskill.util.Result;
 import com.daihuaiyu.secondskill.vo.GoodsVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
@@ -42,6 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 @Controller
 @RequestMapping(value = "/miaosha")
+@Api("秒杀相关API")
 public class MiaoshaController implements InitializingBean {
 
     @Autowired
@@ -60,6 +63,7 @@ public class MiaoshaController implements InitializingBean {
 
     @PostMapping(value = "/{path}/do_miaosha")
     @ResponseBody
+    @ApiOperation(value = "秒杀")
     public Result doMiaosha(MiaoshaUser miaoshaUser, @RequestParam(value = "goodsId") long goodsId,@PathVariable String path) {
         if(miaoshaUser ==null){
             return Result.error(CodeEnum.SESSION_ERROR);
@@ -110,6 +114,7 @@ public class MiaoshaController implements InitializingBean {
      */
     @RequestMapping(value = "/result",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @ApiOperation(value = "获取下单结果")
     public Result<Long> result(MiaoshaUser miaoshaUser,Model model,@RequestParam(value = "goodsId") long goodsId){
         model.addAttribute("user", miaoshaUser);
         if(miaoshaUser == null) {
@@ -145,6 +150,7 @@ public class MiaoshaController implements InitializingBean {
      */
     @RequestMapping(value = "/verifyCode",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @ApiOperation(value = "生成验证码")
     public Result<String> generateVerifyCode(MiaoshaUser miaoshaUser, HttpServletResponse response, @RequestParam(value = "goodsId") long goodsId) throws IOException {
         if(miaoshaUser ==null){
             return Result.error(CodeEnum.SESSION_ERROR);

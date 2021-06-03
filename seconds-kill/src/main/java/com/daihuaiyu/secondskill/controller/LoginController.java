@@ -5,6 +5,8 @@ import com.daihuaiyu.secondskill.domain.MiaoshaUser;
 import com.daihuaiyu.secondskill.service.MiaoshaUserService;
 import com.daihuaiyu.secondskill.util.Result;
 import com.daihuaiyu.secondskill.vo.LoginVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import javax.validation.Valid;
  **/
 @Controller
 @RequestMapping("/login")
+@Api("登录相关API")
 public class LoginController {
     private static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -36,6 +39,7 @@ public class LoginController {
 
     @RequestMapping("/do_login")
     @ResponseBody
+    @ApiOperation(value = "登录页面")
     public Result<Boolean> doLogin( HttpServletResponse response, @Valid LoginVo loginVo){
         logger.info("登录信息:"+loginVo.toString());
         miaoshaUserService.login(response, loginVo);
@@ -44,6 +48,7 @@ public class LoginController {
 
     @RequestMapping(value = "/query_user",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @ApiOperation(value = "登录")
     public Result<MiaoshaUser> queryMiaoshaUser(MiaoshaUser miaoshaUser){
         if(miaoshaUser ==null){
             return Result.error(CodeEnum.LOGIN_FRIST);

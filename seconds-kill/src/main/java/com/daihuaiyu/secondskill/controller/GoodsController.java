@@ -6,6 +6,9 @@ import com.daihuaiyu.secondskill.service.GoodsService;
 import com.daihuaiyu.secondskill.util.Result;
 import com.daihuaiyu.secondskill.vo.GoodsDetailVo;
 import com.daihuaiyu.secondskill.vo.GoodsVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,7 @@ import java.util.concurrent.TimeUnit;
  **/
 @Controller
 @RequestMapping("/goods")
+@Api("商品信息的API")
 public class GoodsController {
 
     private Logger log = LoggerFactory.getLogger(GoodsController.class);
@@ -54,6 +58,7 @@ public class GoodsController {
 
     @RequestMapping(value = "/to_list",produces = "text/html;charset=UTF-8")
     @ResponseBody
+    @ApiOperation(value = "商品列表")
     public String to_list(HttpServletRequest request, HttpServletResponse response,Model model, MiaoshaUser miaoshaUser){
         //从缓存中获取页面文件，有的话直接返回
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
@@ -78,6 +83,7 @@ public class GoodsController {
 
     @RequestMapping(value = "/to_detail/{goodsId}",produces = "text/html;charset=UTF-8")
     @ResponseBody
+    @ApiOperation(value = "商品详情")
     public String to_detail(HttpServletRequest request, HttpServletResponse response,@PathVariable Long goodsId, Model model, MiaoshaUser miaoshaUser){
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         String html = opsForValue.get(GoodsKey.getGoodsDetail.getPrefix()+"gd"+goodsId);
