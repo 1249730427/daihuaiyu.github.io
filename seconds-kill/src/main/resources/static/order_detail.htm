@@ -78,8 +78,25 @@ function render(detail){
 }
 
 $(function(){
-    getOrderDetail();
+    getUserInfo();
+
 })
+function getUserInfo() {
+    $.ajax({
+        url:"/login/query_user/",
+        type:"GET",
+        success:function(data){
+            if(data.code == 0){
+                getOrderDetail();
+            }else{
+                window.location.href="/login.htm"
+            }
+        },
+        error:function(){
+            layer.msg("客户端请求有误");
+        }
+    });
+}
 
 function getOrderDetail(){
 	var orderId = g_getQueryString("orderId");

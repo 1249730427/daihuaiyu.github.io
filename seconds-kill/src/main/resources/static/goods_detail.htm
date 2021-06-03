@@ -178,8 +178,25 @@ function render(detail){
 
 $(function(){
 	//countDown();
-	getDetail();
+    getUserInfo();
+
 });
+function getUserInfo() {
+    $.ajax({
+        url:"/login/query_user/",
+        type:"GET",
+        success:function(data){
+            if(data.code == 0){
+                getDetail();
+            }else{
+                window.location.href="/login.htm"
+            }
+        },
+        error:function(){
+            layer.msg("客户端请求有误");
+        }
+    });
+}
 
 function getDetail(){
 	var goodsId = g_getQueryString("goodsId");

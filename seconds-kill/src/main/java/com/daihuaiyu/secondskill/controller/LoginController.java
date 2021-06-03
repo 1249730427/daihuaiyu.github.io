@@ -42,5 +42,14 @@ public class LoginController {
         return Result.success(Boolean.TRUE);
     }
 
+    @RequestMapping(value = "/query_user",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public Result<MiaoshaUser> queryMiaoshaUser(MiaoshaUser miaoshaUser){
+        if(miaoshaUser ==null){
+            return Result.error(CodeEnum.LOGIN_FRIST);
+        }
+        return Result.success(miaoshaUser);
+    }
+
 }
 
