@@ -112,7 +112,7 @@ public class MiaoshaController implements InitializingBean {
      * @param goodsId
      * @return
      */
-    @RequestMapping(value = "/result",method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/result",method = {RequestMethod.GET})
     @ResponseBody
     @ApiOperation(value = "获取下单结果")
     public Result<Long> result(MiaoshaUser miaoshaUser,Model model,@RequestParam(value = "goodsId") long goodsId){
@@ -148,7 +148,7 @@ public class MiaoshaController implements InitializingBean {
      * @param goodsId
      * @return
      */
-    @RequestMapping(value = "/verifyCode",method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/verifyCode",method = {RequestMethod.GET})
     @ResponseBody
     @ApiOperation(value = "生成验证码")
     public Result<String> generateVerifyCode(MiaoshaUser miaoshaUser, HttpServletResponse response, @RequestParam(value = "goodsId") long goodsId) throws IOException {

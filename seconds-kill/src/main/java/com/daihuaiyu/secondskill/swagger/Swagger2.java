@@ -37,9 +37,9 @@ public class Swagger2 {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 // 页面标题
-                .title("Swagger2 构建RESTful API")
+                .title("Swagger2 构建秒杀系统RESTful API")
                 // 创建人信息
-                .contact(new Contact("DAIHUAIYU",  "",  "1249730427@qq.com"))
+                .contact(new Contact("daihuaiyu",  "",  "1249730427@qq.com"))
                 // 版本号
                 .version("1.0")
                 // 描述

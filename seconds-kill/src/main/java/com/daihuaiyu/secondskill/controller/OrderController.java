@@ -31,7 +31,7 @@ public class OrderController {
     @Autowired
     private GoodsService goodsService;
 
-    @RequestMapping(value ="/detail" ,method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value ="/detail" ,method = {RequestMethod.GET})
     @ResponseBody
     @ApiOperation(value = "订单详情")
     public Result<OrderDetailVo> orderDetail(MiaoshaUser miaoshaUser, @RequestParam("orderId") long orderId){
