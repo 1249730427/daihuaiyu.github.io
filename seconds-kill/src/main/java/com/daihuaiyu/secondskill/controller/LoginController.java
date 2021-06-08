@@ -37,7 +37,7 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(value = "/do_login",method = {RequestMethod.GET})
+    @RequestMapping(value = "/do_login",method = {RequestMethod.POST})
     @ResponseBody
     @ApiOperation(value = "登录页面")
     public Result<Boolean> doLogin( HttpServletResponse response, @Valid LoginVo loginVo){
@@ -46,7 +46,7 @@ public class LoginController {
         return Result.success(Boolean.TRUE);
     }
 
-    @RequestMapping(value = "/query_user",method = {RequestMethod.POST})
+    @RequestMapping(value = "/query_user",method = {RequestMethod.POST,RequestMethod.GET})
     @ResponseBody
     @ApiOperation(value = "登录")
     public Result<MiaoshaUser> queryMiaoshaUser(MiaoshaUser miaoshaUser){

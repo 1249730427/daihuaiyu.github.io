@@ -55,7 +55,7 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
         if(StringUtils.isEmpty(token)){
             return null;
         }
-        MiaoshaUser miaoshaUser = JSON.parseObject((String) redisTemplate.opsForHash().get(MiaoshaUserKey.token.getPrefix()+token, token),MiaoshaUser.class);
+        MiaoshaUser miaoshaUser = JSON.parseObject((String) redisTemplate.opsForHash().get(MiaoshaUserKey.token.getPrefix()+"token", token),MiaoshaUser.class);
         return miaoshaUser;
     }
 
@@ -93,12 +93,17 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService {
 
     private void addCookie(HttpServletResponse response,  String token,MiaoshaUser user) {
         HashOperations<String, Object, Object> opsForHash = redisTemplate.opsForHash();
-        String prefix = MiaoshaUserKey.token.getPrefix() + token;
+        String prefix = MiaoshaUserKey.token.getPrefix() + "token";
             //过期时间小于等于0则不设置过期时间
             if (MiaoshaUserKey.token.expireSeconds() <= 0) {
+                if(redisTemplate.hasKey(prefix)){
+                    redisTemplate.delete(prefix);
+                }
                 opsForHash.put(prefix, token, JSON.toJSONString(user));
             } else { //获取时间大于0设置key的过期时间
-
+                if(redisTemplate.hasKey(prefix)){
+                    redisTemplate.delete(prefix);
+                }
                 opsForHash.put(prefix, token, JSON.toJSONString(user));
                 redisTemplate.expire(prefix, MiaoshaUserKey.token.expireSeconds(), TimeUnit.SECONDS);
             }

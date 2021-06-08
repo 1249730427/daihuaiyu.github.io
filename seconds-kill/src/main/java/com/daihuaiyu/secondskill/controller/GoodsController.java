@@ -56,7 +56,7 @@ public class GoodsController {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @RequestMapping(value = "/to_list",produces = "text/html;charset=UTF-8",method = {RequestMethod.POST})
+    @RequestMapping(value = "/to_list",produces = "text/html;charset=UTF-8",method = {RequestMethod.GET})
     @ResponseBody
     @ApiOperation(value = "商品列表")
     public String to_list(HttpServletRequest request, HttpServletResponse response,Model model, MiaoshaUser miaoshaUser){
@@ -81,7 +81,7 @@ public class GoodsController {
         return html;
     }
 
-    @RequestMapping(value = "/to_detail/{goodsId}",produces = "text/html;charset=UTF-8",method = {RequestMethod.POST})
+    @RequestMapping(value = "/to_detail/{goodsId}",produces = "text/html;charset=UTF-8",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     @ApiOperation(value = "商品详情")
     public String to_detail(HttpServletRequest request, HttpServletResponse response,@PathVariable Long goodsId, Model model, MiaoshaUser miaoshaUser){
