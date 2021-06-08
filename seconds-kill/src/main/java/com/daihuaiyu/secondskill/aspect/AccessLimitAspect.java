@@ -9,6 +9,8 @@ import com.daihuaiyu.secondskill.service.MiaoshaUserService;
 import com.daihuaiyu.secondskill.service.impl.MiaoshaUserServiceImpl;
 import com.daihuaiyu.secondskill.util.Result;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -46,9 +48,15 @@ public class AccessLimitAspect  {
     private RedisTemplate redisTemplate;
 
     @Before("@annotation(com.daihuaiyu.secondskill.config.AccessLimit)")
-    public Object accessLimit(JoinPoint proceedingJoinPoint) throws Throwable {
-       MethodSignature methodSignature= (MethodSignature) proceedingJoinPoint.getSignature();
-        Method method = methodSignature.getMethod();
+    public Object accessLimit(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        //2中获取Method的方式，第一种直接从MethodSignature获取，第2种通过TargetClass传入methodName和方法参数类型获取Method
+//       MethodSignature methodSignature= (MethodSignature) proceedingJoinPoint.getSignature();
+//        Method method = methodSignature.getMethod();
+        String methodName = proceedingJoinPoint.getSignature().getName();
+        Class<?> classTarget = proceedingJoinPoint.getTarget().getClass();
+        Class[] parameterTypes = ((MethodSignature) proceedingJoinPoint.getSignature()).getParameterTypes();
+        Method method = classTarget.getMethod(methodName, parameterTypes);
+
         //获取注解
         AccessLimit accessLimit = method.getAnnotation(AccessLimit.class);
         long timeRange = accessLimit.timeRange();
