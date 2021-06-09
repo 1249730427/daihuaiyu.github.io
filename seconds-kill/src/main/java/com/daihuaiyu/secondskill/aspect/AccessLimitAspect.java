@@ -48,7 +48,7 @@ public class AccessLimitAspect  {
     private RedisTemplate redisTemplate;
 
     @Before("@annotation(com.daihuaiyu.secondskill.config.AccessLimit)")
-    public Object accessLimit(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    public Object accessLimit(JoinPoint proceedingJoinPoint) throws Throwable {
         //2中获取Method的方式，第一种直接从MethodSignature获取，第2种通过TargetClass传入methodName和方法参数类型获取Method
 //       MethodSignature methodSignature= (MethodSignature) proceedingJoinPoint.getSignature();
 //        Method method = methodSignature.getMethod();
