@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.daihuaiyu.secondskill.dao.GoodsDao;
 import com.daihuaiyu.secondskill.domain.Goods;
 import com.daihuaiyu.secondskill.domain.MiaoshaGoods;
+import com.daihuaiyu.secondskill.mybatis.Pager;
 import com.daihuaiyu.secondskill.redis.GoodsKey;
 import com.daihuaiyu.secondskill.redis.OrderKey;
 import com.daihuaiyu.secondskill.service.GoodsService;
@@ -40,7 +41,7 @@ public class GoodsServiceImpl implements GoodsService {
      * 获取商品列表
      */
     @Override
-    public List<GoodsVo> getGoodsVo() {
+    public List<GoodsVo> getGoodsVo(Pager pager) {
         //增加对象级缓存
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         List<GoodsVo> goodsVoList = JSON.parseObject(opsForValue.get(GoodsKey.getGoodsList.getPrefix() +"goods_list"), new TypeReference<ArrayList<GoodsVo>>() {
@@ -49,6 +50,7 @@ public class GoodsServiceImpl implements GoodsService {
             return goodsVoList;
         }
         goodsVoList = goodsDao.getGoodsVoList();
+        goodsVoList = goodsDao.getGoodsVoList(pager);
         if (goodsVoList != null && goodsVoList.size() > 0) {
             opsForValue.set(GoodsKey.getGoodsList.getPrefix() +  "goods_list", JSON.toJSONString(goodsVoList), 60 * 10, TimeUnit.SECONDS);
         }

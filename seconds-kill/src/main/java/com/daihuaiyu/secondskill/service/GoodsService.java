@@ -1,6 +1,7 @@
 package com.daihuaiyu.secondskill.service;
 
 import com.daihuaiyu.secondskill.domain.Goods;
+import com.daihuaiyu.secondskill.mybatis.Pager;
 import com.daihuaiyu.secondskill.vo.GoodsVo;
 
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
 public interface GoodsService {
 
     /**获取商品列表*/
-    List<GoodsVo> getGoodsVo();
+    /**分页获取商品列表*/
+    List<GoodsVo> getGoodsVo(Pager pager);
 
     /**获取商品详情*/
     GoodsVo getGoodsVoByGoodsId(long goodsId);

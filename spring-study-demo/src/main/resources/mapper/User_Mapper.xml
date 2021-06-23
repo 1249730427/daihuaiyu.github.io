@@ -3,7 +3,7 @@
 <mapper namespace="dao.IUserDao1">
 
     <select id="queryUserInfoById" parameterType="java.lang.Long" resultType="domain.User">
-        SELECT id, name, age, createTime, updateTime
+        SELECT id, name
         FROM user
         where id = #{id}
     </select>

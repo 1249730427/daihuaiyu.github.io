@@ -1,5 +1,7 @@
 package domain;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.Date;
 
 /**
@@ -55,5 +57,10 @@ public class User {
 
     public void setUpdateTime(final Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }

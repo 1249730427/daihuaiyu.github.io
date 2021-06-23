@@ -1,6 +1,7 @@
 package com.daihuaiyu.secondskill.controller;
 
 import com.daihuaiyu.secondskill.domain.MiaoshaUser;
+import com.daihuaiyu.secondskill.mybatis.Pager;
 import com.daihuaiyu.secondskill.redis.GoodsKey;
 import com.daihuaiyu.secondskill.service.GoodsService;
 import com.daihuaiyu.secondskill.util.Result;
@@ -17,10 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.spring4.context.SpringWebContext;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
@@ -59,7 +57,7 @@ public class GoodsController {
     @RequestMapping(value = "/to_list",produces = "text/html;charset=UTF-8",method = {RequestMethod.GET})
     @ResponseBody
     @ApiOperation(value = "商品列表")
-    public String to_list(HttpServletRequest request, HttpServletResponse response,Model model, MiaoshaUser miaoshaUser){
+    public String to_list(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser miaoshaUser, @RequestParam(value = "currentPage",required = false,defaultValue = "1") Integer currentPage,@RequestParam(value = "pageSize",required = false ,defaultValue = "20")Integer pageSize,@RequestParam(value = "sortBy",required = false,defaultValue = "id") String sortBy,@RequestParam(value = "rank",required = false,defaultValue = "DESC")String rank){
         //从缓存中获取页面文件，有的话直接返回
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         String html = opsForValue.get(GoodsKey.getGoodsList.getPrefix()+"gl");
@@ -68,7 +66,12 @@ public class GoodsController {
             return html;
         }
         //DO 从数据库中查询出数据用于列表展示，由于是demo，不做分页查询，实际生产过程中做分页查询
-        List<GoodsVo> goodsList = goodsService.getGoodsVo();
+        Pager pager = new Pager();
+        pager.setPageNo(currentPage);
+        pager.setPageSize(currentPage);
+        pager.setRank(rank);
+        pager.setSortBy(sortBy);
+        List<GoodsVo> goodsList = goodsService.getGoodsVo(pager);
         model.addAttribute("user",miaoshaUser);
         model.addAttribute("goodsList",goodsList);
         //构建静态化模板

@@ -3,10 +3,12 @@ import com.alibaba.fastjson.JSON;
 import config.RebateInfo;
 import controller.*;
 import dao.IUserDAO;
+import dao.IUserDao1;
 import domain.*;
 import mediator.SqlSession;
 import mediator.SqlSessionFactory;
 import mediator.SqlSessionFactoryBuilder;
+import mediator.UserDao;
 import org.MqAdapter;
 import org.apache.ibatis.io.Resources;
 import org.junit.Before;
@@ -24,9 +26,11 @@ import service.impl.*;
 import util.RedisUtil;
 import util.ReflectUtil;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.*;
 
 public class ApiTest {
@@ -177,7 +181,6 @@ public class ApiTest {
         logger.info("决策树组合结构信息：\r\n" + JSON.toJSONString(treeRich));
 
         IEngine treeEngineHandle = new TreeEngineHandler();
-
         Map<String, String> decisionMatter = new HashMap<>();
         decisionMatter.put("gender", "man");
         decisionMatter.put("age", "29");
@@ -337,45 +340,65 @@ public class ApiTest {
         String val02 = proxy_IIR.get("user_name_01");
         System.out.println(val02);
     }
-    @Test
-    public void test_queryUserInfoById() {
-        String resource = "mybatis-config-datasource.xml";
-        Reader reader;
-        try {
-            reader = Resources.getResourceAsReader(resource);
-            SqlSessionFactory sqlMapper = new SqlSessionFactoryBuilder().build(reader);
-            SqlSession session = sqlMapper.openSession();
-            try {
-                User user = session.selectOne("dao.IUserDao1.queryUserInfoById", 1L);
-                logger.info("测试结果：{}", JSON.toJSONString(user));
-            } finally {
-                session.close();
-                reader.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Test
+//    public void test_queryUserInfoById() {
+//        String resource = "mybatis-config-datasource.xml";
+//        Reader reader;
+//        try {
+//            reader = Resources.getResourceAsReader(resource);
+//            SqlSessionFactory sqlMapper = new SqlSessionFactoryBuilder().build(reader);
+//            SqlSession session = sqlMapper.openSession();
+//            try {
+//                User user = session.selectOne("dao.IUserDao1.queryUserInfoById", 1L);
+//                logger.info("测试结果：{}", JSON.toJSONString(user));
+//            } finally {
+//                session.close();
+//                reader.close();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    @Test
+//    public void test_queryUserList() {
+//        String resource = "mybatis-config-datasource.xml";
+//        Reader reader;
+//        try {
+//            reader = Resources.getResourceAsReader(resource);
+//            SqlSessionFactory sqlMapper = new SqlSessionFactoryBuilder().build(reader);
+//            SqlSession session = sqlMapper.openSession();
+//            try {
+//                User req = new User();
+//                req.setAge(18);
+//                List<User> userList = session.selectList("org.itstack.demo.design.dao.IUserDao.queryUserList", req);
+//                logger.info("测试结果：{}", JSON.toJSONString(userList));
+//            } finally {
+//                session.close();
+//                reader.close();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Test
-    public void test_queryUserList() {
+    public void test_queryUserList_proxy() throws SQLException, IOException {
         String resource = "mybatis-config-datasource.xml";
-        Reader reader;
+        Reader reader = null;
+        SqlSession session = null;
         try {
             reader = Resources.getResourceAsReader(resource);
             SqlSessionFactory sqlMapper = new SqlSessionFactoryBuilder().build(reader);
-            SqlSession session = sqlMapper.openSession();
-            try {
-                User req = new User();
-                req.setAge(18);
-                List<User> userList = session.selectList("org.itstack.demo.design.dao.IUserDao.queryUserList", req);
-                logger.info("测试结果：{}", JSON.toJSONString(userList));
-            } finally {
-                session.close();
-                reader.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            session = sqlMapper.openSession();
+            IUserDao1 mapper = session.getMapper(IUserDao1.class);
+            User user = JSON.parseObject(mapper.queryUserInfoById(2L),User.class);
+            logger.info("测试结果：{}", JSON.toJSONString(user));
+        }catch (Exception e){
+            e.getCause();
+        }finally {
+            session.close();
+            reader.close();
         }
     }
 

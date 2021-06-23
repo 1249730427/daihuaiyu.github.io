@@ -21,7 +21,7 @@ public class JdbcUtil {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         //1.加载类驱动器
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        Class.forName("com.mysql.jdbc.Driver");
         //2.获取数据库连接
         Connection connection = DriverManager.getConnection(URL,USERNAME,PASSWORD);
         //3.操作数据库

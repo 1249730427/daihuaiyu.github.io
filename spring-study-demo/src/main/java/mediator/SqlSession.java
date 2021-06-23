@@ -19,5 +19,7 @@ public interface SqlSession {
 
     <T> List<T> selectList(String statement, Object parameter) throws SQLException, IllegalAccessException, ClassNotFoundException;
 
+    <T> T getMapper(Class<T> clazz) throws SQLException;
+
     void close() throws SQLException;
 }

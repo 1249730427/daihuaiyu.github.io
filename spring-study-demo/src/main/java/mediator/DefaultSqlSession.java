@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.Date;
  * @author daihuaiyu
  * @create: 2021-03-01 15:06
  **/
-public class DefaultSqlSession implements SqlSession {
+public class DefaultSqlSession implements SqlSession{
 
     private Connection connection;
 
@@ -23,6 +24,9 @@ public class DefaultSqlSession implements SqlSession {
     public DefaultSqlSession(Connection connection, Map<String, XNode> mapperElement) {
         this.connection = connection;
         this.mapperElement = mapperElement;
+    }
+
+    public DefaultSqlSession() {
     }
 
     @SneakyThrows
@@ -64,6 +68,19 @@ public class DefaultSqlSession implements SqlSession {
         ResultSet resultSet = preparedStatement.executeQuery();
         List<T> object = resultSet2Obj(resultSet, Class.forName(xNode.getResultType()));
         return object;
+    }
+
+    /**获取代理对象*/
+    @Override
+    public <T> T getMapper(Class<T> clazz) throws SQLException {
+        Object proxyInstance = null;
+        try {
+            SqlSessionHandler sqlSessionHandler = new SqlSessionHandler(connection,mapperElement);
+            proxyInstance = Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, sqlSessionHandler);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (T) proxyInstance;
     }
 
     @Override
@@ -168,5 +185,6 @@ public class DefaultSqlSession implements SqlSession {
         }
         return resultList;
     }
+
 }
 
