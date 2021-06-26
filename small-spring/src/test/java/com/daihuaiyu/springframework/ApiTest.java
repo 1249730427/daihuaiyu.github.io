@@ -1,5 +1,6 @@
 package com.daihuaiyu.springframework;
 
+import cn.hutool.core.io.IoUtil;
 import com.daihuaiyu.springframework.bean.UserDao;
 import com.daihuaiyu.springframework.bean.UserService;
 import com.daihuaiyu.springframework.beans.factory.BeanFactory;
@@ -8,11 +9,17 @@ import com.daihuaiyu.springframework.beans.factory.PropertyValue;
 import com.daihuaiyu.springframework.beans.factory.PropertyValues;
 import com.daihuaiyu.springframework.beans.factory.factory.BeanDefinition;
 import com.daihuaiyu.springframework.beans.factory.support.DefaultListableBeanFactory;
+import com.daihuaiyu.springframework.core.io.DefaultResourceLoader;
+import com.daihuaiyu.springframework.core.io.Resource;
+import com.daihuaiyu.springframework.core.io.ResourceLoader;
 import jdk.nashorn.internal.runtime.linker.Bootstrap;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 
 /**
@@ -22,6 +29,13 @@ import java.lang.reflect.Constructor;
  * @Description:
  */
 public class ApiTest {
+
+    private DefaultResourceLoader resourceLoader;
+
+    @Before
+    public void init(){
+        resourceLoader = new DefaultResourceLoader();
+    }
 
 //    @Test
 //    public void test_BeanFactory() {
@@ -105,4 +119,28 @@ public class ApiTest {
         UserService userService = (UserService) defaultListableBeanFactory.getBean("userService");
         userService.queryUserInfo();
     }
+
+    @Test
+    public void test_classpath() throws IOException {
+        Resource resource = resourceLoader.getResource("classpath:important.properties");
+        InputStream inputStream = resource.getInputStream();
+        String content = IoUtil.readUtf8(inputStream);
+        System.out.println(content);
+    }
+
+    @Test
+    public void test_file() throws IOException {
+        Resource resource = resourceLoader.getResource("src/test/resources/important.properties");
+        InputStream inputStream = resource.getInputStream();
+        String content = IoUtil.readUtf8(inputStream);
+        System.out.println(content);
+    }
+
+//    @Test
+//    public void test_url() throws IOException {
+//        Resource resource = resourceLoader.getResource("https://github.com/1249730427/daihuaiyu.github.io/small-spring/important.properties");
+//        InputStream inputStream = resource.getInputStream();
+//        String content = IoUtil.readUtf8(inputStream);
+//        System.out.println(content);
+//    }
 }
