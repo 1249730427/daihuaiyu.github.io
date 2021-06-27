@@ -47,6 +47,19 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     }
 
     /**
+     * 根据请求的beanName和类类型返回对应的Bean对象
+     *
+     * @param beanName
+     * @param requireType
+     * @return
+     * @throws BeansException
+     */
+    @Override
+    public <T> T getBeanOfType(String beanName, Class<T> requireType) throws BeansException {
+        return (T) getBean(beanName);
+    }
+
+    /**
      * 根据Bean名称获取BeanDefinition
      * @param beanName
      * @return

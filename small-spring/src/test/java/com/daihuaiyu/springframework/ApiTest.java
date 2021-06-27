@@ -9,6 +9,7 @@ import com.daihuaiyu.springframework.beans.factory.PropertyValue;
 import com.daihuaiyu.springframework.beans.factory.PropertyValues;
 import com.daihuaiyu.springframework.beans.factory.factory.BeanDefinition;
 import com.daihuaiyu.springframework.beans.factory.support.DefaultListableBeanFactory;
+import com.daihuaiyu.springframework.beans.factory.support.XmlBeanDefinitionReader;
 import com.daihuaiyu.springframework.core.io.DefaultResourceLoader;
 import com.daihuaiyu.springframework.core.io.Resource;
 import com.daihuaiyu.springframework.core.io.ResourceLoader;
@@ -136,11 +137,25 @@ public class ApiTest {
         System.out.println(content);
     }
 
-//    @Test
-//    public void test_url() throws IOException {
-//        Resource resource = resourceLoader.getResource("https://github.com/1249730427/daihuaiyu.github.io/small-spring/important.properties");
-//        InputStream inputStream = resource.getInputStream();
-//        String content = IoUtil.readUtf8(inputStream);
-//        System.out.println(content);
-//    }
+    @Test
+    public void test_url() throws IOException {
+        Resource resource = resourceLoader.getResource("https://github.com/1249730427/daihuaiyu.github.io/important.properties");
+        InputStream inputStream = resource.getInputStream();
+        String content = IoUtil.readUtf8(inputStream);
+        System.out.println(content);
+    }
+
+    @Test
+    public void test_xml() {
+        // 1.初始化 BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 2. 读取配置文件&注册Bean
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
+        reader.loadBeanDefinitions("classpath:application.xml");
+
+        // 3. 获取Bean对象调用方法
+        UserService userService = (UserService) beanFactory.getBean("userService", UserService.class);
+        userService.queryUserInfo();
+    }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="userDao" name="dao" class="com.daihuaiyu.springframework.bean.UserDao"/>
+    <bean id="userService" name="service" class="com.daihuaiyu.springframework.bean.UserService">
+        <property name="userName" value="daihuaiyu"/>
+        <property name="userDao" ref="userDao"/>
+    </bean>
+</beans>

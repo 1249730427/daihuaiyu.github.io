@@ -31,9 +31,8 @@ public class UrlResource implements Resource{
     @Override
     public InputStream getInputStream() throws IOException {
         URLConnection urlConnection = this.url.openConnection();
-        InputStream inputStream = urlConnection.getInputStream();
         try {
-            return inputStream;
+            return urlConnection.getInputStream();
         } catch (Exception e) {
             if(urlConnection instanceof HttpURLConnection){
                 ((HttpURLConnection)urlConnection).disconnect();
