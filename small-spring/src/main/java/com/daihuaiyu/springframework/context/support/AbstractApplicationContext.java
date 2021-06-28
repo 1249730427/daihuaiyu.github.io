@@ -1,9 +1,15 @@
 package com.daihuaiyu.springframework.context.support;
 
 import com.daihuaiyu.springframework.beans.BeansException;
+import com.daihuaiyu.springframework.beans.factory.factory.BeanDefinition;
+import com.daihuaiyu.springframework.beans.factory.factory.BeanFactoryPostProcessor;
+import com.daihuaiyu.springframework.beans.factory.factory.BeanPostProcessor;
 import com.daihuaiyu.springframework.beans.factory.factory.ConfigurableListableBeanFactory;
 import com.daihuaiyu.springframework.context.ConfigurableApplicationContext;
 import com.daihuaiyu.springframework.core.io.DefaultResourceLoader;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Spring应用上下文
@@ -37,12 +43,75 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     }
 
-    private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
-
+    private void invokeBeanFactoryProcessors(ConfigurableListableBeanFactory beanFactory) {
+        Map<String, BeanFactoryPostProcessor> beanFactoryPostProcessorMap = beanFactory.getBeanOfType(BeanFactoryPostProcessor.class);
+        for(BeanFactoryPostProcessor beanFactoryPostProcessor:beanFactoryPostProcessorMap.values()){
+            beanFactoryPostProcessor.postProcessorBeanFactory(beanFactory);
+        }
     }
 
-    private void invokeBeanFactoryProcessors(ConfigurableListableBeanFactory beanFactory) {
+    private void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+        Map<String, BeanPostProcessor> beanPostProcessorMap = beanFactory.getBeanOfType(BeanPostProcessor.class);
+        for(BeanPostProcessor beanPostProcessor:beanPostProcessorMap.values()){
+            beanFactory.addBeanPostProcessor(beanPostProcessor);
+        }
+    }
 
+    /**
+     * 获取Bean
+     *
+     * @param beanName
+     */
+    @Override
+    public Object getBean(String beanName) throws BeansException {
+        return getBeanFactory().getBean(beanName);
+    }
+
+    /**
+     * 获取带有参数的Bean
+     *
+     * @param beanName
+     * @param args
+     * @return
+     */
+    @Override
+    public Object getBean(String beanName, Object... args) throws BeansException {
+        return getBeanFactory().getBean(beanName,args);
+    }
+
+    /**
+     * 根据请求的beanName和类类型返回对应的Bean对象
+     *
+     * @param beanName
+     * @param requireType
+     * @return
+     * @throws BeansException
+     */
+    @Override
+    public <T> T getBeanOfType(String beanName, Class<T> requireType) throws BeansException {
+        return getBeanFactory().getBeanOfType(beanName,requireType);
+    }
+
+    /**
+     * 按照类型返回 Bean 实例
+     *
+     * @param requireType
+     * @return
+     * @throws BeansException
+     */
+    @Override
+    public <T> Map<String, T> getBeanOfType(Class<T> requireType) throws BeansException {
+            return getBeanFactory().getBeanOfType(requireType);
+    }
+
+    /**
+     * 返回注册表中的所有Bean名称
+     *
+     * @return
+     */
+    @Override
+    public String[] getBeanDefinitionNames() {
+        return getBeanFactory().getBeanDefinitionNames();
     }
 
     /**

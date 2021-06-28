@@ -2,7 +2,12 @@ package com.daihuaiyu.springframework.beans.factory.support;
 
 import com.daihuaiyu.springframework.beans.BeansException;
 import com.daihuaiyu.springframework.beans.factory.BeanFactory;
+import com.daihuaiyu.springframework.beans.factory.ConfigurableBeanFactory;
 import com.daihuaiyu.springframework.beans.factory.factory.BeanDefinition;
+import com.daihuaiyu.springframework.beans.factory.factory.BeanPostProcessor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bean工厂的抽象类
@@ -12,8 +17,10 @@ import com.daihuaiyu.springframework.beans.factory.factory.BeanDefinition;
  * @Description:继承了 DefaultSingletonBeanRegistry，也就具备了使用单例注册类方法。实现接口 BeanFactory，
  * 主要是对单例 Bean 对象的获取以及在获取不到时需要拿到 Bean 的定义做相应 Bean 实例化操作
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
 
+    /** BeanPostProcessors to apply in createBean */
+    private final List<BeanPostProcessor> beanPostProcessorList = new ArrayList<>();
     /**
      * 根据BeanName获取Bean信息
      * @param beanName
@@ -76,4 +83,14 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      * @throws BeansException
      */
     protected abstract Object createBean(String beanName,BeanDefinition definition,Object [] args) throws BeansException;
+
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        this.beanPostProcessorList.remove(beanPostProcessor);
+        this.beanPostProcessorList.add(beanPostProcessor);
+    }
+
+    public List<BeanPostProcessor> getBeanPostProcessorList() {
+        return beanPostProcessorList;
+    }
 }

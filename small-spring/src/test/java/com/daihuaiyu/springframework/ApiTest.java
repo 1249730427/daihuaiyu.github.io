@@ -1,6 +1,8 @@
 package com.daihuaiyu.springframework;
 
 import cn.hutool.core.io.IoUtil;
+import com.daihuaiyu.springframework.bean.MyBeanFactoryPostProcessor;
+import com.daihuaiyu.springframework.bean.MyBeanPostProcessor;
 import com.daihuaiyu.springframework.bean.UserDao;
 import com.daihuaiyu.springframework.bean.UserService;
 import com.daihuaiyu.springframework.beans.factory.BeanFactory;
@@ -10,6 +12,7 @@ import com.daihuaiyu.springframework.beans.factory.PropertyValues;
 import com.daihuaiyu.springframework.beans.factory.factory.BeanDefinition;
 import com.daihuaiyu.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.daihuaiyu.springframework.beans.factory.support.XmlBeanDefinitionReader;
+import com.daihuaiyu.springframework.context.support.ClassPathXmlApplicationContext;
 import com.daihuaiyu.springframework.core.io.DefaultResourceLoader;
 import com.daihuaiyu.springframework.core.io.Resource;
 import com.daihuaiyu.springframework.core.io.ResourceLoader;
@@ -158,4 +161,31 @@ public class ApiTest {
         UserService userService = (UserService) beanFactory.getBean("userService", UserService.class);
         userService.queryUserInfo();
     }
+
+    @Test
+    public void test_processor() {
+        // 1.初始化 BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 2. 读取配置文件&注册Bean
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
+        reader.loadBeanDefinitions("classpath:application.xml");
+
+        MyBeanFactoryPostProcessor myBeanFactoryPostProcessor = new MyBeanFactoryPostProcessor();
+        myBeanFactoryPostProcessor.postProcessorBeanFactory(beanFactory);
+
+        MyBeanPostProcessor beanPostProcessor = new MyBeanPostProcessor();
+        beanFactory.addBeanPostProcessor(beanPostProcessor);
+
+        // 3. 获取Bean对象调用方法
+        UserService userService = (UserService) beanFactory.getBean("userService", UserService.class);
+        userService.queryUserInfo();
+    }
+    @Test
+    public void test_classPath() {
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:application.xml");
+        UserService userService = (UserService) classPathXmlApplicationContext.getBean("userService");
+        userService.queryUserInfo();
+    }
+
 }
