@@ -43,6 +43,26 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     }
 
+    /**
+     * 虚拟机关闭钩子注册
+     *
+     * @throws BeansException
+     */
+    @Override
+    public void registerShutdownHook() throws BeansException {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+    }
+
+    /**
+     * 关闭
+     *
+     * @throws BeansException
+     */
+    @Override
+    public void close() throws BeansException {
+        getBeanFactory().destroySingletons();
+    }
+
     private void invokeBeanFactoryProcessors(ConfigurableListableBeanFactory beanFactory) {
         Map<String, BeanFactoryPostProcessor> beanFactoryPostProcessorMap = beanFactory.getBeanOfType(BeanFactoryPostProcessor.class);
         for(BeanFactoryPostProcessor beanFactoryPostProcessor:beanFactoryPostProcessorMap.values()){

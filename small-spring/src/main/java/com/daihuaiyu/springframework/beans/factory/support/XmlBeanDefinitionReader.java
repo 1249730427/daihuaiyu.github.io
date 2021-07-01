@@ -63,13 +63,15 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String id = bean.getAttribute("id");
             String name = bean.getAttribute("name");
             String aClass = bean.getAttribute("class");
+            String initMethod = bean.getAttribute("init-method");
+            String destroyMethod = bean.getAttribute("destroy-method");
             Class<?> clazz = Class.forName(aClass);
             //id优先级高于name
             String beanName = StrUtil.isEmpty(id)?name:id;
             if(StrUtil.isEmpty(beanName)){
                 beanName =StrUtil.lowerFirst(clazz.getSimpleName());
             }
-            BeanDefinition beanDefinition = new BeanDefinition(clazz);
+            BeanDefinition beanDefinition = new BeanDefinition(clazz,initMethod,destroyMethod);
             //解析Bean节点下的节点
             for(int j=0;j<bean.getChildNodes().getLength();j++){
                 if (!(bean.getChildNodes().item(j) instanceof Element)) continue;

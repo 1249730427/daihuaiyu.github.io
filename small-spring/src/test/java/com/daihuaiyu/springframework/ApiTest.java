@@ -188,4 +188,12 @@ public class ApiTest {
         userService.queryUserInfo();
     }
 
+    @Test
+    public void test_initializingBeanAndDisposableBean(){
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:application.xml");
+        classPathXmlApplicationContext.registerShutdownHook();
+        UserService userService = (UserService) classPathXmlApplicationContext.getBean("userService");
+        userService.queryUserInfo();
+    }
+
 }

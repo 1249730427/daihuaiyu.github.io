@@ -24,6 +24,13 @@ public class BeanDefinition {
         this.propertyValues = new PropertyValues();
     }
 
+    public BeanDefinition(Class bean,  String initMethodName, String destroyMethodName) {
+        this.bean = bean;
+        this.propertyValues = new PropertyValues();
+        this.initMethodName = initMethodName;
+        this.destroyMethodName = destroyMethodName;
+    }
+
     public BeanDefinition(Class bean, PropertyValues propertyValues) {
         this.bean = bean;
         this.propertyValues = propertyValues==null?new PropertyValues():propertyValues;

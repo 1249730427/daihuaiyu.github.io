@@ -1,6 +1,8 @@
 package com.daihuaiyu.springframework.bean;
 
 import cn.hutool.json.JSONUtil;
+import com.daihuaiyu.springframework.beans.factory.DisposableBean;
+import com.daihuaiyu.springframework.beans.factory.InitializingBean;
 
 import java.util.StringJoiner;
 
@@ -11,7 +13,7 @@ import java.util.StringJoiner;
  * @Date: 2021/6/24 16:44
  * @Description:
  */
-public class UserService {
+public class UserService implements InitializingBean, DisposableBean {
 
     private String userName;
 
@@ -72,5 +74,25 @@ public class UserService {
     @Override
     public String toString() {
         return JSONUtil.toJsonStr(this);
+    }
+
+    /**
+     * 销毁
+     *
+     * @throws Exception
+     */
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("执行：UserService.destroy");
+    }
+
+    /**
+     * Bean 处理了属性填充后调用
+     *
+     * @throws Exception
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("执行：UserService.afterPropertiesSet");
     }
 }
