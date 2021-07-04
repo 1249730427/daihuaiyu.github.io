@@ -9,7 +9,6 @@ import com.daihuaiyu.springframework.context.ConfigurableApplicationContext;
 import com.daihuaiyu.springframework.core.io.DefaultResourceLoader;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Spring应用上下文
@@ -32,13 +31,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         //2.获取BeanFactory
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 
-        //3.在Bean实例化之前，执行BeanFactoryProcessor(Invoke factory processors registered as beans in the context)
+        //3.向容器中注册ApplicationContextAwareProcessor,让实现ApplicationContextAware的Bean对象都能感知所属的 ApplicationContext
+        beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
+
+        //4.在Bean实例化之前，执行BeanFactoryProcessor(Invoke factory processors registered as beans in the context)
         invokeBeanFactoryProcessors(beanFactory);
 
-        //4.BeanPostProcessor 需要提前于其他 Bean 对象实例化之前执行注册操作
+        //5.BeanPostProcessor 需要提前于其他 Bean 对象实例化之前执行注册操作
         registerBeanPostProcessors(beanFactory);
 
-        //5.提前实例化Bean单例对象
+        //6.提前实例化Bean单例对象
         beanFactory.preInstantiateSingletons();
 
     }

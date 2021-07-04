@@ -3,8 +3,10 @@ package com.daihuaiyu.springframework.beans.factory.support;
 import com.daihuaiyu.springframework.beans.BeansException;
 import com.daihuaiyu.springframework.beans.factory.BeanFactory;
 import com.daihuaiyu.springframework.beans.factory.ConfigurableBeanFactory;
+import com.daihuaiyu.springframework.beans.factory.FactoryBean;
 import com.daihuaiyu.springframework.beans.factory.factory.BeanDefinition;
 import com.daihuaiyu.springframework.beans.factory.factory.BeanPostProcessor;
+import com.daihuaiyu.springframework.util.ClassUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +19,9 @@ import java.util.List;
  * @Description:继承了 DefaultSingletonBeanRegistry，也就具备了使用单例注册类方法。实现接口 BeanFactory，
  * 主要是对单例 Bean 对象的获取以及在获取不到时需要拿到 Bean 的定义做相应 Bean 实例化操作
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
+    private ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
     /** BeanPostProcessors to apply in createBean */
     private final List<BeanPostProcessor> beanPostProcessorList = new ArrayList<>();
     /**
@@ -28,12 +31,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      */
     @Override
     public Object getBean(String beanName) throws BeansException {
-        Object bean = getSingleton(beanName);
-        if(bean !=null){
-            return bean;
-        }
-        BeanDefinition definition = getBeanDefinition(beanName);
-        return createBean(beanName,definition,new Object[]{});
+        return doGetBean(beanName,null);
     }
 
     /**
@@ -45,12 +43,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      */
     @Override
     public Object getBean(String beanName, Object... args) throws BeansException {
-        Object bean = getSingleton(beanName);
-        if(bean !=null){
-            return bean;
-        }
-        BeanDefinition definition = getBeanDefinition(beanName);
-        return createBean(beanName,definition,args);
+            return doGetBean(beanName,args);
     }
 
     /**
@@ -92,5 +85,32 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     public List<BeanPostProcessor> getBeanPostProcessorList() {
         return beanPostProcessorList;
+    }
+
+    protected ClassLoader getBeanClassLoader(){
+        return this.classLoader;
+    }
+
+    protected <T> T doGetBean(final String name,final Object [] args){
+         Object sharedInstance = getSingleton(name);
+         if(sharedInstance !=null){
+             //如果是 FactoryBean，则需要调用 FactoryBean#getObject
+             return (T) getObjectForBeanInstance(sharedInstance,name);
+         }
+         BeanDefinition beanDefinition = getBeanDefinition(name);
+         Object bean = createBean(name, beanDefinition, args);
+         return (T)getObjectForBeanInstance(bean,name);
+    }
+
+    private Object getObjectForBeanInstance(Object bean, String name) {
+        if(! (bean instanceof FactoryBean)){
+            return bean;
+        }
+         Object object = getCachedObjectForFactoryBean(name);
+        if(object == null){
+             FactoryBean<?> factoryBean = (FactoryBean<?>) bean;
+             object = getObjectFromFactoryBean(factoryBean, name);
+        }
+        return object;
     }
 }

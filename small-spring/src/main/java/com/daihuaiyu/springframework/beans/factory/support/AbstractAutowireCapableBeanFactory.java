@@ -37,20 +37,34 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
         //注册实现DisposableBean接口的对象
         registerDisposableBeanIfNecessary(bean,beanName,definition);
-        //添加到单例容器中
-        addSingleton(beanName,bean);
+        //判断是否是单例，是的话添加到单例容器中
+        if(definition.isSingleton()){
+            addSingleton(beanName,bean);
+        }
         return bean;
     }
 
     protected void registerDisposableBeanIfNecessary(Object bean, String beanName, BeanDefinition definition) {
+        if(!definition.isSingleton())return;  //非单例模式不执行销毁方法
         if(bean instanceof DisposableBean || StrUtil.isNotEmpty(definition.getDestroyMethodName())){
             registerDisposableBean(beanName,new DisposableBeanAdapter(beanName,bean,definition));
         }
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition definition) throws Exception {
+        if(bean instanceof Aware){
+            if(bean instanceof BeanFactoryAware){
+                ((BeanFactoryAware)bean).setBeanFactory(this);
+            }
+            if(bean instanceof BeanClassLoaderAware){
+                ((BeanClassLoaderAware) bean).setBeanClassLoader(getBeanClassLoader());
+            }
+            if(bean instanceof BeanNameAware){
+                ((BeanNameAware)bean).setBeanName(beanName);
+            }
+
+        }
         Object wrappedBean = applyBeanPostProcessorBeforeInitialization(bean, beanName);
-        // 待完成内容：invokeInitMethods(beanName, wrappedBean, beanDefinition);
         invokeInitMethods(beanName, wrappedBean, definition);
         wrappedBean = applyBeanPostProcessorAfterInitialization(bean, beanName);
         return wrappedBean;
@@ -96,7 +110,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Class<?> bean = definition.getBean();
         Constructor<?>[] constructors = bean.getDeclaredConstructors();
         for(Constructor constructor:constructors){
-            if(constructor.getParameters().length == args.length){ //这里仅仅做了数量的判断，Spring源码中对参数类型也做了对比
+            if(null != args && constructor.getParameters().length == args.length){ //这里仅仅做了数量的判断，Spring源码中对参数类型也做了对比
                 constructorToUser = constructor;
                 break;
             }
