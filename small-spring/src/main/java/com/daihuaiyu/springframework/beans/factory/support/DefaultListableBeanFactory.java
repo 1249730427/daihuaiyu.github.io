@@ -17,7 +17,6 @@ import java.util.Map;
  * ，继承AbstractAutowireCapableBeanFactory重写registerBeanDefinition，实现根据BeanName从beanDefinitionMap获取BeanDefinition
  */
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry, ConfigurableListableBeanFactory {
-
     private Map<String,BeanDefinition> beanDefinitionMap = new HashMap<>();
 
     /**

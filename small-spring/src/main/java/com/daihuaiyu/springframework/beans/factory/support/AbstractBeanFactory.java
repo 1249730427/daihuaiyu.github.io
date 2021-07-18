@@ -33,7 +33,6 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     public Object getBean(String beanName) throws BeansException {
         return doGetBean(beanName,null);
     }
-
     /**
      * 获取带有参数的Bean
      *

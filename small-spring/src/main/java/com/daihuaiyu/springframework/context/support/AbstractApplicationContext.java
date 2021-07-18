@@ -1,13 +1,19 @@
 package com.daihuaiyu.springframework.context.support;
 
 import com.daihuaiyu.springframework.beans.BeansException;
-import com.daihuaiyu.springframework.beans.factory.factory.BeanDefinition;
 import com.daihuaiyu.springframework.beans.factory.factory.BeanFactoryPostProcessor;
 import com.daihuaiyu.springframework.beans.factory.factory.BeanPostProcessor;
 import com.daihuaiyu.springframework.beans.factory.factory.ConfigurableListableBeanFactory;
+import com.daihuaiyu.springframework.context.ApplicationEvent;
+import com.daihuaiyu.springframework.context.ApplicationListener;
 import com.daihuaiyu.springframework.context.ConfigurableApplicationContext;
+import com.daihuaiyu.springframework.context.event.ApplicationMulticaster;
+import com.daihuaiyu.springframework.context.event.ContextClosedEvent;
+import com.daihuaiyu.springframework.context.event.ContextRefreshedEvent;
+import com.daihuaiyu.springframework.context.event.SimpleApplicationEventMulticaster;
 import com.daihuaiyu.springframework.core.io.DefaultResourceLoader;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -18,6 +24,9 @@ import java.util.Map;
  */
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
 
+    private static final String APPLICATION_EVENT_MULTICASTER_BEAN_NAME="applicationMulticaster";
+
+    private ApplicationMulticaster applicationMulticaster;
     /**
      * 刷新容器
      *
@@ -40,9 +49,47 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         //5.BeanPostProcessor 需要提前于其他 Bean 对象实例化之前执行注册操作
         registerBeanPostProcessors(beanFactory);
 
-        //6.提前实例化Bean单例对象
+        //6.初始化事件发布者
+        initApplicationMulticaster();
+
+        //7.注册事件监听器
+        registerListeners();
+
+        //8.提前实例化Bean单例对象
         beanFactory.preInstantiateSingletons();
 
+        //9.发布容器刷新完成事件
+        finishRefresh();
+    }
+
+    private void finishRefresh() {
+
+        publishEvent(new ContextRefreshedEvent(this));
+    }
+
+    /**
+     * Notify all listeners registered with this application of an application
+     * event. Events may be framework events (such as RequestHandledEvent)
+     * or application-specific events.
+     *
+     * @param event the event to publish
+     */
+    @Override
+    public void publishEvent(ApplicationEvent event) {
+        applicationMulticaster.multicasterEvent(event);
+    }
+
+    private void registerListeners() {
+        Collection<ApplicationListener> applicationListeners = getBeanOfType(ApplicationListener.class).values();
+        for(ApplicationListener applicationListener:applicationListeners){
+            applicationMulticaster.addApplicationListener(applicationListener);
+        }
+    }
+
+    private void initApplicationMulticaster() {
+        ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+        applicationMulticaster = new SimpleApplicationEventMulticaster(beanFactory);
+        beanFactory.registerSingleton(APPLICATION_EVENT_MULTICASTER_BEAN_NAME,applicationMulticaster);
     }
 
     /**
@@ -62,6 +109,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
      */
     @Override
     public void close() throws BeansException {
+        // 发布容器关闭事件
+        publishEvent(new ContextClosedEvent(this));
         getBeanFactory().destroySingletons();
     }
 

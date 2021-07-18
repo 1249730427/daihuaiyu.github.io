@@ -1,10 +1,13 @@
 package com.daihuaiyu.springframework;
 
 import cn.hutool.core.io.IoUtil;
-import com.daihuaiyu.springframework.bean.MyBeanFactoryPostProcessor;
-import com.daihuaiyu.springframework.bean.MyBeanPostProcessor;
-import com.daihuaiyu.springframework.bean.UserDao;
-import com.daihuaiyu.springframework.bean.UserService;
+import com.daihuaiyu.springframework.aop.AdvisedSupport;
+import com.daihuaiyu.springframework.aop.TargetSource;
+import com.daihuaiyu.springframework.aop.aspectj.AspectJExpressionPointcut;
+import com.daihuaiyu.springframework.aop.framework.AopProxy;
+import com.daihuaiyu.springframework.aop.framework.Cglib2AopProxy;
+import com.daihuaiyu.springframework.aop.framework.JdkDynamicAopProxy;
+import com.daihuaiyu.springframework.bean.*;
 import com.daihuaiyu.springframework.beans.factory.BeanFactory;
 import com.daihuaiyu.springframework.beans.factory.BeanReference;
 import com.daihuaiyu.springframework.beans.factory.PropertyValue;
@@ -16,6 +19,7 @@ import com.daihuaiyu.springframework.context.support.ClassPathXmlApplicationCont
 import com.daihuaiyu.springframework.core.io.DefaultResourceLoader;
 import com.daihuaiyu.springframework.core.io.Resource;
 import com.daihuaiyu.springframework.core.io.ResourceLoader;
+import com.daihuaiyu.springframework.event.CustomEvent;
 import jdk.nashorn.internal.runtime.linker.Bootstrap;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
@@ -26,6 +30,7 @@ import org.openjdk.jol.info.ClassLayout;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 /**
  * 方法测试类
@@ -233,6 +238,38 @@ public class ApiTest {
         // 2. 调用代理方法
         UserService userService = (UserService) applicationContext.getBean("userService", UserService.class);
         System.out.println("测试结果：" + userService.queryUserInfo());
+    }
+
+    @Test
+    public void test_event() {
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.publishEvent(new CustomEvent(applicationContext, 1019129009086763L, "成功了！"));
+
+        applicationContext.registerShutdownHook();
+    }
+
+    @Test
+    public void test_aop() throws NoSuchMethodException {
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* com.daihuaiyu.springframework.bean.UserService.*(..))");
+        Class<UserService> clazz = UserService.class;
+        Method method = clazz.getDeclaredMethod("queryUserInfo");
+
+        System.out.println(pointcut.matches(clazz));
+        System.out.println(pointcut.matches(method, clazz));
+    }
+
+    @Test
+    public void test_dynamic(){
+        IUserService userService = new UserService();
+        AdvisedSupport advised = new AdvisedSupport();
+        advised.setTargetSource(new TargetSource(userService));
+        advised.setMethodMatcher(new AspectJExpressionPointcut("execution(* com.daihuaiyu.springframework.bean.IUserService.*(..))"));
+        advised.setMethodInterceptor(new UserServiceInterceptor());
+        AopProxy aopProxy = new JdkDynamicAopProxy(advised);
+         IUserService proxy = (IUserService) aopProxy.getProxy();
+        System.out.println(proxy.queryUserInfo());
+        IUserService proxy_cglib = (IUserService) new Cglib2AopProxy(advised).getProxy();
+        System.out.println(proxy_cglib.register("带鱼"));
     }
 
 }

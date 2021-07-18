@@ -6,6 +6,7 @@ import com.daihuaiyu.springframework.beans.factory.*;
 import com.daihuaiyu.springframework.context.ApplicationContext;
 import com.daihuaiyu.springframework.context.ApplicationContextAware;
 
+import java.util.Random;
 import java.util.StringJoiner;
 
 
@@ -15,30 +16,50 @@ import java.util.StringJoiner;
  * @Date: 2021/6/24 16:44
  * @Description:
  */
-public class UserService  {
+public class UserService implements IUserService  {
+    @Override
+    public String queryUserInfo() {
+        try {
+            Thread.sleep(new Random(1).nextInt(100));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "带鱼，100001，合肥";
+    }
+
+    @Override
+    public String register(String userName) {
+        try {
+            Thread.sleep(new Random(1).nextInt(100));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "注册用户：" + userName + " success！";
+    }
+
 
 //    private ApplicationContext applicationContext;
 //
 //    private BeanFactory beanFactory;
-    private String userName;
-
-    private String company;
-    private String location;
+//    private String userName;
+//
+//    private String company;
+//    private String location;
 //    private UserDao userDao;
-    private IUserDao userDao;
+//    private IUserDao userDao;
 
 //    public UserService(String userName,UserDao userDao) {
 //        this.userName = userName;
 //        this.userDao = userDao;
 //    }
-//
 
-    public UserService() {
-    }
 
-    public String queryUserInfo() {
-        return userDao.queryUserName(userName) + "," + company + "," + location;
-    }
+//    public UserService() {
+//    }
+
+//    public String queryUserInfo() {
+//        return userDao.queryUserName(userName) + "," + company + "," + location;
+//    }
 //    public UserService() {
 //    }
 
@@ -50,38 +71,38 @@ public class UserService  {
 //        System.out.println(this);
 //}
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public IUserDao getUserDao() {
-        return userDao;
-    }
-
-    public void setUserDao(IUserDao userDao) {
-        this.userDao = userDao;
-    }
+//    public String getUserName() {
+//        return userName;
+//    }
 //
+//    public void setUserName(String userName) {
+//        this.userName = userName;
+//    }
+//
+//    public String getCompany() {
+//        return company;
+//    }
+//
+//    public void setCompany(String company) {
+//        this.company = company;
+//    }
+//
+//    public String getLocation() {
+//        return location;
+//    }
+//
+//    public void setLocation(String location) {
+//        this.location = location;
+//    }
+
+//    public IUserDao getUserDao() {
+//        return userDao;
+//    }
+//
+//    public void setUserDao(IUserDao userDao) {
+//        this.userDao = userDao;
+//    }
+
 //    public ApplicationContext getApplicationContext() {
 //        return applicationContext;
 //    }

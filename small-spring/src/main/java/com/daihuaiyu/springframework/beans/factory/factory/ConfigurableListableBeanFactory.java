@@ -2,7 +2,6 @@ package com.daihuaiyu.springframework.beans.factory.factory;
 
 import com.daihuaiyu.springframework.beans.BeansException;
 import com.daihuaiyu.springframework.beans.factory.ConfigurableBeanFactory;
-import com.daihuaiyu.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 
 /**
  * ConfigurableListableBeanFactory
