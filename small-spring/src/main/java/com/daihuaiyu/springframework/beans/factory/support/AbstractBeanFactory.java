@@ -45,6 +45,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
             return doGetBean(beanName,args);
     }
 
+    @Override
+    public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+        return (T) getBean(name);
+    }
+
     /**
      * 根据请求的beanName和类类型返回对应的Bean对象
      *

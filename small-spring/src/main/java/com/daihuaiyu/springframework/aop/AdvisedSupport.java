@@ -1,5 +1,6 @@
 package com.daihuaiyu.springframework.aop;
 
+import com.daihuaiyu.springframework.util.ClassUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 
 /**
@@ -18,6 +19,9 @@ public class AdvisedSupport {
 
     /**方法匹配器（检查目标方法是否符合通知条件）*/
     private MethodMatcher methodMatcher;
+
+    /**是否是Cglib代理*/
+    private Boolean isProxyTargetClass =false;
 
     public TargetSource getTargetSource() {
         return targetSource;
@@ -41,5 +45,13 @@ public class AdvisedSupport {
 
     public void setMethodMatcher(MethodMatcher methodMatcher) {
         this.methodMatcher = methodMatcher;
+    }
+
+    public void setProxyTargetClass(Boolean proxyTargetClass) {
+        isProxyTargetClass = proxyTargetClass;
+    }
+
+    public boolean isProxyTargetClass(){
+        return isProxyTargetClass;
     }
 }
