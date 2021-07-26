@@ -14,6 +14,13 @@ public class MethodBeforeAdviceInterceptor implements MethodInterceptor {
 
     private MethodBeforeAdvice advice;
 
+    public MethodBeforeAdviceInterceptor(MethodBeforeAdvice advice) {
+        this.advice = advice;
+    }
+
+    public MethodBeforeAdviceInterceptor() {
+    }
+
     /**
      * Implement this method to perform extra treatments before and
      * after the invocation. Polite implementations would certainly

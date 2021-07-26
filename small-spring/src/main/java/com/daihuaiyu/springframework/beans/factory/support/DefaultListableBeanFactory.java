@@ -2,7 +2,6 @@ package com.daihuaiyu.springframework.beans.factory.support;
 
 import com.daihuaiyu.springframework.beans.BeansException;
 import com.daihuaiyu.springframework.beans.factory.factory.BeanDefinition;
-import com.daihuaiyu.springframework.beans.factory.factory.BeanPostProcessor;
 import com.daihuaiyu.springframework.beans.factory.factory.ConfigurableListableBeanFactory;
 
 import java.util.HashMap;

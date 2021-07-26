@@ -21,7 +21,7 @@ public class AdvisedSupport {
     private MethodMatcher methodMatcher;
 
     /**是否是Cglib代理*/
-    private Boolean isProxyTargetClass =false;
+    private boolean isProxyTargetClass =false;
 
     public TargetSource getTargetSource() {
         return targetSource;
