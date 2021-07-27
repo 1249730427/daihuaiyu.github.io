@@ -4,10 +4,14 @@
 
     <bean class="com.daihuaiyu.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
 
-    <bean id="beforeAdvice" class="com.daihuaiyu.springframework.bean.UserServiceBeforeAdvice"/>
+<!--    <bean id="beforeAdvice" class="com.daihuaiyu.springframework.bean.UserServiceBeforeAdvice"/>-->
 
-    <bean id="methodInterceptor" class="com.daihuaiyu.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
-        <property name="advice" ref="beforeAdvice"/>
+    <bean id="afterAdvice" class="com.daihuaiyu.springframework.bean.UserServiceAfterAdvice"/>
+
+<!--    <bean id="methodInterceptor" class="com.daihuaiyu.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">-->
+    <bean id="methodInterceptor" class="com.daihuaiyu.springframework.aop.framework.adapter.MethodAfterReturningAdviceInterceptor">
+<!--        <property name="advice" ref="beforeAdvice"/>-->
+        <property name="advice" ref="afterAdvice"/>
     </bean>
 
     <bean id="pointcutAdvisor" class="com.daihuaiyu.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
