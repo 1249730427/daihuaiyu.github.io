@@ -1,6 +1,7 @@
 package org;
 
 import annotation.Select;
+import com.alibaba.fastjson.parser.JSONLexer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.FactoryBean;
 import java.lang.reflect.InvocationHandler;
@@ -25,7 +26,7 @@ public class MapperFactoryBean<T> implements FactoryBean<T> {
     public T getObject() throws Exception {
         InvocationHandler invocationHandler = (proxy, method, args) -> {
             Select select = method.getAnnotation(Select.class);
-            log.info("SQL：{}", select.value().replace("#{uId}", args[0].toString()));
+//            log.info("SQL：{}", select.value().replace("#{uId}", args[0].toString()));
             return args[0] + ",沉淀、分享、成长，让自己和他人都能有所收获！";
         };
         return (T) Proxy.newProxyInstance(this.getClass().getClassLoader(),

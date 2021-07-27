@@ -9,8 +9,10 @@
         <option value="$PROJECT_DIR$/spring-cloud-study/pom.xml" />
         <option value="$PROJECT_DIR$/video-applet/pom.xml" />
         <option value="$PROJECT_DIR$/seconds-kill/pom.xml" />
+        <option value="$PROJECT_DIR$/small-spring/pom.xml" />
+        <option value="$PROJECT_DIR$/small-rpc/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
 </project>

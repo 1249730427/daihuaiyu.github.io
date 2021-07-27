@@ -11,6 +11,8 @@
       <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/service-product/servce-produce.iml" filepath="$PROJECT_DIR$/spring-cloud-study/service-product/servce-produce.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/service-kafka/service-kafka.iml" filepath="$PROJECT_DIR$/spring-cloud-study/service-kafka/service-kafka.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/service-order/service-order.iml" filepath="$PROJECT_DIR$/spring-cloud-study/service-order/service-order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/small-rpc/small-rpc.iml" filepath="$PROJECT_DIR$/small-rpc/small-rpc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/small-spring/small-spring.iml" filepath="$PROJECT_DIR$/small-spring/small-spring.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-cloud-study/spring-cloud-study.iml" filepath="$PROJECT_DIR$/spring-cloud-study/spring-cloud-study.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-study-demo/spring-study-demo.iml" filepath="$PROJECT_DIR$/spring-study-demo/spring-study-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/springBoot-Learning/springboot-learning.iml" filepath="$PROJECT_DIR$/springBoot-Learning/springboot-learning.iml" />

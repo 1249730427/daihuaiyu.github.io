@@ -7,19 +7,21 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="config-service" />
+        <module name="spring-study-demo" />
+        <module name="eureka" />
+        <module name="small-spring" />
+        <module name="servce-produce" />
+        <module name="video-applet-core" />
+        <module name="service-order" />
+        <module name="zuul-service" />
+        <module name="small-rpc" />
+        <module name="service-kafka" />
+        <module name="Chat-Client" />
+        <module name="seconds-kill" />
+        <module name="springboot-learning" />
         <module name="video-applet-api" />
         <module name="Chat-Server" />
-        <module name="eureka" />
-        <module name="Chat-Client" />
-        <module name="service-order" />
-        <module name="springboot-learning" />
-        <module name="servce-produce" />
-        <module name="config-service" />
-        <module name="video-applet-core" />
-        <module name="zuul-service" />
-        <module name="seconds-kill" />
-        <module name="spring-study-demo" />
-        <module name="service-kafka" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -32,6 +34,9 @@
       <module name="servce-produce" target="1.8" />
       <module name="service-kafka" target="1.8" />
       <module name="service-order" target="1.8" />
+      <module name="small-rpc" target="1.6" />
+      <module name="small-spring" target="1.8" />
+      <module name="small-spring-step-12" target="1.8" />
       <module name="spring-cloud-study" target="1.8" />
       <module name="spring-study-demo" target="8" />
       <module name="springboot-learning" target="1.8" />
